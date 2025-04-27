@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Systems Pie Chart</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-light"></body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Vehicle Systems</a>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">Vehicle Systems Overview</h2>
+                        <div style="max-width: 800px; margin: auto;">
+                            <canvas id="vehicleSystemsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const ctx = document.getElementById('vehicleSystemsChart').getContext('2d');
+        
+        // Your existing Chart.js code remains the same
+        const urls = [
+            '/engine.html',
+            '/transmission.html',
+            '/fuel.html',
+            '/electrical.html',
+            '/cooling.html',
+            '/exhaust.html',
+            '/steering.html',
+            '/suspension.html',
+            '/braking.html',
+            '/hvac.html'
+        ];
+
+        const chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: [
+                    'Engine/Powertrain System',
+                    'Transmission System',
+                    'Fuel System',
+                    'Electrical System',
+                    'Cooling System',
+                    'Exhaust System',
+                    'Steering System',
+                    'Suspension System',
+                    'Braking System',
+                    'HVAC System'
+                ],
+                datasets: [{
+                    data: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+                    backgroundColor: [
+                        '#FF4B4B', '#3498DB', '#F1C40F', '#2ECC71', '#9B59B6', 
+                        '#E67E22', '#34495E', '#7F8C8D', '#E74C3C', '#16A085'
+                    ]
+                }]
+            },
+            options: {
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const descriptions = [
+                                    'Converts fuel into mechanical energy to move the vehicle',
+                                    'Transfers power from the engine to the wheels',
+                                    'Stores and delivers fuel to the engine',
+                                    'Powers lights, electronics, and other electrical components',
+                                    'Prevents engine overheating',
+                                    'Removes exhaust gases from the engine',
+                                    'Controls vehicle direction',
+                                    'Absorbs shock and provides comfort',
+                                    'Slows and stops the vehicle',
+                                    'Heats, ventilates, and air conditions the interior'
+                                ];
+                                return `${context.label}: ${descriptions[context.dataIndex]}`;
+                            }
+                        }
+                    }
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        window.location.href = urls[index];
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
