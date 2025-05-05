@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2021 Hyundai Sonata Oil Life Reset Guide</title>
+    <style>
+        :root {
+            --primary-color: #121212;
+            --secondary-color: #0053a0;
+            --accent-color: #ff6b6b;
+            --text-color: #e0e0e0;
+            --light-gray: #aaa;
+            --medium-gray: #555;
+            --dark-gray: #333;
+            --border-color: #444;
+            --highlight: #00a7e1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: #000;
+            padding: 1.5rem 0;
+            border-bottom: 4px solid var(--secondary-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .logo-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: white;
+            letter-spacing: 1px;
+        }
+        
+        .logo span {
+            color: var(--secondary-color);
+        }
+        
+        .hyundai-badge {
+            width: 60px;
+            height: 40px;
+            background-color: var(--secondary-color);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .hero {
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('/api/placeholder/1200/600');
+            background-size: cover;
+            background-position: center;
+            padding: 6rem 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, var(--secondary-color), transparent);
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.8rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--light-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .vehicle-info {
+            display: inline-block;
+            background-color: rgba(0,0,0,0.6);
+            padding: 1rem 2rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            margin-top: 2rem;
+        }
+        
+        .vehicle-info span {
+            color: var(--highlight);
+            font-weight: bold;
+        }
+        
+        .main-content {
+            padding: 4rem 0;
+            position: relative;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2.5rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--secondary-color);
+        }
+        
+        .intro-text {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            text-align: center;
+            color: var(--light-gray);
+        }
+        
+        .methods-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .method-card {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--dark-gray);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        
+        .method-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background-color: var(--secondary-color);
+        }
+        
+        .method-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--border-color);
+            position: relative;
+        }
+        
+        .method-tag {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 5px 15px;
+            font-size: 0.9rem;
+            border-radius: 3px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .method-body {
+            padding: 2rem;
+        }
+        
+        .step-list {
+            list-style-type: none;
+            counter-reset: step-counter;
+        }
+        
+        .step-item {
+            margin-bottom: 2rem;
+            position: relative;
+            padding-left: 50px;
+            counter-increment: step-counter;
+        }
+        
+        .step-item::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 35px;
+            height: 35px;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: white;
+            text-transform: uppercase;
+        }
+        
+        .note-box {
+            background-color: rgba(0, 167, 225, 0.1);
+            border-left: 4px solid var(--highlight);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .note-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--highlight);
+        }
+        
+        .note-title::before {
+            content: "ⓘ";
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .dashboard-section {
+            background-color: var(--primary-color);
+            padding: 4rem 2rem;
+            border-radius: 10px;
+            margin: 4rem 0;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            position: relative;
+        }
+        
+        .dashboard-title {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--secondary-color);
+            padding: 8px 25px;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            border-radius: 5px;
+        }
+        
+        .dashboard-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        
+        .dashboard-caption {
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .troubleshooting-section {
+            background-color: var(--dark-gray);
+            padding: 4rem 0;
+            position: relative;
+            border-top: 5px solid var(--border-color);
+            border-bottom: 5px solid var(--border-color);
+        }
+        
+        .troubleshooting-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .trouble-item {
+            margin-bottom: 1.5rem;
+            background-color: var(--primary-color);
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+        }
+        
+        .trouble-question {
+            padding: 1.2rem;
+            background-color: var(--primary-color);
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s;
+        }
+        
+        .trouble-question:hover {
+            background-color: #222;
+        }
+        
+        .trouble-question::after {
+            content: "+";
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+        
+        .trouble-answer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: none;
+        }
+        
+        .oil-specs-section {
+            padding: 4rem 0;
+        }
+        
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .specs-card {
+            background-color: var(--dark-gray);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        
+        .card-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .specs-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .specs-body {
+            padding: 1.5rem;
+        }
+        
+        .specs-list {
+            list-style-type: none;
+        }
+        
+        .specs-item {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .specs-item::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: #000;
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: var(--secondary-color);
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-logo span {
+            color: var(--secondary-color);
+        }
+        
+        .footer-links {
+            margin: 1.5rem 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        
+        .footer-link {
+            color: var(--light-gray);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .footer-link:hover {
+            color: var(--secondary-color);
+        }
+        
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s;
+        }
+        
+        .footer-link:hover::after {
+            width: 100%;
+        }
+        
+        .copyright {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--light-gray);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .methods-container {
+                flex-direction: column;
+            }
+            
+            .method-card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <div class="logo">AUTO<span>PRO</span></div>
+                <div class="hyundai-badge">H</div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="hero">
+        <div class="container">
+            <h1 class="hero-title">OIL LIFE RESET GUIDE</h1>
+            <p class="hero-subtitle">2021 HYUNDAI SONATA</p>
+            <div class="vehicle-info">
+                <p>Model: <span>SONATA</span> | Year: <span>2021</span> | Engine Options: <span>1.6T / 2.5L / Hybrid</span></p>
+            </div>
+        </div>
+    </div>
+    
+    <section class="main-content">
+        <div class="container">
+            <h2 class="section-title">RESET YOUR OIL LIFE INDICATOR</h2>
+            
+            <p class="intro-text">Keeping track of your Hyundai Sonata's oil life is essential for maintaining optimal engine performance and longevity. After changing your oil, resetting the service indicator ensures accurate maintenance tracking. Follow one of these methods to reset your 2021 Hyundai Sonata's oil life indicator.</p>
+            
+            <div class="methods-container">
+                <div class="method-card">
+                    <div class="method-header">
+                        USER SETTINGS METHOD
+                        <div class="method-tag">PRIMARY METHOD</div>
+                    </div>
+                    
+                    <div class="method-body">
+                        <ul class="step-list">
+                            <li class="step-item">
+                                <h3 class="step-title">PREPARE YOUR VEHICLE</h3>
+                                <p>Ensure your 2021 Sonata is parked safely with the parking brake engaged. Close all doors and put the transmission in Park position.</p>
+                            </li>
+                            
+                            <li class="step-item">
+                                <h3 class="step-title">START THE ENGINE</h3>
+                                <p>Start your Sonata's engine and let the dashboard initialize fully. Wait until all initial startup notifications have cleared.</p>
+                            </li>
+                            
+                            <li class="step-item">
+                                <h3 class="step-title">ACCESS USER SETTINGS</h3>
+                                <p>Press the MODE button on your steering wheel to navigate to the USER SETTINGS menu on your instrument cluster display.</p>
+                            </li>
+                            
+                            <li class="step-item">
+                                <h3 class="step-title">FIND SERVICE INTERVAL</h3>
+                                <p>Use the arrow buttons or scroll wheel to navigate down to SERVICE INTERVAL, then press the OK button to select it.</p>
+                            </li>
+                            
+                            <li class="step-item">
+                                <h3 class="step-title">RESET THE SERVICE INTERVAL</h3>
+                                <p>Within the SERVICE INTERVAL menu, select RESET and confirm when prompted. The service interval will reset to 100% or your default setting.</p>
+                            </li>
+                        </ul>
+                        
+                        <div class="note-box">
+                            <p class="note-title">IMPORTANT NOTE</p>
+                            <p>If you cannot find the SERVICE INTERVAL option in the menu, it may be located under SETUP > VEHICLE > CONVENIENCE in some updated software versions. Menu locations can vary slightly between different Sonata trim levels.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        TRIP/OIL LIFE METHOD
+                        <div class="method-tag">ALTERNATIVE</div>
+                    </div>
+                    
+                    <div class="method-body">
+                        <ul class="step-list">
+                            <li class="step-item">
+                                <h3 class="step-title">TURN IGNITION ON</h3>
+                                <p>Turn the key to the "On" position without starting the engine. For push-button start vehicles, press the START button once without pressing the brake pedal.</p>
+                            </li>
+                            
+                            <li class="step-item">
+                                <h3 class="step-title">ACCESS DISPLAY OPTIONS</h3>
+                                <p>Locate the "Mode" or "Trip" button on your dashboard. This is typically found on the right side of the steering wheel or on the instrument panel.</p>
+                            </li>
+                            
+                            <li class="step-item">
+                                <h3 class="step-title">NAVIGATE TO OIL LIFE SCREEN</h3>
+                                <p>Press the Mode/Trip button repeatedly until you see the "Oil Life" screen displayed on your instrument cluster. You may need to cycle through other displays like trip odometer and fuel economy first.</p>
+                            </li>
+                            
+                            <li class="step-item">
+                                <h3 class="step-title">RESET THE OIL LIFE</h3>
+                                <p>Once the Oil Life screen is displayed, press and hold the OK button (or Reset button) for approximately 5 seconds until the oil life indicator resets.</p>
+                            </li>
+                            
+                            <li class="step-item">
+                                <h3 class="step-title">CONFIRM THE RESET</h3>
+                                <p>The display should confirm the reset by showing "Oil Life Reset" or "100%" or similar message. Turn the ignition to the Off position to complete the process.</p>
+                            </li>
+                        </ul>
+                        
+                        <div class="note-box">
+                            <p class="note-title">PRO TIP</p>
+                            <p>If the reset doesn't work on the first attempt, try turning the ignition completely off, wait 10 seconds, and then repeat the steps. Some models may require you to press and release the button several times rather than holding it down.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-section">
+                <div class="dashboard-title">DASHBOARD CONTROLS</div>
+                <img src="/api/placeholder/800/400" alt="2021 Hyundai Sonata Dashboard Controls" class="dashboard-image">
+                <p class="dashboard-caption">The steering wheel controls (highlighted) are used to navigate the instrument cluster menus. The MODE button and OK button are used to access and reset the service interval.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="troubleshooting-section">
+        <div class="container">
+            <h2 class="section-title">TROUBLESHOOTING</h2>
+            
+            <div class="troubleshooting-container">
+                <div class="trouble-item">
+                    <div class="trouble-question">SERVICE INTERVAL MENU NOT FOUND</div>
+                    <div class="trouble-answer">
+                        <p>Some 2021 Sonata models, especially following software updates, may have the Service Interval option relocated. Try looking under:</p>
+                        <ul style="margin-left: 20px;">
+                            <li>SETUP > VEHICLE > CONVENIENCE</li>
+                            <li>SETUP > VEHICLE > CLUSTER</li>
+                            <li>VEHICLE SETTINGS > MAINTENANCE</li>
+                        </ul>
+                        <p>If you still cannot find the option, check your owner's manual or contact your Hyundai dealer. They may need to reset it using their diagnostic equipment.</p>
+                    </div>
+                </div>
+                
+                <div class="trouble-item">
+                    <div class="trouble-question">RESET BUTTON NOT RESPONDING</div>
+                    <div class="trouble-answer">
+                        <p>If pressing and holding the OK/Reset button doesn't reset the oil life indicator, try these steps:</p>
+                        <ol style="margin-left: 20px;">
+                            <li>Make sure you're holding the button long enough (5-10 seconds)</li>
+                            <li>Try a sequence of quick presses rather than holding</li>
+                            <li>Turn the ignition completely off, wait 30 seconds, then try again</li>
+                            <li>Disconnect the vehicle's battery for 5 minutes (this will reset all electronic systems, not just the oil life)</li>
+                        </ol>
+                        <p>Note: Disconnecting the battery will also reset other settings such as clock, radio presets, and seat memory.</p>
+                    </div>
+                </div>
+                
+                <div class="trouble-item">
+                    <div class="trouble-question">OIL LIFE INDICATOR RETURNS AFTER RESET</div>
+                    <div class="trouble-answer">
+                        <p>If the service reminder returns shortly after resetting, this could indicate:</p>
+                        <ul style="margin-left: 20px;">
+                            <li>The reset procedure wasn't completed correctly</li>
+                            <li>There might be other maintenance issues causing the system to trigger</li>
+                            <li>A possible sensor malfunction</li>
+                        </ul>
+                        <p>If the indicator persists after multiple reset attempts, it's recommended to have your vehicle inspected by a Hyundai service technician. They can use diagnostic tools to identify and resolve any underlying issues.</p>
+                    </div>
+                </div>
+                
+                <div class="trouble-item">
+                    <div class="trouble-question">NO OIL LIFE PERCENTAGE DISPLAY</div>
+                    <div class="trouble-answer">
+                        <p>Some Hyundai models, including certain 2021 Sonata trims, may not display an actual oil life percentage. Instead, they use a simple service interval reminder based on mileage or time.</p>
+                        <p>If your vehicle doesn't show an oil percentage, focus on resetting the service interval reminder rather than looking specifically for an "oil life" display. The SERVICE INTERVAL option in your settings menu is what you need to reset.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="oil-specs-section">
+        <div class="container">
+            <h2 class="section-title">OIL SPECIFICATIONS</h2>
+            
+            <div class="specs-grid">
+                <div class="specs-card">
+                    <div class="card-icon">🛢️</div>
+                    <div class="specs-header">
+                        RECOMMENDED OIL TYPE
+                    </div>
+                    <div class="specs-body">
+                        <ul class="specs-list">
+                            <li class="specs-item">2.5L Engine: SAE 5W-30 Full Synthetic</li>
+                            <li class="specs-item">1.6T Engine: SAE 5W-30 Full Synthetic</li>
+                            <li class="specs-item">Hybrid: SAE 5W-30 Full Synthetic</li>
+                            <li class="specs-item">Always use oil meeting Hyundai specifications</li>
+                            <li class="specs-item">API Certified (look for the API starburst symbol)</li>
+                            <li class="specs-item">ILSAC GF-6 Certified recommended</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="specs-card">
+                    <div class="card-icon">📏</div>
+                    <div class="specs-header">
+                        OIL CAPACITY
+                    </div>
+                    <div class="specs-body">
+                        <ul class="specs-list">
+                            <li class="specs-item">2.5L Engine: 5.8 quarts (5.5 liters) with filter</li>
+                            <li class="specs-item">1.6T Engine: 4.8 quarts (4.5 liters) with filter</li>
+                            <li class="specs-item">Hybrid: 4.2 quarts (4.0 liters) with filter</li>
+                            <li class="specs-item">Always verify with dipstick after filling</li>
+                            <li class="specs-item">Over-filling can damage engine components</li>
+                            <li class="specs-item">Consult owner's manual for exact specifications</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="specs-card">
+                    <div class="card-icon">⏱️</div>
+                    <div class="specs-header">
+                        CHANGE INTERVALS
+                    </div>
+                    <div class="specs-body">
+                        <ul class="specs-list">
+                            <li class="specs-item">Normal Conditions: Every 7,500 miles / 12 months</li>
+                            <li class="specs-item">Severe Conditions: Every 3,750 miles / 6 months</li>
+                            <li class="specs-item">Hybrid: Every 7,500 miles / 12 months</li>
+                            <li class="specs-item">Follow service reminder for optimal timing</li>
+                            <li class="specs-item">Severe conditions include frequent short trips, extreme temperatures, stop-and-go traffic, or towing</li>
+                            <li class="specs-item">Regular oil changes extend engine life</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">AUTO<span>PRO</span></div>
+                <p>YOUR TRUSTED SOURCE FOR VEHICLE MAINTENANCE GUIDES</p>
+                
+                <div class="footer-links">
+                    <a href="#" class="footer-link">HOME</a>
+                    <a href="#" class="footer-link">HYUNDAI GUIDES</a>
+                    <a href="#" class="footer-link">OIL RESET GUIDES</a>
+                    <a href="#" class="footer-link">CONTACT</a>
+                </div>
+                
+                <p>This guide applies specifically to the 2021 Hyundai Sonata. Always consult your owner's manual for the most accurate information for your specific vehicle.</p>
+                <p class="copyright">© 2025 AUTOPRO MAINTENANCE GUIDES. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle troubleshooting answers
+        document.querySelectorAll('.trouble-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                
+                if (answer.style.display === 'block') {
+                    answer.style.display = 'none';
+                    question.style.setProperty('--after-content', '"+');
+                } else {
+                    // Hide all other answers
+                    document.querySelectorAll('.trouble-answer').forEach(item => {
+                        item.style.display = 'none';
+                    });
+                    
+                    // Reset all question icons
+                    document.querySelectorAll('.trouble-question').forEach(q => {
+                        q.style.setProperty('--after-content', '"+');
+                    });
+                    
+                    // Show this answer
+                    answer.style.display = 'block';
+                    question.style.setProperty('--after-content', '"-');
+                }
+            });
+        });
+        
+        // Add smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Initialize with first troubleshooting item open
+        window.addEventListener('load', function() {
+            // Open the first troubleshooting item by default
+            const firstQuestion = document.querySelector('.trouble-question');
+            if (firstQuestion) {
+                firstQuestion.click();
+            }
+            
+            // Add highlight effect to dashboard section when it comes into view
+            const dashboardSection = document.querySelector('.dashboard-section');
+            
+            function isInViewport(element) {
+                const rect = element.getBoundingClientRect();
+                return (
+                    rect.top >= 0 &&
+                    rect.top <= (window.innerHeight || document.documentElement.clientHeight)
+                );
+            }
+            
+            function checkDashboard() {
+                if (isInViewport(dashboardSection)) {
+                    dashboardSection.style.transition = 'box-shadow 0.5s ease';
+                    dashboardSection.style.boxShadow = '0 0 20px rgba(0, 167, 225, 0.5)';
+                    
+                    setTimeout(() => {
+                        dashboardSection.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+                    }, 1000);
+                    
+                    window.removeEventListener('scroll', checkDashboard);
+                }
+            }
+            
+            window.addEventListener('scroll', checkDashboard);
+            // Initial check
+            checkDashboard();
+        });
+    </script>
+</body>
+</html>
