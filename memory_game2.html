@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silverado Platform-Years Memory Game</title>
+    <style>
+        :root {
+            --primary-color: #151515;
+            --secondary-color: #d92121;
+            --accent-color: #ffcc00;
+            --text-color: #e0e0e0;
+            --dark-gray: #333;
+            --medium-gray: #555;
+            --light-gray: #777;
+            --border-color: #444;
+            --card-bg: #242424;
+            --hover-color: #303030;
+            
+            --gmt400-color: #2c4770;
+            --gmt800-color: #4a2c70;
+            --gmt900-color: #702c2c;
+            --k2xx-color: #2c7050;
+            --t1xx-color: #705a2c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .game-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--light-gray);
+            margin-bottom: 2rem;
+        }
+        
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            background-color: var(--dark-gray);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--light-gray);
+            margin-bottom: 0.3rem;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        #timer .stat-value {
+            color: var(--accent-color);
+        }
+        
+        #matches .stat-value {
+            color: #4CAF50;
+        }
+        
+        #attempts .stat-value {
+            color: var(--secondary-color);
+        }
+        
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .control-button {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .control-button:hover {
+            background-color: #ff3b3b;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(217, 33, 33, 0.4);
+        }
+        
+        .control-button.reset {
+            background-color: var(--dark-gray);
+        }
+        
+        .control-button.reset:hover {
+            background-color: var(--medium-gray);
+            box-shadow: 0 5px 15px rgba(85, 85, 85, 0.4);
+        }
+        
+        .difficulty-selector {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .difficulty-label {
+            margin-right: 1rem;
+            color: var(--light-gray);
+        }
+        
+        .difficulty-buttons {
+            display: inline-flex;
+            background-color: var(--dark-gray);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .difficulty-button {
+            padding: 0.5rem 1.5rem;
+            background-color: transparent;
+            color: var(--light-gray);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .difficulty-button.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .memory-card {
+            aspect-ratio: 3/4;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        
+        .memory-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .memory-card.matched .card-inner {
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.8);
+            animation: pulse 1.5s infinite;
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .card-front {
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+        }
+        
+        .card-back {
+            background-color: var(--dark-gray);
+            transform: rotateY(180deg);
+            border: 2px solid var(--border-color);
+            padding: 1rem;
+        }
+        
+        .card-logo {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .platform-name {
+            color: white;
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .platform-years {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+        .gmt400-card .card-back {
+            background-color: var(--gmt400-color);
+            border-color: #3a5c92;
+        }
+        
+        .gmt800-card .card-back {
+            background-color: var(--gmt800-color);
+            border-color: #6a42a0;
+        }
+        
+        .gmt900-card .card-back {
+            background-color: var(--gmt900-color);
+            border-color: #a04242;
+        }
+        
+        .k2xx-card .card-back {
+            background-color: var(--k2xx-color);
+            border-color: #42a070;
+        }
+        
+        .t1xx-card .card-back {
+            background-color: var(--t1xx-color);
+            border-color: #a0803c;
+        }
+        
+        .year-card .card-back {
+            background-color: var(--dark-gray);
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-title {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-text {
+            margin-bottom: 2rem;
+        }
+        
+        .modal-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 2rem;
+        }
+        
+        .modal-stat {
+            text-align: center;
+        }
+        
+        .modal-stat-label {
+            font-size: 0.9rem;
+            color: var(--light-gray);
+            margin-bottom: 0.3rem;
+        }
+        
+        .modal-stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .modal-time {
+            color: var(--accent-color);
+        }
+        
+        .modal-attempts {
+            color: var(--secondary-color);
+        }
+        
+        .modal-button {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-button:hover {
+            background-color: #ff3b3b;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(217, 33, 33, 0.4);
+        }
+        
+        .game-info {
+            margin-top: 3rem;
+            background-color: var(--dark-gray);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .info-title {
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .platform-list {
+            list-style-type: none;
+        }
+        
+        .platform-item {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .platform-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .platform-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .platform-details {
+            flex-grow: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .platform-title {
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.3rem;
+            font-size: 1.2rem;
+        }
+        
+        .platform-years {
+            font-weight: bold;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+        }
+        
+        .gmt400-bg {
+            background-color: var(--gmt400-color);
+        }
+        
+        .gmt800-bg {
+            background-color: var(--gmt800-color);
+        }
+        
+        .gmt900-bg {
+            background-color: var(--gmt900-color);
+        }
+        
+        .k2xx-bg {
+            background-color: var(--k2xx-color);
+        }
+        
+        .t1xx-bg {
+            background-color: var(--t1xx-color);
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 10px rgba(76, 175, 80, 0.8); }
+            50% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.8); }
+            100% { box-shadow: 0 0 10px rgba(76, 175, 80, 0.8); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .game-board {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .title {
+                font-size: 1.8rem;
+            }
+            
+            .game-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .difficulty-selector {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .difficulty-label {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="game-header">
+            <h1 class="title">Silverado Platform Years Memory Game</h1>
+            <p class="subtitle">Match each Chevy truck platform with its correct production years!</p>
+        </div>
+        
+        <div class="game-stats">
+            <div class="stat" id="timer">
+                <div class="stat-label">TIME</div>
+                <div class="stat-value">00:00</div>
+            </div>
+            <div class="stat" id="attempts">
+                <div class="stat-label">ATTEMPTS</div>
+                <div class="stat-value">0</div>
+            </div>
+            <div class="stat" id="matches">
+                <div class="stat-label">MATCHES</div>
+                <div class="stat-value">0/5</div>
+            </div>
+        </div>
+        
+        <div class="difficulty-selector">
+            <span class="difficulty-label">DIFFICULTY:</span>
+            <div class="difficulty-buttons">
+                <button class="difficulty-button active" data-difficulty="easy">Easy</button>
+                <button class="difficulty-button" data-difficulty="medium">Medium</button>
+                <button class="difficulty-button" data-difficulty="hard">Hard</button>
+            </div>
+        </div>
+        
+        <div class="game-controls">
+            <button class="control-button start">Start Game</button>
+            <button class="control-button reset">Reset</button>
+        </div>
+        
+        <div class="game-board">
+            <!-- Cards will be dynamically inserted here -->
+        </div>
+        
+        <div class="game-info">
+            <h2 class="info-title">Platform Year Reference</h2>
+            <ul class="platform-list">
+                <li class="platform-item">
+                    <div class="platform-color gmt400-bg"></div>
+                    <div class="platform-details">
+                        <div class="platform-title">GMT400 (C/K)</div>
+                        <div class="platform-years">1988-1998</div>
+                    </div>
+                </li>
+                <li class="platform-item">
+                    <div class="platform-color gmt800-bg"></div>
+                    <div class="platform-details">
+                        <div class="platform-title">GMT800</div>
+                        <div class="platform-years">1999-2006</div>
+                    </div>
+                </li>
+                <li class="platform-item">
+                    <div class="platform-color gmt900-bg"></div>
+                    <div class="platform-details">
+                        <div class="platform-title">GMT900</div>
+                        <div class="platform-years">2007-2013</div>
+                    </div>
+                </li>
+                <li class="platform-item">
+                    <div class="platform-color k2xx-bg"></div>
+                    <div class="platform-details">
+                        <div class="platform-title">K2XX</div>
+                        <div class="platform-years">2014-2018</div>
+                    </div>
+                </li>
+                <li class="platform-item">
+                    <div class="platform-color t1xx-bg"></div>
+                    <div class="platform-details">
+                        <div class="platform-title">T1XX</div>
+                        <div class="platform-years">2019-2025</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="modal" id="victory-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Victory!</h2>
+            <p class="modal-text">You've successfully matched all platform-year pairs!</p>
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <div class="modal-stat-label">TIME</div>
+                    <div class="modal-stat-value modal-time" id="final-time">00:00</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-label">ATTEMPTS</div>
+                    <div class="modal-stat-value modal-attempts" id="final-attempts">0</div>
+                </div>
+            </div>
+            <button class="modal-button" id="play-again">Play Again</button>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Game state
+            let gameStarted = false;
+            let timer = 0;
+            let timerInterval;
+            let attempts = 0;
+            let matches = 0;
+            let firstCard = null;
+            let secondCard = null;
+            let lockBoard = false;
+            let difficulty = 'easy';
+            
+            // DOM elements
+            const gameBoard = document.querySelector('.game-board');
+            const timerDisplay = document.querySelector('#timer .stat-value');
+            const attemptsDisplay = document.querySelector('#attempts .stat-value');
+            const matchesDisplay = document.querySelector('#matches .stat-value');
+            const startButton = document.querySelector('.control-button.start');
+            const resetButton = document.querySelector('.control-button.reset');
+            const difficultyButtons = document.querySelectorAll('.difficulty-button');
+            const victoryModal = document.getElementById('victory-modal');
+            const finalTimeDisplay = document.getElementById('final-time');
+            const finalAttemptsDisplay = document.getElementById('final-attempts');
+            const playAgainButton = document.getElementById('play-again');
+            
+            // Platform and year data
+            const platformData = [
+                {
+                    type: 'platform',
+                    value: 'GMT400',
+                    class: 'gmt400-card',
+                    match: '1988-1998'
+                },
+                {
+                    type: 'platform',
+                    value: 'GMT800',
+                    class: 'gmt800-card',
+                    match: '1999-2006'
+                },
+                {
+                    type: 'platform',
+                    value: 'GMT900',
+                    class: 'gmt900-card',
+                    match: '2007-2013'
+                },
+                {
+                    type: 'platform',
+                    value: 'K2XX',
+                    class: 'k2xx-card',
+                    match: '2014-2018'
+                },
+                {
+                    type: 'platform',
+                    value: 'T1XX',
+                    class: 't1xx-card',
+                    match: '2019-2025'
+                },
+                {
+                    type: 'year',
+                    value: '1988-1998',
+                    class: 'year-card',
+                    match: 'GMT400'
+                },
+                {
+                    type: 'year',
+                    value: '1999-2006',
+                    class: 'year-card',
+                    match: 'GMT800'
+                },
+                {
+                    type: 'year',
+                    value: '2007-2013',
+                    class: 'year-card',
+                    match: 'GMT900'
+                },
+                {
+                    type: 'year',
+                    value: '2014-2018',
+                    class: 'year-card',
+                    match: 'K2XX'
+                },
+                {
+                    type: 'year',
+                    value: '2019-2025',
+                    class: 'year-card',
+                    match: 'T1XX'
+                }
+            ];
+            
+            // Medium difficulty - specific year ranges
+            const mediumData = [
+                {
+                    type: 'platform',
+                    value: 'GMT400',
+                    class: 'gmt400-card',
+                    match: '1988-1998'
+                },
+                {
+                    type: 'platform',
+                    value: 'GMT800',
+                    class: 'gmt800-card',
+                    match: '1999-2006'
+                },
+                {
+                    type: 'platform',
+                    value: 'GMT900',
+                    class: 'gmt900-card',
+                    match: '2007-2013'
+                },
+                {
+                    type: 'platform',
+                    value: 'K2XX',
+                    class: 'k2xx-card',
+                    match: '2014-2018'
+                },
+                {
+                    type: 'platform',
+                    value: 'T1XX',
+                    class: 't1xx-card',
+                    match: '2019-2025'
+                },
+                // More specific years
+                {
+                    type: 'year',
+                    value: '1988-1998',
+                    class: 'year-card',
+                    match: 'GMT400'
+                },
+                {
+                    type: 'year',
+                    value: '1999-2006',
+                    class: 'year-card',
+                    match: 'GMT800'
+                },
+                {
+                    type: 'year',
+                    value: '2007-2013',
+                    class: 'year-card',
+                    match: 'GMT900'
+                },
+                {
+                    type: 'year',
+                    value: '2014-2018',
+                    class: 'year-card',
+                    match: 'K2XX'
+                },
+                {
+                    type: 'year',
+                    value: '2019-2025',
+                    class: 'year-card',
+                    match: 'T1XX'
+                },
+                // Additional cards for medium
+                {
+                    type: 'platform',
+                    value: 'GMT400 C/K',
+                    class: 'gmt400-card',
+                    match: '1988-1998'
+                },
+                {
+                    type: 'year',
+                    value: 'Pre-1999',
+                    class: 'year-card',
+                    match: 'GMT400 C/K'
+                }
+            ];
+            
+            // Hard difficulty - specific model years and subsets
+            const hardData = [
+                {
+                    type: 'platform',
+                    value: 'GMT400',
+                    class: 'gmt400-card',
+                    match: '1988-1998'
+                },
+                {
+                    type: 'platform',
+                    value: 'GMT800',
+                    class: 'gmt800-card',
+                    match: '1999-2006'
+                },
+                {
+                    type: 'platform',
+                    value: 'GMT900',
+                    class: 'gmt900-card',
+                    match: '2007-2013'
+                },
+                {
+                    type: 'platform',
+                    value: 'K2XX',
+                    class: 'k2xx-card',
+                    match: '2014-2018'
+                },
+                {
+                    type: 'platform',
+                    value: 'T1XX',
+                    class: 't1xx-card',
+                    match: '2019-2025'
+                },
+                // More specific year ranges
+                {
+                    type: 'year',
+                    value: '1988-1998',
+                    class: 'year-card',
+                    match: 'GMT400'
+                },
+                {
+                    type: 'year',
+                    value: '1999-2006',
+                    class: 'year-card',
+                    match: 'GMT800'
+                },
+                {
+                    type: 'year',
+                    value: '2007-2013',
+                    class: 'year-card',
+                    match: 'GMT900'
+                },
+                {
+                    type: 'year',
+                    value: '2014-2018',
+                    class: 'year-card',
+                    match: 'K2XX'
+                },
+                {
+                    type: 'year',
+                    value: '2019-2025',
+                    class: 'year-card',
+                    match: 'T1XX'
+                },
+                // Additional hard cards
+                {
+                    type: 'platform',
+                    value: 'Early GMT800',
+                    class: 'gmt800-card',
+                    match: '1999-2002'
+                },
+                {
+                    type: 'platform',
+                    value: 'GMT800 (Updated)',
+                    class: 'gmt800-card',
+                    match: '2003-2006'
+                },
+                {
+                    type: 'platform',
+                    value: 'T1XX Refresh',
+                    class: 't1xx-card',
+                    match: '2023-2025'
+                },
+                {
+                    type: 'year',
+                    value: '1999-2002',
+                    class: 'year-card',
+                    match: 'Early GMT800'
+                },
+                {
+                    type: 'year',
+                    value: '2003-2006',
+                    class: 'year-card',
+                    match: 'GMT800 (Updated)'
+                },
+                {
+                    type: 'year',
+                    value: '2023-2025',
+                    class: 'year-card',
+                    match: 'T1XX Refresh'
+                }
+            ];
+            
+            // Initialize the game
+            function init() {
+                resetGame();
+                setupEventListeners();
+            }
+            
+            // Set up event listeners
+            function setupEventListeners() {
+                startButton.addEventListener('click', startGame);
+                resetButton.addEventListener('click', resetGame);
+                playAgainButton.addEventListener('click', function() {
+                    victoryModal.classList.remove('active');
+                    resetGame();
+                });
+                
+                difficultyButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        if (!gameStarted) {
+                            difficultyButtons.forEach(btn => btn.classList.remove('active'));
+                            this.classList.add('active');
+                            difficulty = this.getAttribute('data-difficulty');
+                            resetGame();
+                        }
+                    });
+                });
+            }
+            
+            // Start the game
+            function startGame() {
+                if (!gameStarted) {
+                    gameStarted = true;
+                    startButton.textContent = 'Game In Progress';
+                    startButton.disabled = true;
+                    startTimer();
+                    
+                    // Enable card clicking
+                    const cards = document.querySelectorAll('.memory-card');
+                    cards.forEach(card => {
+                        card.addEventListener('click', flipCard);
+                    });
+                }
+            }
+            
+            // Reset the game
+            function resetGame() {
+                // Reset game state
+                gameStarted = false;
+                timer = 0;
+                attempts = 0;
+                matches = 0;
+                firstCard = null;
+                secondCard = null;
+                lockBoard = false;
+                
+                // Clear timer
+                clearInterval(timerInterval);
+                
+                // Reset displays
+                timerDisplay.textContent = '00:00';
+                attemptsDisplay.textContent = '0';
+                
+                // Reset start button
+                startButton.textContent = 'Start Game';
+                startButton.disabled = false;
+                
+                // Generate cards based on difficulty
+                generateCards();
+            }
+            
+            // Generate cards
+            function generateCards() {
+                // Clear game board
+                gameBoard.innerHTML = '';
+                
+                // Select cards based on difficulty
+                let selectedData;
+                let numPairs;
+                
+                if (difficulty === 'easy') {
+                    selectedData = [...platformData];
+                    numPairs = 5;
+                } else if (difficulty === 'medium') {
+                    selectedData = [...mediumData];
+                    numPairs = 6;
+                } else { // hard
+                    selectedData = [...hardData];
+                    numPairs = 8;
+                }
+                
+                // Update total matches display
+                matchesDisplay.textContent = `0/${numPairs}`;
+                
+                // Shuffle the cards
+                let shuffledData = [...selectedData];
+                if (difficulty === 'medium' || difficulty === 'hard') {
+                    // For medium and hard, we need to be careful to maintain the pairs
+                    shuffledData = getRandomPairs(selectedData, numPairs);
+                }
+                
+                shuffledData = shuffledData.sort(() => 0.5 - Math.random());
+                
+                // Create card elements
+                shuffledData.forEach((card, index) => {
+                    const cardElement = document.createElement('div');
+                    cardElement.classList.add('memory-card', card.class);
+                    cardElement.setAttribute('data-type', card.type);
+                    cardElement.setAttribute('data-value', card.value);
+                    cardElement.setAttribute('data-match', card.match);
+                    
+                    cardElement.innerHTML = `
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="card-logo">?</div>
+                                <div class="card-text">SILVERADO</div>
+                            </div>
+                            <div class="card-back">
+                                ${card.type === 'platform' ? 
+                                    `<div class="platform-name">${card.value}</div>` : 
+                                    `<div class="platform-years">${card.value}</div>`}
+                            </div>
+                        </div>
+                    `;
+                    
+                    gameBoard.appendChild(cardElement);
+                });
+            }
+            
+            // Get random pairs for medium and hard difficulties
+            function getRandomPairs(data, numPairs) {
+                const platforms = data.filter(card => card.type === 'platform');
+                const years = data.filter(card => card.type === 'year');
+                
+                // Group platforms by match value to ensure we have matching pairs
+                const platformsByMatch = {};
+                platforms.forEach(platform => {
+                    if (!platformsByMatch[platform.match]) {
+                        platformsByMatch[platform.match] = [];
+                    }
+                    platformsByMatch[platform.match].push(platform);
+                });
+                
+                // Group years by match value
+                const yearsByMatch = {};
+                years.forEach(year => {
+                    if (!yearsByMatch[year.match]) {
+                        yearsByMatch[year.match] = [];
+                    }
+                    yearsByMatch[year.match].push(year);
+                });
+                
+                // Get all available matches
+                const allMatches = Object.keys(platformsByMatch);
+                
+                // Shuffle matches
+                const shuffledMatches = [...allMatches].sort(() => 0.5 - Math.random());
+                
+                // Select the required number of matches
+                const selectedMatches = shuffledMatches.slice(0, numPairs);
+                
+                // Create pairs array
+                const pairs = [];
+                
+                selectedMatches.forEach(match => {
+                    // Find a platform card for this match
+                    const platformsForMatch = platformsByMatch[match];
+                    const yearsForMatch = yearsByMatch[match] || yearsByMatch[platformsForMatch[0].value];
+                    
+                    if (platformsForMatch && platformsForMatch.length > 0 && 
+                        yearsForMatch && yearsForMatch.length > 0) {
+                        // Add the pair
+                        pairs.push(platformsForMatch[0]);
+                        pairs.push(yearsForMatch[0]);
+                    }
+                });
+                
+                return pairs;
+            }
+            
+            // Start timer
+            function startTimer() {
+                clearInterval(timerInterval);
+                let startTime = Date.now() - (timer * 1000);
+                
+                timerInterval = setInterval(function() {
+                    timer = Math.floor((Date.now() - startTime) / 1000);
+                    let minutes = Math.floor(timer / 60);
+                    let seconds = timer % 60;
+                    
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+                    
+                    timerDisplay.textContent = `${minutes}:${seconds}`;
+                }, 1000);
+            }
+            
+            // Format time
+            function formatTime(totalSeconds) {
+                let minutes = Math.floor(totalSeconds / 60);
+                let seconds = totalSeconds % 60;
+                
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                
+                return `${minutes}:${seconds}`;
+            }
+            
+            // Flip card
+            function flipCard() {
+                if (lockBoard) return;
+                if (this === firstCard) return;
+                
+                this.classList.add('flipped');
+                
+                if (!firstCard) {
+                    // First card flipped
+                    firstCard = this;
+                    return;
+                }
+                
+                // Second card flipped
+                secondCard = this;
+                attempts++;
+                attemptsDisplay.textContent = attempts;
+                
+                checkForMatch();
+            }
+            
+            // Check for match
+            function checkForMatch() {
+                lockBoard = true;
+                
+                const firstType = firstCard.getAttribute('data-type');
+                const secondType = secondCard.getAttribute('data-type');
+                
+                // Only match if one is a platform and one is a year
+                if (firstType !== secondType) {
+                    // First card could be platform or year
+                    let platformCard, yearCard;
+                    
+                    if (firstType === 'platform') {
+                        platformCard = firstCard;
+                        yearCard = secondCard;
+                    } else {
+                        platformCard = secondCard;
+                        yearCard = firstCard;
+                    }
+                    
+                    const platformValue = platformCard.getAttribute('data-value');
+                    const platformMatch = platformCard.getAttribute('data-match');
+                    const yearValue = yearCard.getAttribute('data-value');
+                    const yearMatch = yearCard.getAttribute('data-match');
+                    
+                    // Check if they match
+                    const isMatch = (platformMatch === yearValue && yearMatch === platformValue) || 
+                                    (platformValue === yearMatch && yearValue === platformMatch);
+                    
+                    if (isMatch) {
+                        disableCards();
+                    } else {
+                        unflipCards();
+                    }
+                } else {
+                    // Both are platforms or both are years - not a match
+                    unflipCards();
+                }
+            }
+            
+            // Disable matched cards
+            function disableCards() {
+                firstCard.classList.add('matched');
+                secondCard.classList.add('matched');
+                
+                firstCard.removeEventListener('click', flipCard);
+                secondCard.removeEventListener('click', flipCard);
+                
+                matches++;
+                const totalMatches = parseInt(matchesDisplay.textContent.split('/')[1]);
+                matchesDisplay.textContent = `${matches}/${totalMatches}`;
+                
+                // Check for victory
+                if (matches === totalMatches) {
+                    setTimeout(() => {
+                        finishGame();
+                    }, 1000);
+                }
+                
+                resetTurn();
+            }
+            
+            // Unflip unmatched cards
+            function unflipCards() {
+                setTimeout(() => {
+                    firstCard.classList.remove('flipped');
+                    secondCard.classList.remove('flipped');
+                    
+                    resetTurn();
+                }, 1500);
+            }
+            
+            // Reset after each turn
+            function resetTurn() {
+                [firstCard, secondCard] = [null, null];
+                lockBoard = false;
+            }
+            
+            // Finish game and show victory screen
+            function finishGame() {
+                clearInterval(timerInterval);
+                
+                finalTimeDisplay.textContent = formatTime(timer);
+                finalAttemptsDisplay.textContent = attempts;
+                
+                victoryModal.classList.add('active');
+                
+                gameStarted = false;
+                startButton.textContent = 'Start Game';
+                startButton.disabled = false;
+            }
+            
+            // Initialize game
+            init();
+        });
+    </script>
+</body>
+</html>
