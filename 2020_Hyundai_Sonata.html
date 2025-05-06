@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyundai Sonata 2020 Oil Life Reset - The Mechanic's Guide</title>
+    <style>
+        :root {
+            --primary-color: #1a1a1a;
+            --secondary-color: #d92121;
+            --accent-color: #2a2a2a;
+            --text-color: #e0e0e0;
+            --dark-gray: #333;
+            --medium-gray: #555;
+            --light-gray: #777;
+            --highlight: #ff3b3b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: #000;
+            padding: 1.5rem 0;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: white;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .tagline {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--light-gray);
+            border-left: 2px solid var(--secondary-color);
+            padding-left: 1rem;
+        }
+        
+        .hero {
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('/api/placeholder/1200/600');
+            background-size: cover;
+            background-position: center;
+            padding: 5rem 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, var(--secondary-color), transparent);
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--light-gray);
+        }
+        
+        .main-content {
+            padding: 3rem 0;
+            background-color: var(--accent-color);
+            position: relative;
+        }
+        
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background-image: linear-gradient(to right, var(--secondary-color), transparent, var(--secondary-color));
+        }
+        
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary-color);
+        }
+        
+        .method-card {
+            background-color: var(--dark-gray);
+            border-radius: 5px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 1px solid #444;
+            position: relative;
+        }
+        
+        .method-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background-color: var(--secondary-color);
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #444;
+            position: relative;
+        }
+        
+        .card-header::after {
+            content: '🔧';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.8rem;
+        }
+        
+        .card-body {
+            padding: 2rem;
+        }
+        
+        .step {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: flex-start;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .step-number {
+            position: absolute;
+            left: -20px;
+            top: 0;
+            background-color: var(--secondary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        
+        .step-content {
+            flex-grow: 1;
+            background-color: rgba(0,0,0,0.2);
+            padding: 1.5rem;
+            border-radius: 5px;
+            border: 1px solid #444;
+        }
+        
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: white;
+            text-transform: uppercase;
+        }
+        
+        .note {
+            background-color: rgba(255, 59, 59, 0.1);
+            border-left: 4px solid var(--secondary-color);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .note-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--secondary-color);
+        }
+        
+        .note-title::before {
+            content: "⚠️";
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .method {
+            margin-bottom: 4rem;
+        }
+        
+        .dashboard-layout {
+            background-color: var(--primary-color);
+            padding: 3rem 2rem;
+            border-radius: 8px;
+            margin: 3rem 0;
+            text-align: center;
+            border: 2px solid #444;
+            position: relative;
+        }
+        
+        .dashboard-title {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--secondary-color);
+            padding: 5px 15px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+        
+        .dashboard {
+            position: relative;
+            width: 90%;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #111;
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5), inset 0 0 10px rgba(255,255,255,0.1);
+            border: 1px solid #333;
+            min-height: 200px;
+        }
+        
+        .dashboard::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1px dashed #333;
+            border-radius: 10px;
+            pointer-events: none;
+        }
+        
+        .dashboard-element {
+            position: absolute;
+        }
+        
+        .ok-button {
+            top: 35%;
+            right: 20%;
+            padding: 12px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(217, 33, 33, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(217, 33, 33, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(217, 33, 33, 0); }
+        }
+        
+        .wheel-controls {
+            left: 15%;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #222;
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid #333;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.7);
+            position: relative;
+        }
+        
+        .wheel-controls::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background-color: #111;
+            border-radius: 50%;
+            border: 2px solid #444;
+        }
+        
+        .wheel-controls::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px dashed rgba(255,255,255,0.1);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .dashboard-screen {
+            right: 25%;
+            top: 40%;
+            width: 180px;
+            height: 100px;
+            background-color: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            text-align: center;
+            border-radius: 5px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.7);
+            border: 1px solid #444;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dashboard-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,255,0,0.1), transparent);
+            pointer-events: none;
+        }
+        
+        .dashboard-screen::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(0,255,0,0.2), transparent);
+            animation: screen-glow 2s infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes screen-glow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .faq-section {
+            background-color: var(--primary-color);
+            padding: 3rem 0;
+            position: relative;
+        }
+        
+        .faq-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-image: linear-gradient(to right, transparent, var(--secondary-color), transparent);
+        }
+        
+        .faq-container {
+            background-color: var(--accent-color);
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #444;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .faq-item {
+            margin-bottom: 1.5rem;
+            background-color: var(--dark-gray);
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+            border: 1px solid #444;
+        }
+        
+        .faq-question {
+            padding: 1.2rem;
+            background-color: var(--primary-color);
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s;
+        }
+        
+        .faq-question:hover {
+            background-color: #000;
+        }
+        
+        .faq-question::after {
+            content: "+";
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+        
+        .faq-answer {
+            padding: 1.5rem;
+            border-top: 1px solid #444;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+        
+        .tool-tips {
+            padding: 3rem 0;
+            background-color: var(--accent-color);
+            position: relative;
+        }
+        
+        .tool-tips::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-image: linear-gradient(to right, var(--secondary-color), transparent, var(--secondary-color));
+        }
+        
+        .tips-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .tip-card {
+            background-color: var(--dark-gray);
+            border-radius: 5px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 1px solid #444;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tip-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+        
+        .tip-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .tip-number {
+            position: absolute;
+            right: -10px;
+            bottom: -15px;
+            font-size: 8rem;
+            font-weight: bold;
+            color: rgba(255,255,255,0.03);
+            line-height: 1;
+            user-select: none;
+        }
+        
+        footer {
+            background-color: #000;
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: var(--secondary-color);
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            margin: 1.5rem 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        
+        .footer-link {
+            color: var(--light-gray);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .footer-link:hover {
+            color: var(--secondary-color);
+        }
+        
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s;
+        }
+        
+        .footer-link:hover::after {
+            width: 100%;
+        }
+        
+        .copyright {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--light-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .gear-decoration {
+            position: absolute;
+            opacity: 0.05;
+            user-select: none;
+            pointer-events: none;
+        }
+        
+        .gear-1 {
+            top: 50px;
+            right: 50px;
+            font-size: 15rem;
+            transform: rotate(45deg);
+        }
+        
+        .gear-2 {
+            bottom: 100px;
+            left: 50px;
+            font-size: 10rem;
+            transform: rotate(-15deg);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.8rem 2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 3px;
+            margin-top: 1.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+        }
+        
+        .btn:hover {
+            background-color: #ff3b3b;
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        /* Tools section */
+        .tools-needed {
+            background-color: var(--primary-color);
+            padding: 2rem;
+            border-radius: 5px;
+            margin: 3rem 0;
+            border: 1px solid #444;
+            position: relative;
+        }
+        
+        .tools-title {
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            background-color: var(--secondary-color);
+            padding: 5px 15px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .tools-list {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .tool {
+            text-align: center;
+            width: 100px;
+        }
+        
+        .tool-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--light-gray);
+        }
+        
+        .tool-name {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+        
+        /* Media queries */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .dashboard {
+                width: 100%;
+                min-height: 250px;
+            }
+            
+            .wheel-controls {
+                width: 100px;
+                height: 100px;
+                left: 10%;
+            }
+            
+            .dashboard-screen {
+                width: 120px;
+                height: 70px;
+                right: 15%;
+            }
+            
+            .tip-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <div class="logo">GEARHEAD</div>
+                <div class="tagline">Mechanics. Engines. Performance.</div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="hero">
+        <div class="container">
+            <h1 class="hero-title">HYUNDAI SONATA 2020</h1>
+            <p class="hero-subtitle">OIL LIFE RESET - THE NO-NONSENSE GUIDE</p>
+        </div>
+    </div>
+    
+    <section class="main-content">
+        <div class="container">
+            <div class="gear-decoration gear-1">⚙️</div>
+            <div class="gear-decoration gear-2">⚙️</div>
+            
+            <div class="tools-needed">
+                <div class="tools-title">WHAT YOU NEED</div>
+                <div class="tools-list">
+                    <div class="tool">
+                        <div class="tool-icon">🔑</div>
+                        <div class="tool-name">Keys</div>
+                    </div>
+                    <div class="tool">
+                        <div class="tool-icon">⏱️</div>
+                        <div class="tool-name">5 Minutes</div>
+                    </div>
+                    <div class="tool">
+                        <div class="tool-icon">👆</div>
+                        <div class="tool-name">Index Finger</div>
+                    </div>
+                    <div class="tool">
+                        <div class="tool-icon">🧠</div>
+                        <div class="tool-name">Brain</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="method">
+                <h2 class="section-title">PRIMARY METHOD</h2>
+                
+                <div class="method-card">
+                    <div class="card-header">
+                        STEERING WHEEL CONTROLS
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h3 class="step-title">START YOUR ENGINE</h3>
+                                <p>Get in the driver's seat. Insert key, fire up the engine. Make sure your vehicle is in PARK position with all doors closed.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h3 class="step-title">ACCESS MENU SYSTEM</h3>
+                                <p>Locate the MODE button on your steering wheel (usually on the right side). Hit this button to cycle through to the USER SETTINGS menu.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h3 class="step-title">FIND SERVICE INTERVAL</h3>
+                                <p>Use the directional buttons to scroll down until you find "SERVICE INTERVAL". Press the OK button firmly to select it.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h3 class="step-title">RESET THE SYSTEM</h3>
+                                <p>When you see "Service Required" on the display, press and HOLD the OK button for at least 1 full second. Don't tap it - HOLD IT DOWN.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h3 class="step-title">VERIFY RESET</h3>
+                                <p>The service interval will reset to default settings. You'll see a confirmation on your dash. Job done. Reset complete.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="note">
+                            <p class="note-title">IMPORTANT</p>
+                            <p>The service interval feature must be ACTIVATED first. Access the INFORMATION menu by pressing the MODE button, then press OK to enter the menu. Use the directional pad to turn on SERVICE INTERVAL mode and set your preferred interval.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-layout">
+                    <div class="dashboard-title">CONTROL LOCATIONS</div>
+                    <div class="dashboard">
+                        <div class="wheel-controls">STEERING CONTROLS</div>
+                        <div class="dashboard-screen">SERVICE REQUIRED</div>
+                        <div class="ok-button">OK</div>
+                    </div>
+                    <p style="margin-top: 1.5rem; text-transform: uppercase; letter-spacing: 1px;">THE OK BUTTON IS LOCATED ON THE RIGHT SIDE OF YOUR STEERING WHEEL</p>
+                </div>
+            </div>
+            
+            <div class="method">
+                <h2 class="section-title">ALTERNATE METHOD</h2>
+                
+                <div class="method-card">
+                    <div class="card-header">
+                        INFOTAINMENT SYSTEM
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h3 class="step-title">ENTER SETUP MENU</h3>
+                                <p>With engine running, access your infotainment screen's main menu. Select "SETUP" option.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h3 class="step-title">VEHICLE SETTINGS</h3>
+                                <p>In the Setup menu, locate and tap "VEHICLE" to access vehicle-specific settings.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h3 class="step-title">FIND CONVENIENCE</h3>
+                                <p>With newer software updates, scroll down to find the "CONVENIENCE" option in the Vehicle menu.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h3 class="step-title">SERVICE INTERVAL</h3>
+                                <p>Under Convenience, locate and select the "SERVICE INTERVAL" option with a firm press.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h3 class="step-title">RESET COUNTER</h3>
+                                <p>Follow the on-screen prompts to reset your service interval. Confirm when prompted. Done.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="note">
+                            <p class="note-title">SOFTWARE UPDATE INFO</p>
+                            <p>If you've recently updated your Hyundai's software, menu locations may have changed. Older versions had Service Interval under SETUP > VEHICLE > CLUSTER. Newer versions moved it to SETUP > VEHICLE > CONVENIENCE.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                            <div class="tip-card" style="margin-top: 3rem;">
+                <div class="tip-icon">⚠️</div>
+                <div class="tip-title">PRO MECHANIC TIP</div>
+                <p>Always reset your oil life indicator IMMEDIATELY after changing your oil. Failure to reset can cause your maintenance schedule to be thrown off, giving you inaccurate readings about when service is actually due. It's the mark of a true gearhead to keep maintenance tracking precise.</p>
+                <div class="tip-number">01</div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="tool-tips">
+        <div class="container">
+            <h2 class="section-title">MAINTENANCE ARSENAL</h2>
+            
+            <div class="tips-container">
+                <div class="tip-card">
+                    <div class="tip-icon">🔧</div>
+                    <div class="tip-title">OIL TYPE MATTERS</div>
+                    <p>Your 2020 Sonata demands SAE 5W-30 full synthetic oil. Don't cheap out with conventional oil. Synthetic costs more but gives superior engine protection, especially in extreme temperatures. Performance vehicles deserve performance oil.</p>
+                    <div class="tip-number">02</div>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">⏱️</div>
+                    <div class="tip-title">CHANGE FREQUENCY</div>
+                    <p>Factory specs say change every 7,500 miles under normal conditions. But if you're driving hard, towing, or in extreme weather, cut that to 3,750 miles. Real pros know that more frequent changes mean longer engine life.</p>
+                    <div class="tip-number">03</div>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">⚙️</div>
+                    <div class="tip-title">FILTER QUALITY</div>
+                    <p>Don't just change the oil - replace the filter with OEM or better. A high-quality filter traps more contaminants and maintains proper oil pressure. Skip the bargain filters if you want your engine to last.</p>
+                    <div class="tip-number">04</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="section-title">TROUBLESHOOTING</h2>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">CAN'T FIND SERVICE INTERVAL OPTION</div>
+                    <div class="faq-answer">
+                        <p>If the Service Interval option is nowhere to be found, you're likely dealing with a software update that moved things around. Try these fixes:</p>
+                        <p>1. Check under Vehicle > Convenience instead of Vehicle > Cluster</p>
+                        <p>2. Some software versions may have eliminated the option from the infotainment system. In this case, use the steering wheel controls method.</p>
+                        <p>3. If all else fails, disconnect the battery for 5 minutes to force a system reset (note: this will reset ALL settings).</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">RESET PROCEDURE NOT WORKING</div>
+                    <div class="faq-answer">
+                        <p>If holding the OK button doesn't reset the service light:</p>
+                        <p>1. Make sure you're holding it for at least 1 FULL second - not just tapping it</p>
+                        <p>2. Try turning the car completely off, wait 30 seconds, then restart and try again</p>
+                        <p>3. Ensure the Service Interval feature is actually activated in your vehicle settings</p>
+                        <p>4. Some vehicles require pressing and holding multiple buttons simultaneously - try holding OK + Back buttons together</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">SERVICE LIGHT RETURNS IMMEDIATELY</div>
+                    <div class="faq-answer">
+                        <p>If your service light comes back on right after resetting:</p>
+                        <p>1. Your oil level may actually be low - check with the dipstick</p>
+                        <p>2. There could be a sensor malfunction - have the oil pressure sensor checked</p>
+                        <p>3. The oil quality sensor might be detecting contaminated oil - make sure you've actually changed the oil with fresh supply</p>
+                        <p>4. There may be another maintenance issue triggering the light - consider a diagnostic scan</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">OIL CAPACITY SPECIFICATIONS</div>
+                    <div class="faq-answer">
+                        <p>The 2020 Hyundai Sonata has different oil capacities based on engine configuration:</p>
+                        <p>• 2.5L Engine: 5.8 quarts (5.5 liters) with filter change</p>
+                        <p>• 1.6L Turbo Engine: 4.8 quarts (4.5 liters) with filter change</p>
+                        <p>Always verify the exact capacity for your specific engine in your owner's manual. Overfilling is just as harmful as underfilling.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">BEST OIL BRANDS FOR PERFORMANCE</div>
+                    <div class="faq-answer">
+                        <p>For maximum performance and protection in your Sonata, consider these top-tier oils that exceed manufacturer specifications:</p>
+                        <p>• Mobil 1 Extended Performance Full Synthetic</p>
+                        <p>• Castrol EDGE Full Synthetic</p>
+                        <p>• Valvoline Advanced Full Synthetic</p>
+                        <p>• Pennzoil Ultra Platinum Full Synthetic</p>
+                        <p>Remember: cheap oil is expensive in the long run when it costs you engine life.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">GEARHEAD</div>
+                <p>THE ULTIMATE RESOURCE FOR MEN WHO HANDLE THEIR OWN MAINTENANCE</p>
+                
+                <div class="footer-links">
+                    <a href="#" class="footer-link">HOME</a>
+                    <a href="#" class="footer-link">MAINTENANCE GUIDES</a>
+                    <a href="#" class="footer-link">PERFORMANCE MODS</a>
+                    <a href="#" class="footer-link">TOOLS</a>
+                    <a href="#" class="footer-link">CONTACT</a>
+                </div>
+                
+                <p>This guide applies to the 2020 Hyundai Sonata. Procedures may vary for different models.</p>
+                <p class="copyright">© 2025 GEARHEAD. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple toggle for FAQ items
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const currentDisplay = window.getComputedStyle(answer).display;
+                
+                // Close all answers first
+                document.querySelectorAll('.faq-answer').forEach(item => {
+                    item.style.display = 'none';
+                });
+                
+                // If the clicked one was already open, leave it closed
+                // Otherwise, open it
+                if (currentDisplay === 'none') {
+                    answer.style.display = 'block';
+                    question.style.setProperty('--faq-icon', '"-"');
+                } else {
+                    question.style.setProperty('--faq-icon', '"+"');
+                }
+            });
+        });
+        
+        // Hide all FAQ answers initially
+        document.querySelectorAll('.faq-answer').forEach(answer => {
+            answer.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
