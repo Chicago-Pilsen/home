@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silverado Oil Reset Comparison</title>
+    <style>
+        :root {
+            --primary-color: #151515;
+            --secondary-color: #d92121;
+            --accent-color: #ffcc00;
+            --text-color: #e0e0e0;
+            --dark-gray: #333;
+            --medium-gray: #555;
+            --light-gray: #777;
+            --border-color: #444;
+            --card-bg: #242424;
+            --hover-color: #303030;
+            --table-row-odd: #1e1e1e;
+            --table-row-even: #2a2a2a;
+            --table-header-bg: #0e0e0e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .comparison-section {
+            margin: 4rem 0;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2.5rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 1rem;
+            animation: slideInFromTop 0.8s ease-out;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--secondary-color);
+            animation: expandWidth 1.2s ease-out forwards;
+        }
+        
+        .comparison-table-container {
+            overflow-x: auto;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--card-bg);
+            overflow: hidden;
+        }
+        
+        .comparison-table th, 
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .comparison-table th {
+            background-color: var(--table-header-bg);
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .comparison-table tr:nth-child(odd) {
+            background-color: var(--table-row-odd);
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: var(--table-row-even);
+        }
+        
+        .comparison-table tr:hover {
+            background-color: var(--hover-color);
+        }
+        
+        .comparison-table td:first-child {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+        .generation-header {
+            background-color: var(--secondary-color) !important;
+            color: white;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+        
+        .feature-available {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .feature-unavailable {
+            color: #f44336;
+        }
+        
+        .note {
+            font-style: italic;
+            color: var(--light-gray);
+        }
+        
+        .filter-controls {
+            margin-bottom: 2rem;
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-label {
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-right: 0.5rem;
+        }
+        
+        .filter-select, .filter-button {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background-color: var(--dark-gray);
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .filter-button {
+            background-color: var(--secondary-color);
+            border: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-button:hover {
+            background-color: #ff3b3b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+        
+        .filter-reset {
+            background-color: var(--medium-gray);
+        }
+        
+        .filter-reset:hover {
+            background-color: var(--dark-gray);
+        }
+        
+        .quick-tip {
+            background-color: rgba(255, 204, 0, 0.1);
+            border-left: 3px solid var(--accent-color);
+            padding: 1.2rem;
+            margin: 2rem 0;
+            font-size: 1rem;
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .tip-title {
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .tip-icon {
+            font-size: 1.2rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideInFromTop {
+            from { 
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 100px; }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="comparison-section">
+            <h2 class="section-title">COMPREHENSIVE SILVERADO COMPARISON</h2>
+            
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <div>
+                        <span class="filter-label">Filter by Year:</span>
+                        <select class="filter-select" id="year-filter">
+                            <option value="all">All Years</option>
+                            <option value="1988-1998">1988-1998</option>
+                            <option value="2000-2002">2000-2002</option>
+                            <option value="2003-2006">2003-2006</option>
+                            <option value="2007-2009">2007-2009</option>
+                            <option value="2010-2013">2010-2013</option>
+                            <option value="2014-2018">2014-2018</option>
+                            <option value="2019-2022">2019-2022</option>
+                            <option value="2023-2025">2023-2025</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <span class="filter-label">Filter by Engine:</span>
+                        <select class="filter-select" id="engine-filter">
+                            <option value="all">All Engines</option>
+                            <option value="4.3L V6">4.3L V6</option>
+                            <option value="4.8L V8">4.8L V8</option>
+                            <option value="5.0L V8">5.0L V8</option>
+                            <option value="5.3L V8">5.3L V8</option>
+                            <option value="5.7L V8">5.7L V8</option>
+                            <option value="6.0L V8">6.0L V8</option>
+                            <option value="6.2L V8">6.2L V8</option>
+                            <option value="6.5L Diesel">6.5L Diesel</option>
+                            <option value="3.0L Duramax">3.0L Duramax Diesel</option>
+                            <option value="6.6L Duramax">6.6L Duramax Diesel</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <button class="filter-button" id="apply-filter">Apply Filters</button>
+                    <button class="filter-button filter-reset" id="reset-filter">Reset</button>
+                </div>
+            </div>
+            
+            <div class="comparison-table-container">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Model Years</th>
+                            <th>Generation</th>
+                            <th>Primary Reset Method</th>
+                            <th>Secondary Reset Method</th>
+                            <th>Recommended Oil Type</th>
+                            <th>Oil Capacity (5.3L/5.7L)</th>
+                            <th>Digital Controls</th>
+                            <th>App Integration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- GMT400 Platform -->
+                        <tr class="generation-header">
+                            <td colspan="8">Pre-Silverado C/K Trucks (GMT400 Platform)</td>
+                        </tr>
+                        <tr data-year="1988-1998" data-engine="5.7L V8">
+                            <td>1988-1998</td>
+                            <td>GMT400 (C/K)</td>
+                            <td>Manual Oil Change Tracking</td>
+                            <td>Not Available</td>
+                            <td>5W-30 (Conventional)</td>
+                            <td>5.0 quarts</td>
+                            <td class="feature-unavailable">Not Available</td>
+                            <td class="feature-unavailable">Not Available</td>
+                        </tr>
+                        <tr data-year="1988-1998" data-engine="5.0L V8">
+                            <td>1988-1998 (5.0L)</td>
+                            <td>GMT400 (C/K)</td>
+                            <td>Manual Oil Change Tracking</td>
+                            <td>Not Available</td>
+                            <td>5W-30 (Conventional)</td>
+                            <td>4.5 quarts</td>
+                            <td class="feature-unavailable">Not Available</td>
+                            <td class="feature-unavailable">Not Available</td>
+                        </tr>
+                        <tr data-year="1988-1998" data-engine="6.5L Diesel">
+                            <td>1992-1998 (6.5L Diesel)</td>
+                            <td>GMT400 (C/K)</td>
+                            <td>Manual Oil Change Tracking</td>
+                            <td>Not Available</td>
+                            <td>15W-40 Diesel Oil</td>
+                            <td>7.0 quarts</td>
+                            <td class="feature-unavailable">Not Available</td>
+                            <td class="feature-unavailable">Not Available</td>
+                        </tr>
+                        
+                        <!-- First Generation (Early) -->
+                        <tr class="generation-header">
+                            <td colspan="8">First Generation (GMT800 Platform - Early)</td>
+                        </tr>
+                        <tr data-year="2000-2002" data-engine="5.3L V8">
+                            <td>2000-2002</td>
+                            <td>GMT800</td>
+                            <td>Odometer Reset Button</td>
+                            <td>Not Applicable</td>
+                            <td>5W-30 (Conventional)</td>
+                            <td>6.0 quarts</td>
+                            <td class="feature-unavailable">Not Available</td>
+                            <td class="feature-unavailable">Not Available</td>
+                        </tr>
+                        <tr data-year="2000-2002" data-engine="4.8L V8">
+                            <td>2000-2002 (4.8L)</td>
+                            <td>GMT800</td>
+                            <td>Odometer Reset Button</td>
+                            <td>Not Applicable</td>
+                            <td>5W-30 (Conventional)</td>
+                            <td>5.5 quarts</td>
+                            <td class="feature-unavailable">Not Available</td>
+                            <td class="feature-unavailable">Not Available</td>
+                        </tr>
+                        <tr data-year="2000-2002" data-engine="4.3L V6">
+                            <td>2000-2002 (4.3L)</td>
+                            <td>GMT800</td>
+                            <td>Odometer Reset Button</td>
+                            <td>Not Applicable</td>
+                            <td>5W-30 (Conventional)</td>
+                            <td>4.5 quarts</td>
+                            <td class="feature-unavailable">Not Available</td>
+                            <td class="feature-unavailable">Not Available</td>
+                        </tr>
+                        
+                        <!-- First Generation (Updated) -->
+                        <tr class="generation-header">
+                            <td colspan="8">First Generation (GMT800 Platform - Updated)</td>
+                        </tr>
+                        <tr data-year="2003-2006" data-engine="5.3L V8">
+                            <td>2003-2006</td>
+                            <td>GMT800</td>
+                            <td>Oil Life Reset Button</td>
+                            <td>Driver Information Center</td>
+                            <td>5W-30 (Conventional)</td>
+                            <td>6.0 quarts</td>
+                            <td class="feature-unavailable">Basic DIC</td>
+                            <td class="feature-unavailable">Not Available</td>
+                        </tr>
+                        <tr data-year="2003-2006" data-engine="4.8L V8">
+                            <td>2003-2006 (4.8L)</td>
+                            <td>GMT800</td>
+                            <td>Oil Life Reset Button</td>
+                            <td>Driver Information Center</td>
+                            <td>5W-30 (Conventional)</td>
+                            <td>5.5 quarts</td>
+                            <td class="feature-unavailable">Basic DIC</td>
+                            <td class="feature-unavailable">Not Available</td>
+                        </tr>
+                        <tr data-year="2003-2006" data-engine="6.0L V8">
+                            <td>2003-2006 (6.0L)</td>
+                            <td>GMT800</td>
+                            <td>Oil Life Reset Button</td>
+                            <td>Driver Information Center</td>
+                            <td>5W-30 (Conventional)</td>
+                            <td>6.0 quarts</td>
+                            <td class="feature-unavailable">Basic DIC</td>
+                            <td class="feature-unavailable">Not Available</td>
+                        </tr>
+                        
+                        <!-- First-Second Generation Transition -->
+                        <tr class="generation-header">
+                            <td colspan="8">First-Second Gen Transition ("Classic" & "New Body Style")</td>
+                        </tr>
+                        <tr data-year="2007-2009" data-engine="5.3L V8">
+                            <td>2007-2009</td>
+                            <td>GMT900/GMT800</td>
+                            <td>Oil Life Button (DIC)</td>
+                            <td>Accelerator Pedal Method</td>
+                            <td>5W-30 (Conventional)</td>
+                            <td>6.0 quarts</td>
+                            <td class="feature-unavailable">Basic DIC</td>
+                            <td class="feature-unavailable">Not Available</td>
+                        </tr>
+                        <tr data-year="2007-2009" data-engine="4.8L V8">
+                            <td>2007-2009 (4.8L)</td>
+                            <td>GMT900/GMT800</td>
+                            <td>Oil Life Button (DIC)</td>
+                            <td>Accelerator Pedal Method</td>
+                            <td>5W-30 (Conventional)</td>
+                            <td>5.5 quarts</td>
+                            <td class="feature-unavailable">Basic DIC</td>
+                            <td class="feature-unavailable">Not Available</td>
+                        </tr>
+                        <tr data-year="2007-2009" data-engine="6.0L V8">
+                            <td>2007-2009 (6.0L)</td>
+                            <td>GMT900/GMT800</td>
+                            <td>Oil Life Button (DIC)</td>
+                            <td>Accelerator Pedal Method</td>
+                            <td>5W-30 (Conventional)</td>
+                            <td>6.0 quarts</td>
+                            <td class="feature-unavailable">Basic DIC</td>
+                            <td class="feature-unavailable">Not Available</td>
+                        </tr>
+                        
+                        <!-- Second Generation -->
+                        <tr class="generation-header">
+                            <td colspan="8">Second Generation (GMT900 Platform)</td>
+                        </tr>
+                        <tr data-year="2010-2013" data-engine="5.3L V8">
+                            <td>2010-2013</td>
+                            <td>GMT900</td>
+                            <td>Trip Odometer Button Method</td>
+                            <td>Accelerator Pedal Method</td>
+                            <td>5W-30 (Conventional or Synthetic)</td>
+                            <td>6.0 quarts</td>
+                            <td class="feature-unavailable">Not Available</td>
+                            <td class="feature-unavailable">Not Available</td>
+                        </tr>
+                        
+                        <!-- Third Generation -->
+                        <tr class="generation-header">
+                            <td colspan="8">Third Generation (K2XX Platform)</td>
+                        </tr>
+                        <tr data-year="2014-2018" data-engine="5.3L V8">
+                            <td>2014-2018</td>
+                            <td>K2XX</td>
+                            <td>DIC Menu Navigation</td>
+                            <td>Steering Wheel Controls</td>
+                            <td>Dexos1 5W-30</td>
+                            <td>8.0 quarts</td>
+                            <td class="feature-available">Basic DIC</td>
+                            <td class="feature-unavailable">Limited</td>
+                        </tr>
+                        
+                        <!-- Fourth Generation -->
+                        <tr class="generation-header">
+                            <td colspan="8">Fourth Generation (T1XX Platform)</td>
+                        </tr>
+                        <tr data-year="2019-2022" data-engine="5.3L V8">
+                            <td>2019-2022</td>
+                            <td>T1XX</td>
+                            <td>Infotainment Touchscreen</td>
+                            <td>Steering Wheel Controls</td>
+                            <td>Full Synthetic 0W-20</td>
+                            <td>8.0 quarts</td>
+                            <td class="feature-available">Full Digital</td>
+                            <td class="feature-available">MyChevrolet App</td>
+                        </tr>
+                        <tr data-year="2019-2022" data-engine="6.2L V8">
+                            <td>2019-2022 (6.2L)</td>
+                            <td>T1XX</td>
+                            <td>Infotainment Touchscreen</td>
+                            <td>Steering Wheel Controls</td>
+                            <td>Full Synthetic 0W-20</td>
+                            <td>8.0 quarts</td>
+                            <td class="feature-available">Full Digital</td>
+                            <td class="feature-available">MyChevrolet App</td>
+                        </tr>
+                        <tr data-year="2020-2022" data-engine="3.0L Duramax">
+                            <td>2020-2022 (Diesel)</td>
+                            <td>T1XX</td>
+                            <td>Infotainment Touchscreen</td>
+                            <td>Steering Wheel Controls</td>
+                            <td>Full Synthetic Dexos-D 5W-30</td>
+                            <td>7.0 quarts</td>
+                            <td class="feature-available">Full Digital</td>
+                            <td class="feature-available">MyChevrolet App</td>
+                        </tr>
+                        
+                        <!-- Fifth Generation -->
+                        <tr class="generation-header">
+                            <td colspan="8">Fifth Generation (Updated T1XX Platform)</td>
+                        </tr>
+                        <tr data-year="2023-2025" data-engine="5.3L V8">
+                            <td>2023-2025</td>
+                            <td>T1XX (Refresh)</td>
+                            <td>Google Built-in Interface</td>
+                            <td>MyChevrolet App</td>
+                            <td>Full Synthetic 0W-20</td>
+                            <td>8.0 quarts</td>
+                            <td class="feature-available">Advanced Digital</td>
+                            <td class="feature-available">Full App Integration</td>
+                        </tr>
+                        <tr data-year="2023-2025" data-engine="6.2L V8">
+                            <td>2023-2025 (6.2L)</td>
+                            <td>T1XX (Refresh)</td>
+                            <td>Google Built-in Interface</td>
+                            <td>MyChevrolet App</td>
+                            <td>Full Synthetic 0W-20</td>
+                            <td>8.0 quarts</td>
+                            <td class="feature-available">Advanced Digital</td>
+                            <td class="feature-available">Full App Integration</td>
+                        </tr>
+                        <tr data-year="2023-2025" data-engine="3.0L Duramax">
+                            <td>2023-2025 (Diesel)</td>
+                            <td>T1XX (Refresh)</td>
+                            <td>Google Built-in Interface</td>
+                            <td>MyChevrolet App</td>
+                            <td>Full Synthetic Dexos-D 5W-30</td>
+                            <td>7.0 quarts</td>
+                            <td class="feature-available">Advanced Digital</td>
+                            <td class="feature-available">Full App Integration + DEF Monitoring</td>
+                        </tr>
+                        
+                        <!-- Special Editions -->
+                        <tr class="generation-header">
+                            <td colspan="8">Special Editions & Variants</td>
+                        </tr>
+                        <tr data-year="2019-2022" data-engine="5.3L V8">
+                            <td>2019-2022 Trail Boss</td>
+                            <td>T1XX</td>
+                            <td>Infotainment Touchscreen</td>
+                            <td>Steering Wheel Controls</td>
+                            <td>Full Synthetic 0W-20</td>
+                            <td>8.0 quarts</td>
+                            <td class="feature-available">Full Digital</td>
+                            <td class="feature-available">MyChevrolet App</td>
+                        </tr>
+                        <tr data-year="2022-2025" data-engine="6.2L V8">
+                            <td>2022-2025 ZR2</td>
+                            <td>T1XX</td>
+                            <td>Google Built-in Interface</td>
+                            <td>MyChevrolet App</td>
+                            <td>Full Synthetic 0W-20 (High Performance)</td>
+                            <td>8.0 quarts</td>
+                            <td class="feature-available">Advanced Digital</td>
+                            <td class="feature-available">Full App + Off-Road Tracking</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="quick-tip">
+                <div class="tip-title"><span class="tip-icon">💡</span> Platform Evolution</div>
+                <p>General Motors has used several truck platforms over the years, evolving from the GMT400 (1988-2002) to the latest T1XX platforms. These platform designations refer to the underlying chassis architecture and frame design that serves as the foundation for GM's trucks and SUVs:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>GMT400 (1988-2002):</strong> Used for the C/K trucks before the Silverado name was applied to the entire model line</li>
+                    <li><strong>GMT800 (1999-2006):</strong> First-generation Silverado with early oil life monitoring systems</li>
+                    <li><strong>GMT900 (2007-2013):</strong> Second-generation with improved monitoring systems</li>
+                    <li><strong>K2XX (2014-2018):</strong> Third-generation with enhanced digital controls</li>
+                    <li><strong>T1XX (2019-present):</strong> Fourth/Fifth-generation with modern digital interfaces and app integration</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearFilter = document.getElementById('year-filter');
+            const engineFilter = document.getElementById('engine-filter');
+            const applyFilterBtn = document.getElementById('apply-filter');
+            const resetFilterBtn = document.getElementById('reset-filter');
+            const tableRows = document.querySelectorAll('.comparison-table tbody tr');
+            
+            // Function to apply filters
+            function applyFilters() {
+                const selectedYear = yearFilter.value;
+                const selectedEngine = engineFilter.value;
+                
+                // Loop through all rows and check if they match the filters
+                tableRows.forEach(row => {
+                    // Skip generation header rows
+                    if (row.classList.contains('generation-header')) {
+                        row.style.display = 'table-row';
+                        return;
+                    }
+                    
+                    const rowYear = row.getAttribute('data-year');
+                    const rowEngine = row.getAttribute('data-engine');
+                    
+                    // Show row if both filters match or if filters are set to 'all'
+                    const yearMatch = selectedYear === 'all' || rowYear === selectedYear;
+                    const engineMatch = selectedEngine === 'all' || rowEngine === selectedEngine;
+                    
+                    if (yearMatch && engineMatch) {
+                        row.style.display = 'table-row';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                // Hide generation headers if no visible rows in that generation
+                const generationHeaders = document.querySelectorAll('.generation-header');
+                generationHeaders.forEach(header => {
+                    let nextRow = header.nextElementSibling;
+                    let hasVisibleRows = false;
+                    
+                    // Check if any rows in this generation are visible
+                    while (nextRow && !nextRow.classList.contains('generation-header')) {
+                        if (nextRow.style.display !== 'none') {
+                            hasVisibleRows = true;
+                            break;
+                        }
+                        nextRow = nextRow.nextElementSibling;
+                    }
+                    
+                    // Hide header if no visible rows
+                    header.style.display = hasVisibleRows ? 'table-row' : 'none';
+                });
+            }
+            
+            // Function to reset filters

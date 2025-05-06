@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chevrolet Silverado Cards</title>
+    <style>
+        :root {
+            --primary-color: #151515;
+            --secondary-color: #d92121;
+            --accent-color: #ffcc00;
+            --text-color: #e0e0e0;
+            --dark-gray: #333;
+            --medium-gray: #555;
+            --light-gray: #777;
+            --border-color: #444;
+            --card-bg: #242424;
+            --card-back-bg: #1a1a1a;
+            --hover-color: #303030;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .manufacturer-section {
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        .manufacturer-title {
+            font-size: 2rem;
+            margin: 2rem 0 1.5rem;
+            color: white;
+            position: relative;
+            padding-left: 1.5rem;
+            text-transform: uppercase;
+        }
+        
+        .manufacturer-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 5px;
+            background-color: var(--secondary-color);
+            transform: scaleY(0);
+            transform-origin: top;
+            animation: scaleHeight 0.6s ease-out forwards;
+            animation-delay: 0.3s;
+        }
+        
+        .vehicle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        /* 3D FLIP CARD STYLING */
+        .vehicle-card {
+            background-color: transparent;
+            perspective: 1000px;
+            height: 450px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+            animation-delay: calc(var(--card-index, 0) * 0.2s);
+        }
+        
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        
+        .vehicle-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-front {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+        
+        .card-back {
+            background-color: var(--card-back-bg);
+            border: 1px solid var(--secondary-color);
+            color: white;
+            transform: rotateY(180deg);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .flip-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(0,0,0,0.6);
+            color: var(--accent-color);
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .flip-icon {
+            display: inline-block;
+            animation: rotateIcon 2s infinite ease-in-out;
+        }
+        
+        @keyframes rotateIcon {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(180deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        
+        .card-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                to right, 
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.3) 50%,
+                rgba(255,255,255,0) 100%
+            );
+            transform: skewX(-25deg);
+            transition: left 0.75s ease-out;
+            z-index: 1;
+        }
+        
+        .vehicle-card:hover .card-image::before {
+            left: 150%;
+        }
+        
+        .card-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(to top, var(--card-bg), transparent);
+            z-index: 1;
+        }
+        
+        .brand-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            transform: scale(0);
+            opacity: 0;
+            z-index: 2;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation-delay: calc(var(--card-index, 0) * 0.2s + 0.3s);
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+            text-align: left;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .card-subtitle {
+            color: var(--light-gray);
+            margin-bottom: 1rem;
+        }
+        
+        .card-features {
+            list-style-type: none;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+        
+        .feature-item {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: flex-start;
+            transform: translateX(-10px);
+            opacity: 0;
+            animation: slideInFromLeft 0.4s ease-out forwards;
+            animation-delay: calc(var(--card-index, 0) * 0.2s + var(--item-index, 0) * 0.1s + 0.6s);
+        }
+        
+        .feature-icon {
+            color: var(--accent-color);
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .card-button {
+            display: block;
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 0.8rem;
+            border-radius: 5px;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+        }
+        
+        .card-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: skewX(-30deg);
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+        
+        .card-button:hover {
+            background-color: #ff3b3b;
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(217, 33, 33, 0.4);
+            letter-spacing: 2px;
+        }
+        
+        .card-button:hover::before {
+            left: 100%;
+        }
+        
+        /* BACK CARD CONTENT */
+        .back-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            width: 100%;
+        }
+        
+        .back-subtitle {
+            color: var(--light-gray);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .back-content {
+            flex-grow: 1;
+            text-align: left;
+            width: 100%;
+        }
+        
+        .detail-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .detail-title {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .detail-title svg {
+            margin-right: 0.5rem;
+            fill: var(--secondary-color);
+        }
+        
+        .detail-content {
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--secondary-color);
+            margin-left: 0.3rem;
+        }
+        
+        .detail-item {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .maintenance-note {
+            background-color: rgba(255, 204, 0, 0.1);
+            border-left: 3px solid var(--accent-color);
+            padding: 0.8rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .back-buttons {
+            display: flex;
+            gap: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .back-button {
+            flex: 1;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.8rem;
+            border-radius: 5px;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background-color: #ff3b3b;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .back-button.secondary {
+            background-color: var(--medium-gray);
+        }
+        
+        .back-button.secondary:hover {
+            background-color: var(--dark-gray);
+        }
+        
+        /* ANIMATIONS KEYFRAMES */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideInFromLeft {
+            from { 
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes scaleHeight {
+            from { transform: scaleY(0); }
+            to { transform: scaleY(1); }
+        }
+        
+        @keyframes popIn {
+            from { 
+                opacity: 0;
+                transform: scale(0); 
+            }
+            to { 
+                opacity: 1;
+                transform: scale(1); 
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .vehicle-card {
+                height: 480px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="manufacturer-section">
+            <h3 class="manufacturer-title">CHEVROLET SILVERADO 1500 LT (5.3L)</h3>
+            
+            <div class="vehicle-grid">
+                <!-- Third Generation (2014-2018) -->
+                <div class="vehicle-card" style="--card-index: 0;">
+                    <div class="card-inner">
+                        <!-- Front of Card -->
+                        <div class="card-front">
+                            <div class="card-image" style="background-image: url('/api/placeholder/400/250')">
+                                <div class="brand-badge chevrolet-badge">C</div>
+                                <div class="flip-indicator">
+                                    <span class="flip-icon">↺</span> Flip for Details
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <h4 class="card-title">2014-2018 Silverado 1500 LT</h4>
+                                <p class="card-subtitle">Third Generation (K2XX)</p>
+                                
+                                <ul class="card-features">
+                                    <li class="feature-item" style="--item-index: 0;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Information Center Reset Method</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 1;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Steering Wheel Controls Guide</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 2;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>5.3L EcoTec3 V8 Oil Specs</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 3;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Maintenance Schedule</span>
+                                    </li>
+                                </ul>
+                                
+                                <a href="#silverado-2014-2018-reset" class="card-button">VIEW GUIDE</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Back of Card -->
+                        <div class="card-back">
+                            <h4 class="back-title">2014-2018 Silverado</h4>
+                            <p class="back-subtitle">Third Gen Oil Life Reset Guide</p>
+                            
+                            <div class="back-content">
+                                <div class="detail-section">
+                                    <h5 class="detail-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                                        </svg>
+                                        Oil Specifications (5.3L)
+                                    </h5>
+                                    <div class="detail-content">
+                                        <p class="detail-item">• Oil Type: Full Synthetic 0W-20</p>
+                                        <p class="detail-item">• Oil Capacity: 8.0 quarts (with filter)</p>
+                                        <p class="detail-item">• Filter: ACDelco PF63E</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <h5 class="detail-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24">
+                                            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                                        </svg>
+                                        Reset Procedure
+                                    </h5>
+                                    <div class="detail-content">
+                                        <p class="detail-item"><strong>Primary Method:</strong> Using touchscreen infotainment system</p>
+                                        <p class="detail-item"><strong>Alternative:</strong> Using steering wheel controls</p>
+                                        <p class="detail-item"><strong>Reset Time:</strong> Under 1 minute</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="maintenance-note">
+                                    <strong>Note:</strong> The 2019-2022 models feature a completely redesigned interface with touchscreen controls. The oil life system now integrates with the vehicle's connected services.
+                                </div>
+                            </div>
+                            
+                            <div class="back-buttons">
+                                <a href="#silverado-4th-gen-reset" class="back-button">VIEW FULL GUIDE</a>
+                                <a href="#" class="back-button secondary">WATCH VIDEO</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Fifth Generation (2023-2025) -->
+                <div class="vehicle-card" style="--card-index: 3;">
+                    <div class="card-inner">
+                        <!-- Front of Card -->
+                        <div class="card-front">
+                            <div class="card-image" style="background-image: url('/api/placeholder/400/250')">
+                                <div class="brand-badge chevrolet-badge">C</div>
+                                <div class="flip-indicator">
+                                    <span class="flip-icon">↺</span> Flip for Details
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <h4 class="card-title">2023-2025 Silverado 1500 LT</h4>
+                                <p class="card-subtitle">Fifth Generation (Updated T1XX)</p>
+                                
+                                <ul class="card-features">
+                                    <li class="feature-item" style="--item-index: 0;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Google Built-in Method</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 1;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Digital Cluster Method</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 2;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>5.3L V8 Oil Specifications</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 3;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>MyChevrolet App Integration</span>
+                                    </li>
+                                </ul>
+                                
+                                <a href="#silverado-2023-2025-reset" class="card-button">VIEW GUIDE</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Back of Card -->
+                        <div class="card-back">
+                            <h4 class="back-title">2023-2025 Silverado</h4>
+                            <p class="back-subtitle">Fifth Gen Oil Life Reset Guide</p>
+                            
+                            <div class="back-content">
+                                <div class="detail-section">
+                                    <h5 class="detail-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                                        </svg>
+                                        Oil Specifications (5.3L)
+                                    </h5>
+                                    <div class="detail-content">
+                                        <p class="detail-item">• Oil Type: Full Synthetic 0W-20</p>
+                                        <p class="detail-item">• Oil Capacity: 8.0 quarts (with filter)</p>
+                                        <p class="detail-item">• Filter: ACDelco PF63E</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <h5 class="detail-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24">
+                                            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                                        </svg>
+                                        New Gen Features
+                                    </h5>
+                                    <div class="detail-content">
+                                        <p class="detail-item">• 13.4" Touchscreen Interface</p>
+                                        <p class="detail-item">• Remote Reset via MyChevrolet App</p>
+                                        <p class="detail-item">• Voice Command Reset Option</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="maintenance-note">
+                                    <strong>Pro Tip:</strong> The newest Silverado models (2023-2025) allow oil life reset through the redesigned Google Built-in interface or via the MyChevrolet mobile app after completing an oil change.
+                                </div>
+                            </div>
+                            
+                            <div class="back-buttons">
+                                <a href="#silverado-5th-gen-reset" class="back-button">VIEW FULL GUIDE</a>
+                                <a href="#" class="back-button secondary">APP GUIDE</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 2019 Silverado Refresh -->
+                <div class="vehicle-card" style="--card-index: 4;">
+                    <div class="card-inner">
+                        <!-- Front of Card -->
+                        <div class="card-front">
+                            <div class="card-image" style="background-image: url('/api/placeholder/400/250')">
+                                <div class="brand-badge chevrolet-badge">C</div>
+                                <div class="flip-indicator">
+                                    <span class="flip-icon">↺</span> Flip for Details
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <h4 class="card-title">2019 Silverado 1500 Trail Boss</h4>
+                                <p class="card-subtitle">Fourth Generation Special Edition</p>
+                                
+                                <ul class="card-features">
+                                    <li class="feature-item" style="--item-index: 0;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Touchscreen Menu Method</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 1;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Voice Command Method</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 2;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>5.3L V8 Z71 Package Specs</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 3;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Off-Road Maintenance Tips</span>
+                                    </li>
+                                </ul>
+                                
+                                <a href="#silverado-trail-boss-reset" class="card-button">VIEW GUIDE</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Back of Card -->
+                        <div class="card-back">
+                            <h4 class="back-title">2019 Trail Boss Edition</h4>
+                            <p class="back-subtitle">Special Edition Oil Life Reset Guide</p>
+                            
+                            <div class="back-content">
+                                <div class="detail-section">
+                                    <h5 class="detail-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                                        </svg>
+                                        Oil Specifications
+                                    </h5>
+                                    <div class="detail-content">
+                                        <p class="detail-item">• Oil Type: Full Synthetic 0W-20</p>
+                                        <p class="detail-item">• Oil Capacity: 8.0 quarts (with filter)</p>
+                                        <p class="detail-item">• Recommended: High-performance filter for off-road use</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <h5 class="detail-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24">
+                                            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                                        </svg>
+                                        Off-Road Considerations
+                                    </h5>
+                                    <div class="detail-content">
+                                        <p class="detail-item">• More frequent oil changes recommended for off-road use</p>
+                                        <p class="detail-item">• Monitor oil life more closely after water crossings</p>
+                                        <p class="detail-item">• Consider 5,000 mile intervals for heavy trail use</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="maintenance-note">
+                                    <strong>Trail Boss Tip:</strong> The Trail Boss edition features additional underbody protection, but it's still advisable to check for oil pan damage after aggressive off-road driving. Reset oil life to 100% after changes, but consider more frequent service intervals.
+                                </div>
+                            </div>
+                            
+                            <div class="back-buttons">
+                                <a href="#trail-boss-maintenance" class="back-button">VIEW FULL GUIDE</a>
+                                <a href="#" class="back-button secondary">OFF-ROAD TIPS</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 2022-2025 Silverado ZR2 -->
+                <div class="vehicle-card" style="--card-index: 5;">
+                    <div class="card-inner">
+                        <!-- Front of Card -->
+                        <div class="card-front">
+                            <div class="card-image" style="background-image: url('/api/placeholder/400/250')">
+                                <div class="brand-badge chevrolet-badge">C</div>
+                                <div class="flip-indicator">
+                                    <span class="flip-icon">↺</span> Flip for Details
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <h4 class="card-title">2022-2025 Silverado ZR2</h4>
+                                <p class="card-subtitle">Premium Off-Road Edition</p>
+                                
+                                <ul class="card-features">
+                                    <li class="feature-item" style="--item-index: 0;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Infotainment Touch Reset</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 1;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Digital Dashboard Method</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 2;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>5.3L/6.2L V8 Oil Specs</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 3;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Extreme Terrain Maintenance</span>
+                                    </li>
+                                </ul>
+                                
+                                <a href="#silverado-zr2-reset" class="card-button">VIEW GUIDE</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Back of Card -->
+                        <div class="card-back">
+                            <h4 class="back-title">2022-2025 Silverado ZR2</h4>
+                            <p class="back-subtitle">Performance Truck Oil Reset Guide</p>
+                            
+                            <div class="back-content">
+                                <div class="detail-section">
+                                    <h5 class="detail-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                                        </svg>
+                                        Engine Options & Oil Specs
+                                    </h5>
+                                    <div class="detail-content">
+                                        <p class="detail-item">• 5.3L V8: Full Synthetic 0W-20 (8.0 quarts)</p>
+                                        <p class="detail-item">• 6.2L V8: Full Synthetic 0W-20 (8.0 quarts)</p>
+                                        <p class="detail-item">• Premium Filters Recommended</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <h5 class="detail-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24">
+                                            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                                        </svg>
+                                        ZR2 Special Features
+                                    </h5>
+                                    <div class="detail-content">
+                                        <p class="detail-item">• Electronic Oil Life System with Enhanced Tracking</p>
+                                        <p class="detail-item">• App Integration with Off-Road Status</p>
+                                        <p class="detail-item">• Voice Command: "Reset Oil Life"</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="maintenance-note">
+                                    <strong>ZR2 Advisory:</strong> The ZR2 model is designed for extreme off-road use and features additional cooling capacity. For desert running or rock crawling, consider synthetic oil with higher heat resistance and 5,000 mile change intervals regardless of the oil life indicator.
+                                </div>
+                            </div>
+                            
+                            <div class="back-buttons">
+                                <a href="#zr2-oil-reset" class="back-button">VIEW FULL GUIDE</a>
+                                <a href="#" class="back-button secondary">EXTREME TERRAIN GUIDE</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Fleet/Commercial Silverado Card -->
+                <div class="vehicle-card" style="--card-index: 6;">
+                    <div class="card-inner">
+                        <!-- Front of Card -->
+                        <div class="card-front">
+                            <div class="card-image" style="background-image: url('/api/placeholder/400/250')">
+                                <div class="brand-badge chevrolet-badge">C</div>
+                                <div class="flip-indicator">
+                                    <span class="flip-icon">↺</span> Flip for Details
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <h4 class="card-title">Silverado 1500 Fleet (2010-2025)</h4>
+                                <p class="card-subtitle">Commercial/Fleet Vehicles</p>
+                                
+                                <ul class="card-features">
+                                    <li class="feature-item" style="--item-index: 0;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Universal Reset Methods</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 1;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Fleet Maintenance Intervals</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 2;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Commercial Grade Oil Specs</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 3;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Fleet Management Integration</span>
+                                    </li>
+                                </ul>
+                                
+                                <a href="#silverado-fleet-guide" class="card-button">VIEW GUIDE</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Back of Card -->
+                        <div class="card-back">
+                            <h4 class="back-title">Silverado Fleet Vehicles</h4>
+                            <p class="back-subtitle">Commercial Maintenance Guide</p>
+                            
+                            <div class="back-content">
+                                <div class="detail-section">
+                                    <h5 class="detail-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                                        </svg>
+                                        Fleet Considerations
+                                    </h5>
+                                    <div class="detail-content">
+                                        <p class="detail-item">• Heavy Use: 5,000 mile service intervals</p>
+                                        <p class="detail-item">• Idle-Heavy Use: 3 month intervals</p>
+                                        <p class="detail-item">• Oil Analysis Recommended</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <h5 class="detail-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24">
+                                            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.
+            document.querySelectorAll('.vehicle-card').forEach((card, index) => {
+                card.style.setProperty('--card-index', index % 4);
+            });
+            
+            // Set feature item indexes for staggered animations
+            document.querySelectorAll('.vehicle-card').forEach(card => {
+                card.querySelectorAll('.feature-item').forEach((item, index) => {
+                    item.style.setProperty('--item-index', index);
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                                        </svg>
+                                        Oil Specifications (5.3L)
+                                    </h5>
+                                    <div class="detail-content">
+                                        <p class="detail-item">• Oil Type: Dexos1 5W-30</p>
+                                        <p class="detail-item">• Oil Capacity: 8.0 quarts (with filter)</p>
+                                        <p class="detail-item">• Filter: ACDelco PF63/PF63E</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <h5 class="detail-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24">
+                                            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                                        </svg>
+                                        Reset Procedure
+                                    </h5>
+                                    <div class="detail-content">
+                                        <p class="detail-item"><strong>Primary Method:</strong> Using steering wheel controls to navigate DIC menu</p>
+                                        <p class="detail-item"><strong>Applies to:</strong> All 2014-2018 models with 5.3L</p>
+                                        <p class="detail-item"><strong>Reset Time:</strong> Under 2 minutes</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="maintenance-note">
+                                    <strong>Note:</strong> The 2014-2018 models feature upgraded displays with simplified menu systems for oil life monitoring. Use the CHECK button to verify reset.
+                                </div>
+                            </div>
+                            
+                            <div class="back-buttons">
+                                <a href="#silverado-3rd-gen-reset" class="back-button">VIEW FULL GUIDE</a>
+                                <a href="#" class="back-button secondary">WATCH VIDEO</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Second Generation (2010-2013) -->
+                <div class="vehicle-card" style="--card-index: 1;">
+                    <div class="card-inner">
+                        <!-- Front of Card -->
+                        <div class="card-front">
+                            <div class="card-image" style="background-image: url('/api/placeholder/400/250')">
+                                <div class="brand-badge chevrolet-badge">C</div>
+                                <div class="flip-indicator">
+                                    <span class="flip-icon">↺</span> Flip for Details
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <h4 class="card-title">2010-2013 Silverado 1500 LT</h4>
+                                <p class="card-subtitle">Second Generation (GMT900)</p>
+                                
+                                <ul class="card-features">
+                                    <li class="feature-item" style="--item-index: 0;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Trip Odometer Reset Method</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 1;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Accelerator Pedal Method</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 2;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>5.3L Vortec V8 Oil Specs</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 3;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Troubleshooting Guide</span>
+                                    </li>
+                                </ul>
+                                
+                                <a href="#silverado-2010-2013-reset" class="card-button">VIEW GUIDE</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Back of Card -->
+                        <div class="card-back">
+                            <h4 class="back-title">2010-2013 Silverado</h4>
+                            <p class="back-subtitle">Second Gen Oil Life Reset Guide</p>
+                            
+                            <div class="back-content">
+                                <div class="detail-section">
+                                    <h5 class="detail-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                                        </svg>
+                                        Oil Specifications (5.3L)
+                                    </h5>
+                                    <div class="detail-content">
+                                        <p class="detail-item">• Oil Type: 5W-30 (conventional or synthetic)</p>
+                                        <p class="detail-item">• Oil Capacity: 6.0 quarts (with filter)</p>
+                                        <p class="detail-item">• Filter: ACDelco PF48</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-section">
+                                    <h5 class="detail-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24">
+                                            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                                        </svg>
+                                        Reset Methods
+                                    </h5>
+                                    <div class="detail-content">
+                                        <p class="detail-item"><strong>Method 1:</strong> Using Trip Odometer button</p>
+                                        <p class="detail-item"><strong>Method 2:</strong> Using Accelerator Pedal</p>
+                                        <p class="detail-item"><strong>Reset Time:</strong> 2-3 minutes</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="maintenance-note">
+                                    <strong>Important:</strong> For 2010-2013 models, the accelerator pedal method is the most reliable backup if the primary method fails. Turn ignition to ON but do not start engine.
+                                </div>
+                            </div>
+                            
+                            <div class="back-buttons">
+                                <a href="#silverado-2nd-gen-reset" class="back-button">VIEW FULL GUIDE</a>
+                                <a href="#" class="back-button secondary">TROUBLESHOOTING</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Fourth Generation (2019-2022) -->
+                <div class="vehicle-card" style="--card-index: 2;">
+                    <div class="card-inner">
+                        <!-- Front of Card -->
+                        <div class="card-front">
+                            <div class="card-image" style="background-image: url('/api/placeholder/400/250')">
+                                <div class="brand-badge chevrolet-badge">C</div>
+                                <div class="flip-indicator">
+                                    <span class="flip-icon">↺</span> Flip for Details
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <h4 class="card-title">2019-2022 Silverado 1500 LT</h4>
+                                <p class="card-subtitle">Fourth Generation (T1XX)</p>
+                                
+                                <ul class="card-features">
+                                    <li class="feature-item" style="--item-index: 0;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Infotainment Menu Method</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 1;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Steering Control Method</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 2;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>5.3L DFM V8 Oil Specs</span>
+                                    </li>
+                                    <li class="feature-item" style="--item-index: 3;">
+                                        <span class="feature-icon">✓</span>
+                                        <span>Vehicle Settings Guide</span>
+                                    </li>
+                                </ul>
+                                
+                                <a href="#silverado-2019-2022-reset" class="card-button">VIEW GUIDE</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Back of Card -->
+                        <div class="card-back">
+                            <h4 class="back-title">2019-2022 Silverado</h4>
+                            <p class="back-subtitle">Fourth Gen Oil Life Reset Guide</p>
+                            
+                            <div class="back-content">
+                                <div class="detail-section">
+                                    <h5 class="detail-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10
