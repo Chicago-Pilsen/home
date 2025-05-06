@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Noise Memory Game</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .player-card {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            flex-basis: 30%;
+        }
+        
+        .player-active {
+            border: 2px solid;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .player1 {
+            background-color: #e3f2fd;
+            border-color: #2196F3;
+        }
+        
+        .player2 {
+            background-color: #e8f5e9;
+            border-color: #4CAF50;
+        }
+        
+        .turn-display {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            flex-basis: 30%;
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            height: 130px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+        
+        .card-front {
+            background-color: #3f51b5;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .card-back {
+            background-color: white;
+            color: #333;
+            transform: rotateY(180deg);
+            font-size: 14px;
+            flex-direction: column;
+            border: 1px solid #ddd;
+            justify-content: space-between;
+        }
+        
+        .component-card .card-back {
+            background-color: #e3f2fd;
+            border-color: #2196F3;
+        }
+        
+        .sound-card .card-back {
+            background-color: #e8f5e9;
+            border-color: #4CAF50;
+        }
+        
+        .card-matched .card-back {
+            opacity: 0.7;
+        }
+        
+        .sound-button {
+            margin-top: 5px;
+            padding: 5px 10px;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sound-button svg {
+            margin-right: 5px;
+        }
+        
+        .category-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background-color: #757575;
+            color: white;
+        }
+        
+        .instructions {
+            margin-top: 20px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+        }
+        
+        .instructions ol {
+            padding-left: 25px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+        }
+        
+        .game-over {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .game-over h2 {
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        
+        .game-over p {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .restart-button {
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .restart-button svg {
+            margin-right: 8px;
+        }
+        
+        #start-screen {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        #start-screen h2 {
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        
+        #start-screen p {
+            margin-bottom: 20px;
+        }
+        
+        #start-button {
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Car Noise Memory Game</h1>
+    
+    <div class="game-container">
+        <div id="start-screen">
+            <h2>Welcome to Car Noise Memory Game!</h2>
+            <p>Match car components with their corresponding noises</p>
+            <button id="start-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Start Game
+            </button>
+        </div>
+        
+        <div id="game-over" class="game-over" style="display: none;">
+            <h2 id="winner-text">Player 1 Wins!</h2>
+            <p id="final-score">Final Score: Player 1: 4 | Player 2: 2</p>
+            <button id="restart-button" class="restart-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path>
+                </svg>
+                Play Again
+            </button>
+        </div>
+        
+        <div id="game-board" style="display: none;">
+            <div class="player-info">
+                <div id="player1" class="player-card player1 player-active">
+                    <h2>Player 1</h2>
+                    <p id="player1-score" class="score">0</p>
+                </div>
+                
+                <div class="turn-display">
+                    <h3>Current Turn</h3>
+                    <p id="current-player">Player 1</p>
+                </div>
+                
+                <div id="player2" class="player-card player2">
+                    <h2>Player 2</h2>
+                    <p id="player2-score" class="score">0</p>
+                </div>
+            </div>
+            
+            <div id="cards-container" class="cards-container">
+                <!-- Cards will be generated here by JavaScript -->
+            </div>
+            
+            <div class="instructions">
+                <h3>How to Play:</h3>
+                <ol>
+                    <li>Players take turns flipping cards to find matching pairs</li>
+                    <li>A match consists of a component card and its corresponding sound</li>
+                    <li>When you find a match, you score a point and get another turn</li>
+                    <li>The game ends when all pairs are matched</li>
+                    <li>The player with the most matches wins!</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game data - pairs of components and their associated sounds
+        const cardPairs = [
+            { id: 1, component: "Worn Brake Pads", sound: "High-pitched squealing when braking", category: "brake" },
+            { id: 2, component: "Warped Rotors", sound: "Pulsating/vibrating when braking", category: "brake" },
+            { id: 3, component: "Loose Caliper", sound: "Rattling noise when driving over bumps", category: "brake" },
+            { id: 4, component: "ABS System", sound: "Rapid clicking/grinding when braking hard", category: "brake" },
+            { id: 5, component: "Worn Wheel Bearing", sound: "Humming/growling that changes with speed", category: "suspension" },
+            { id: 6, component: "Bad Shock Absorbers", sound: "Bouncing and rattling after bumps", category: "suspension" },
+            { id: 7, component: "Ball Joint Failure", sound: "Knocking when turning or going over bumps", category: "suspension" },
+            { id: 8, component: "Damaged Control Arm", sound: "Clunking during acceleration/deceleration", category: "suspension" }
+        ];
+
+        // Game state variables
+        let cards = [];
+        let flippedCards = [];
+        let matchedPairs = [];
+        let currentPlayer = 1;
+        let player1Score = 0;
+        let player2Score = 0;
+        let gameOver = false;
+        let canFlip = true;
+
+        // DOM elements
+        const startScreen = document.getElementById('start-screen');
+        const gameBoard = document.getElementById('game-board');
+        const gameOverScreen = document.getElementById('game-over');
+        const cardsContainer = document.getElementById('cards-container');
+        const player1Element = document.getElementById('player1');
+        const player2Element = document.getElementById('player2');
+        const player1ScoreElement = document.getElementById('player1-score');
+        const player2ScoreElement = document.getElementById('player2-score');
+        const currentPlayerElement = document.getElementById('current-player');
+        const winnerTextElement = document.getElementById('winner-text');
+        const finalScoreElement = document.getElementById('final-score');
+        const startButton = document.getElementById('start-button');
+        const restartButton = document.getElementById('restart-button');
+
+        // Initialize the game
+        function initializeGame() {
+            // Reset game state
+            cards = createDeck();
+            flippedCards = [];
+            matchedPairs = [];
+            currentPlayer = 1;
+            player1Score = 0;
+            player2Score = 0;
+            gameOver = false;
+            canFlip = true;
+            
+            // Update UI
+            player1ScoreElement.textContent = '0';
+            player2ScoreElement.textContent = '0';
+            currentPlayerElement.textContent = 'Player 1';
+            player1Element.classList.add('player-active');
+            player2Element.classList.remove('player-active');
+            
+            // Generate cards
+            renderCards();
+            
+            // Show game board
+            startScreen.style.display = 'none';
+            gameOverScreen.style.display = 'none';
+            gameBoard.style.display = 'block';
+        }
+
+        // Create shuffled deck of cards
+        function createDeck() {
+            const componentCards = cardPairs.map(pair => ({
+                ...pair,
+                type: 'component',
+                id: `component-${pair.id}`,
+                matched: false,
+                flipped: false
+            }));
+            
+            const soundCards = cardPairs.map(pair => ({
+                ...pair,
+                type: 'sound',
+                id: `sound-${pair.id}`,
+                matched: false,
+                flipped: false
+            }));
+            
+            // Combine and shuffle
+            return [...componentCards, ...soundCards].sort(() => Math.random() - 0.5);
+        }
+
+        // Render cards on the game board
+        function renderCards() {
+            cardsContainer.innerHTML = '';
+            
+            cards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = `card ${card.type}-card`;
+                if (card.matched) cardElement.classList.add('card-matched');
+                if (card.flipped) cardElement.classList.add('flipped');
+                cardElement.dataset.index = index;
+                
+                cardElement.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">?</div>
+                        <div class="card-back">
+                            ${card.type === 'component' 
+                                ? card.component 
+                                : `${card.sound}
+                                   <button class="sound-button" data-sound="${card.sound}">
+                                       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                           <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                           <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                           <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                                       </svg>
+                                       Play
+                                   </button>`
+                            }
+                            <span class="category-badge">${card.category}</span>
+                        </div>
+                    </div>
+                `;
+                
+                cardsContainer.appendChild(cardElement);
+            });
+            
+            // Add event listeners
+            document.querySelectorAll('.card').forEach(card => {
+                card.addEventListener('click', handleCardClick);
+            });
+            
+            document.querySelectorAll('.sound-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    playSound(e.currentTarget.dataset.sound);
+                });
+            });
+        }
+
+        // Handle card click
+        function handleCardClick(e) {
+            if (!canFlip) return;
+            
+            const cardElement = e.currentTarget;
+            const index = parseInt(cardElement.dataset.index);
+            const card = cards[index];
+            
+            // Prevent clicking if card is already flipped or matched
+            if (card.flipped || card.matched || flippedCards.length >= 2) {
+                return;
+            }
+            
+            // Flip the card
+            card.flipped = true;
+            cardElement.classList.add('flipped');
+            
+            // Add to flipped cards
+            flippedCards.push({ index, card });
+            
+            // Check for match if two cards are flipped
+            if (flippedCards.length === 2) {
+                canFlip = false;
+                const [first, second] = flippedCards;
+                
+                // Check if the cards are from the same pair but different types
+                const isMatch = first.card.id.split('-')[1] === second.card.id.split('-')[1] && 
+                                first.card.type !== second.card.type;
+                
+                if (isMatch) {
+                    // Handle match
+                    setTimeout(() => {
+                        // Mark cards as matched
+                        cards[first.index].matched = true;
+                        cards[second.index].matched = true;
+                        document.querySelector(`[data-index="${first.index}"]`).classList.add('card-matched');
+                        document.querySelector(`[data-index="${second.index}"]`).classList.add('card-matched');
+                        
+                        // Add to matched pairs
+                        matchedPairs.push(first.card.id.split('-')[1]);
+                        
+                        // Update score for current player
+                        if (currentPlayer === 1) {
+                            player1Score++;
+                            player1ScoreElement.textContent = player1Score;
+                        } else {
+                            player2Score++;
+                            player2ScoreElement.textContent = player2Score;
+                        }
+                        
+                        // Clear flipped cards
+                        flippedCards = [];
+                        
+                        // Check if game is over
+                        if (matchedPairs.length === cardPairs.length) {
+                            endGame();
+                        } else {
+                            canFlip = true;
+                        }
+                    }, 1000);
+                } else {
+                    // Not a match, flip cards back after delay and switch players
+                    setTimeout(() => {
+                        // Flip cards back
+                        cards[first.index].flipped = false;
+                        cards[second.index].flipped = false;
+                        document.querySelector(`[data-index="${first.index}"]`).classList.remove('flipped');
+                        document.querySelector(`[data-index="${second.index}"]`).classList.remove('flipped');
+                        
+                        // Switch players
+                        switchPlayer();
+                        
+                        // Clear flipped cards
+                        flippedCards = [];
+                        canFlip = true;
+                    }, 1500);
+                }
+            }
+        }
+
+        // Switch current player
+        function switchPlayer() {
+            currentPlayer = currentPlayer === 1 ? 2 : 1;
+            currentPlayerElement.textContent = `Player ${currentPlayer}`;
+            
+            // Update active player highlights
+            if (currentPlayer === 1) {
+                player1Element.classList.add('player-active');
+                player2Element.classList.remove('player-active');
+            } else {
+                player1Element.classList.remove('player-active');
+                player2Element.classList.add('player-active');
+            }
+        }
+
+        // Play sound (simulated)
+        function playSound(soundDescription) {
+            alert(`Sound playing: ${soundDescription}`);
+        }
+
+        // End game and show results
+        function endGame() {
+            gameOver = true;
+            
+            // Determine winner
+            let winner;
+            if (player1Score > player2Score) {
+                winner = 1;
+                winnerTextElement.textContent = 'Player 1 Wins!';
+            } else if (player2Score > player1Score) {
+                winner = 2;
+                winnerTextElement.textContent = 'Player 2 Wins!';
+            } else {
+                winner = 0;
+                winnerTextElement.textContent = "It's a Tie!";
+            }
+            
+            finalScoreElement.textContent = `Final Score: Player 1: ${player1Score} | Player 2: ${player2Score}`;
+            
+            // Show game over screen
+            setTimeout(() => {
+                gameBoard.style.display = 'none';
+                gameOverScreen.style.display = 'block';
+            }, 1000);
+        }
+
+        // Event listeners
+        startButton.addEventListener('click', initializeGame);
+        restartButton.addEventListener('click', initializeGame);
+        
+        // If you want the game to start immediately, uncomment the line below
+        // initializeGame();
+    </script>
+</body>
+</html>
