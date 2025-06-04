@@ -515,13 +515,141 @@
             z-index: 1000;
         }
 
-        .scanner-content {
+        .modal-content {
             background: var(--card-bg);
             padding: 30px;
             border-radius: 15px;
-            text-align: center;
-            max-width: 400px;
+            max-width: 500px;
             width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .add-tire-modal .modal-content {
+            max-width: 600px;
+        }
+
+        .scanner-content {
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+
+        .btn-primary, .btn-secondary, .btn-danger {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #6c757d;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+
+        .validation-error {
+            color: var(--danger-color);
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        .success-message {
+            background: var(--success-color);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         .close-btn {
@@ -606,6 +734,9 @@
                     <button class="export-btn" onclick="exportData()">
                         📊 Export
                     </button>
+                    <button class="export-btn" onclick="openAddTireModal()">
+                        ➕ Add Tire
+                    </button>
                 </div>
             </div>
         </div>
@@ -660,17 +791,17 @@
                 </div>
                 <div class="stat-card">
                     <span class="stat-icon">❄️</span>
-                    <span class="stat-number" id="nokian-total">31</span>
+                    <span class="stat-number" id="nokian-total">44</span>
                     <div class="stat-label">Nokian Tires</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-icon">📊</span>
-                    <span class="stat-number" id="total-inventory">144</span>
+                    <span class="stat-number" id="total-inventory">157</span>
                     <div class="stat-label">Total Inventory</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-icon">🔧</span>
-                    <span class="stat-number" id="tire-models">73</span>
+                    <span class="stat-number" id="tire-models">86</span>
                     <div class="stat-label">Tire Models</div>
                 </div>
                 <div class="stat-card">
@@ -711,7 +842,7 @@
                         <div class="brand-logo">NOK</div>
                         <div class="brand-details">
                             <h2>Nokian Tires</h2>
-                            <div class="brand-total">31 models • <span id="nokian-display-total">31</span> units in stock</div>
+                            <div class="brand-total">44 models • <span id="nokian-display-total">44</span> units in stock</div>
                         </div>
                     </div>
                     <div class="section-controls">
@@ -760,12 +891,96 @@
 
     <!-- Scanner Modal -->
     <div class="scanner-modal" id="scannerModal">
-        <div class="scanner-content">
-            <button class="close-btn" onclick="closeScanner()">×</button>
-            <h3>📱 Barcode Scanner</h3>
-            <p>Enter part number to quickly find tire:</p>
-            <input type="text" class="search-input" id="scannerInput" placeholder="Enter or scan part number..." style="margin: 20px 0;">
-            <button class="export-btn" onclick="searchByPartNumber()">Search</button>
+        <div class="modal-content">
+            <div class="scanner-content">
+                <button class="close-btn" onclick="closeScanner()">×</button>
+                <h3>📱 Barcode Scanner</h3>
+                <p>Enter part number to quickly find tire:</p>
+                <input type="text" class="search-input" id="scannerInput" placeholder="Enter or scan part number..." style="margin: 20px 0;">
+                <button class="export-btn" onclick="searchByPartNumber()">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Tire Modal -->
+    <div class="scanner-modal add-tire-modal" id="addTireModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeAddTireModal()">×</button>
+            <h3>➕ Add New Tire</h3>
+            <div id="addTireSuccess" class="success-message" style="display: none;">
+                Tire added successfully!
+            </div>
+            <form id="addTireForm">
+                <div class="form-group">
+                    <label class="form-label">Brand</label>
+                    <select class="form-select" id="newTireBrand" required>
+                        <option value="">Select Brand</option>
+                        <option value="bhk">BHK</option>
+                        <option value="continental">Continental</option>
+                        <option value="nokian">Nokian</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Tire Size</label>
+                        <input type="text" class="form-input" id="newTireSize" placeholder="e.g., 225/60R16" required>
+                        <div id="sizeError" class="validation-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Part Number</label>
+                        <input type="text" class="form-input" id="newTirePartNumber" placeholder="e.g., T431999" required>
+                        <div id="partError" class="validation-error"></div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Type/Series</label>
+                        <input type="text" class="form-input" id="newTireType" placeholder="e.g., One, ExtremeContact DWS06" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Supplier</label>
+                        <input type="text" class="form-input" id="newTireSupplier" placeholder="e.g., BHK Direct" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Cost ($)</label>
+                        <input type="number" class="form-input" id="newTireCost" placeholder="0.00" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Initial Quantity</label>
+                        <input type="number" class="form-input" id="newTireQty" placeholder="1" step="0.01" min="0" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Minimum Stock Level</label>
+                    <input type="number" class="form-input" id="newTireMinStock" placeholder="1" min="0" required>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeAddTireModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Tire</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="scanner-modal" id="deleteModal">
+        <div class="modal-content">
+            <h3>🗑️ Delete Tire</h3>
+            <p>Are you sure you want to delete this tire from inventory?</p>
+            <div id="deleteTireInfo" style="background: var(--light-bg); padding: 15px; border-radius: 8px; margin: 15px 0;">
+                <!-- Tire info will be populated here -->
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn-danger" onclick="confirmDelete()">Delete Tire</button>
+            </div>
         </div>
     </div>
 
@@ -822,7 +1037,20 @@
             { size: "235/60R16", part: "T431353", qty: 1.00, type: "One", cost: 125.30, supplier: "Nokian Nordic", minStock: 1 },
             { size: "205/55R16", part: "T431354", qty: 1.00, type: "One", cost: 95.75, supplier: "Nokian Nordic", minStock: 1 },
             { size: "225/55R17", part: "T431358", qty: 1.00, type: "One", cost: 125.45, supplier: "Nokian Nordic", minStock: 1 },
-            { size: "225/50R17", part: "T431361", qty: 1.00, type: "One", cost: 120.85, supplier: "Nokian Nordic", minStock: 1 }
+            { size: "225/50R17", part: "T431361", qty: 1.00, type: "One", cost: 120.85, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "235/50R17", part: "T431362", qty: 1.00, type: "One", cost: 130.75, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "215/45R17", part: "T431363", qty: 1.00, type: "One", cost: 115.60, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "235/45R17", part: "T431365", qty: 1.00, type: "One", cost: 125.90, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "225/45R18", part: "T431366", qty: 1.00, type: "One", cost: 135.45, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "235/45R18", part: "T431367", qty: 1.00, type: "One", cost: 140.80, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "245/45R18", part: "T431368", qty: 1.00, type: "One", cost: 150.65, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "245/40R18", part: "T431370", qty: 1.00, type: "One", cost: 145.95, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "245/45R19", part: "T432007", qty: 1.00, type: "One", cost: 160.85, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "205/55R16", part: "T432534", qty: 1.00, type: "Remedy wrg5", cost: 85.30, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "225/60R18", part: "T432555", qty: 1.00, type: "Remedy wrg5", cost: 115.75, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "235/55R19", part: "T432566", qty: 1.00, type: "Remedy wrg5", cost: 135.90, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "235/60R18", part: "T432569", qty: 1.00, type: "Remedy wrg5", cost: 125.45, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "235/65R17", part: "T432570", qty: 1.00, type: "Remedy wrg5", cost: 120.80, supplier: "Nokian Nordic", minStock: 1 }
         ];
 
         const contTires = [
@@ -855,13 +1083,15 @@
 
         let transactionHistory = [];
         let currentTheme = 'light';
+        let deleteTarget = null;
 
         function createTireCard(tire, brand, index) {
             const stockStatus = getStockStatus(tire);
             const needsReorder = tire.qty <= tire.minStock;
             
             return `
-                <div class="tire-card ${stockStatus}" data-brand="${brand}" data-type="${tire.type.toLowerCase()}" data-size="${tire.size.toLowerCase()}" data-part="${tire.part.toLowerCase()}">
+                                    <div class="tire-card ${stockStatus}" data-brand="${brand}" data-type="${tire.type.toLowerCase()}" data-size="${tire.size.toLowerCase()}" data-part="${tire.part.toLowerCase()}">
+                        <button class="delete-btn" onclick="deleteTire('${brand}', ${index})" title="Delete tire">×</button>
                     <div class="tire-header">
                         <div class="tire-details">
                             <h3>${tire.size}</h3>
@@ -1179,9 +1409,159 @@
             window.URL.revokeObjectURL(url);
         }
 
-        function clearHistory() {
-            transactionHistory = [];
-            updateHistoryDisplay();
+        function openAddTireModal() {
+            document.getElementById('addTireModal').style.display = 'flex';
+            document.getElementById('addTireSuccess').style.display = 'none';
+            document.getElementById('addTireForm').reset();
+            clearValidationErrors();
+        }
+
+        function closeAddTireModal() {
+            document.getElementById('addTireModal').style.display = 'none';
+        }
+
+        function clearValidationErrors() {
+            document.getElementById('sizeError').textContent = '';
+            document.getElementById('partError').textContent = '';
+        }
+
+        function validateTireSize(size) {
+            // Basic tire size pattern validation (e.g., 225/60R16, P225/60R16, 225/60ZR16)
+            const pattern = /^(P)?(\d{3})\/(\d{2})(Z)?R(\d{2})(\/?XL)?$/i;
+            return pattern.test(size.replace(/\s/g, ''));
+        }
+
+        function validatePartNumber(partNumber, brand) {
+            // Check if part number already exists
+            const allTires = [...bhkTires, ...contTires, ...nokianTires];
+            return !allTires.some(tire => tire.part.toLowerCase() === partNumber.toLowerCase());
+        }
+
+        function addNewTire() {
+            clearValidationErrors();
+            
+            const brand = document.getElementById('newTireBrand').value;
+            const size = document.getElementById('newTireSize').value.trim();
+            const partNumber = document.getElementById('newTirePartNumber').value.trim();
+            const type = document.getElementById('newTireType').value.trim();
+            const supplier = document.getElementById('newTireSupplier').value.trim();
+            const cost = parseFloat(document.getElementById('newTireCost').value) || 0;
+            const qty = parseFloat(document.getElementById('newTireQty').value) || 0;
+            const minStock = parseInt(document.getElementById('newTireMinStock').value) || 1;
+
+            let isValid = true;
+
+            // Validate tire size
+            if (!validateTireSize(size)) {
+                document.getElementById('sizeError').textContent = 'Invalid tire size format (e.g., 225/60R16)';
+                isValid = false;
+            }
+
+            // Validate part number uniqueness
+            if (!validatePartNumber(partNumber, brand)) {
+                document.getElementById('partError').textContent = 'Part number already exists';
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            // Create new tire object
+            const newTire = {
+                size: size,
+                part: partNumber,
+                qty: qty,
+                type: type,
+                cost: cost,
+                supplier: supplier,
+                minStock: minStock
+            };
+
+            // Add to appropriate brand array
+            if (brand === 'bhk') {
+                bhkTires.push(newTire);
+            } else if (brand === 'continental') {
+                contTires.push(newTire);
+            } else if (brand === 'nokian') {
+                nokianTires.push(newTire);
+            }
+
+            // Show success message
+            document.getElementById('addTireSuccess').style.display = 'block';
+            
+            // Refresh the display
+            refreshInventoryDisplay();
+            
+            // Add to transaction history
+            addTransaction(newTire, 0, qty, 'Added New Tire');
+            
+            // Auto-close modal after 2 seconds
+            setTimeout(() => {
+                closeAddTireModal();
+            }, 2000);
+        }
+
+        function deleteTire(brand, index) {
+            const tires = brand === 'bhk' ? bhkTires : brand === 'cont' ? contTires : nokianTires;
+            const tire = tires[index];
+            
+            deleteTarget = { brand, index, tire };
+            
+            // Show tire info in delete modal
+            document.getElementById('deleteTireInfo').innerHTML = `
+                <strong>${tire.size}</strong><br>
+                Part Number: ${tire.part}<br>
+                Type: ${tire.type}<br>
+                Current Quantity: ${tire.qty.toFixed(2)}<br>
+                Brand: ${brand.toUpperCase()}
+            `;
+            
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            deleteTarget = null;
+        }
+
+        function confirmDelete() {
+            if (!deleteTarget) return;
+            
+            const { brand, index, tire } = deleteTarget;
+            const tires = brand === 'bhk' ? bhkTires : brand === 'cont' ? contTires : nokianTires;
+            
+            // Add to transaction history before deletion
+            addTransaction(tire, tire.qty, 0, 'Deleted Tire');
+            
+            // Remove tire from array
+            tires.splice(index, 1);
+            
+            // Refresh display
+            refreshInventoryDisplay();
+            
+            // Close modal
+            closeDeleteModal();
+        }
+
+        function refreshInventoryDisplay() {
+            // Re-populate all grids
+            const bhkGrid = document.getElementById('bhk-grid');
+            bhkGrid.innerHTML = bhkTires.map((tire, index) => createTireCard(tire, 'bhk', index)).join('');
+            
+            const contGrid = document.getElementById('cont-grid');
+            contGrid.innerHTML = contTires.map((tire, index) => createTireCard(tire, 'cont', index)).join('');
+            
+            const nokianGrid = document.getElementById('nokian-grid');
+            nokianGrid.innerHTML = nokianTires.map((tire, index) => createTireCard(tire, 'nokian', index)).join('');
+            
+            // Update type filter options
+            populateTypeFilter();
+            
+            // Update all totals and alerts
+            updateTotals();
+            updateLowStockAlert();
+            
+            // Re-apply current filters
+            filterTires();
         }
 
         function initializeInventory() {
