@@ -762,6 +762,7 @@
                         <option value="bhk">BHK</option>
                         <option value="continental">Continental</option>
                         <option value="nokian">Nokian</option>
+                        <option value="genr">General</option>
                     </select>
                 </div>
                 <div class="control-group">
@@ -795,13 +796,18 @@
                     <div class="stat-label">Nokian Tires</div>
                 </div>
                 <div class="stat-card">
+                    <span class="stat-icon">🔵</span>
+                    <span class="stat-number" id="genr-total">25</span>
+                    <div class="stat-label">General Tires</div>
+                </div>
+                <div class="stat-card">
                     <span class="stat-icon">📊</span>
-                    <span class="stat-number" id="total-inventory">157</span>
+                    <span class="stat-number" id="total-inventory">182</span>
                     <div class="stat-label">Total Inventory</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-icon">🔧</span>
-                    <span class="stat-number" id="tire-models">86</span>
+                    <span class="stat-number" id="tire-models">111</span>
                     <div class="stat-label">Tire Models</div>
                 </div>
                 <div class="stat-card">
@@ -832,6 +838,25 @@
                 </div>
                 <div class="tire-grid" id="bhk-grid">
                     <!-- BHK tires will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- General Tires Section -->
+            <div class="brand-section" id="genr-section">
+                <div class="brand-header">
+                    <div class="brand-info">
+                        <div class="brand-logo">GENR</div>
+                        <div class="brand-details">
+                            <h2>General Tires</h2>
+                            <div class="brand-total">25 models • <span id="genr-display-total">25</span> units in stock</div>
+                        </div>
+                    </div>
+                    <div class="section-controls">
+                        <button class="toggle-btn" onclick="toggleSection('genr')">Hide General</button>
+                    </div>
+                </div>
+                <div class="tire-grid" id="genr-grid">
+                    <!-- General tires will be populated by JavaScript -->
                 </div>
             </div>
 
@@ -918,6 +943,7 @@
                         <option value="bhk">BHK</option>
                         <option value="continental">Continental</option>
                         <option value="nokian">Nokian</option>
+                        <option value="genr">General</option>
                     </select>
                 </div>
                 
@@ -1004,6 +1030,34 @@
             { size: "225/45R18", part: "5546821V", qty: 4.00, type: "Hh11", cost: 49.56, supplier: "BHK Warehouse", minStock: 2 },
             { size: "235/45R18", part: "5546822V", qty: 4.00, type: "Hh11", cost: 46.26, supplier: "BHK Direct", minStock: 2 },
             { size: "225/45R17", part: "5546823V", qty: 4.00, type: "Hh11", cost: 38.34, supplier: "BHK Warehouse", minStock: 2 }
+        ];
+
+        const genrTires = [
+            { size: "215/55R17", part: "15574440000", qty: 1.00, type: "Altimax 365aw", cost: 89.95, supplier: "General Tire", minStock: 1 },
+            { size: "215/65R17", part: "15574860000", qty: 1.00, type: "Altimax 365aw", cost: 92.45, supplier: "General Tire", minStock: 1 },
+            { size: "175/70R14", part: "15575990000", qty: 1.00, type: "Altimax rt45", cost: 65.30, supplier: "General Tire", minStock: 1 },
+            { size: "185/60R14", part: "15576020000", qty: 1.00, type: "Altimax rt45", cost: 68.75, supplier: "General Tire", minStock: 1 },
+            { size: "185/65R14", part: "15576060000", qty: 1.00, type: "Altimax rt45", cost: 70.20, supplier: "General Tire", minStock: 1 },
+            { size: "185/65R15", part: "15576070000", qty: 1.00, type: "Altimax rt45", cost: 72.85, supplier: "General Tire", minStock: 1 },
+            { size: "185/65R15", part: "15576090000", qty: 1.00, type: "Altimax rt45", cost: 72.85, supplier: "General Tire", minStock: 1 },
+            { size: "195/65R15", part: "15576150000", qty: 1.00, type: "Altimax rt45", cost: 78.90, supplier: "General Tire", minStock: 1 },
+            { size: "205/55R16", part: "15576170000", qty: 1.00, type: "Altimax rt45", cost: 82.45, supplier: "General Tire", minStock: 1 },
+            { size: "205/65R15", part: "15576210000", qty: 1.00, type: "Altimax rt45", cost: 79.65, supplier: "General Tire", minStock: 1 },
+            { size: "205/65R16", part: "15576230000", qty: 1.00, type: "Altimax rt45", cost: 84.30, supplier: "General Tire", minStock: 1 },
+            { size: "205/70R16", part: "15576250000", qty: 1.00, type: "Altimax rt45", cost: 86.50, supplier: "General Tire", minStock: 1 },
+            { size: "215/55R16", part: "15576260000", qty: 1.00, type: "Altimax rt45", cost: 88.75, supplier: "General Tire", minStock: 1 },
+            { size: "215/55R18", part: "15576280000", qty: 1.00, type: "Altimax rt45", cost: 95.20, supplier: "General Tire", minStock: 1 },
+            { size: "215/60R16", part: "15576290000", qty: 1.00, type: "Altimax rt45", cost: 90.30, supplier: "General Tire", minStock: 1 },
+            { size: "215/60R16", part: "15576300000", qty: 1.00, type: "Altimax rt45", cost: 90.30, supplier: "General Tire", minStock: 1 },
+            { size: "215/60R17", part: "15576310000", qty: 1.00, type: "Altimax rt45", cost: 93.85, supplier: "General Tire", minStock: 1 },
+            { size: "225/55R17", part: "15576410000", qty: 1.00, type: "Altimax rt45", cost: 98.45, supplier: "General Tire", minStock: 1 },
+            { size: "225/55R18", part: "15576420000", qty: 1.00, type: "Altimax rt45", cost: 102.30, supplier: "General Tire", minStock: 1 },
+            { size: "225/55R19", part: "15576430000", qty: 1.00, type: "Altimax rt45", cost: 108.75, supplier: "General Tire", minStock: 1 },
+            { size: "225/60R16", part: "15576450000", qty: 1.00, type: "Altimax rt45", cost: 95.80, supplier: "General Tire", minStock: 1 },
+            { size: "225/60R17", part: "15576470000", qty: 1.00, type: "Altimax rt45", cost: 99.20, supplier: "General Tire", minStock: 1 },
+            { size: "225/65R17", part: "15576510000", qty: 1.00, type: "Altimax rt45", cost: 101.45, supplier: "General Tire", minStock: 1 },
+            { size: "225/65R17", part: "15576520000", qty: 1.00, type: "Altimax rt45", cost: 101.45, supplier: "General Tire", minStock: 1 },
+            { size: "235/55R17", part: "15576580000", qty: 1.00, type: "Altimax rt45", cost: 105.90, supplier: "General Tire", minStock: 1 }
         ];
 
         const nokianTires = [
@@ -1251,8 +1305,8 @@
 
         function updateLowStockAlert() {
             const threshold = parseInt(document.getElementById('thresholdInput').value) || 2;
-            const lowStockItems = [...bhkTires, ...contTires, ...nokianTires].filter(tire => tire.qty <= threshold && tire.qty > 0);
-            const outOfStockItems = [...bhkTires, ...contTires, ...nokianTires].filter(tire => tire.qty === 0);
+            const lowStockItems = [...bhkTires, ...contTires, ...nokianTires, ...genrTires].filter(tire => tire.qty <= threshold && tire.qty > 0);
+            const outOfStockItems = [...bhkTires, ...contTires, ...nokianTires, ...genrTires].filter(tire => tire.qty === 0);
             const totalLowStock = lowStockItems.length + outOfStockItems.length;
             
             document.getElementById('low-stock-count').textContent = totalLowStock;
@@ -1283,7 +1337,8 @@
                 const matchesBrand = !brandFilter || 
                     (brandFilter === 'bhk' && brand === 'bhk') || 
                     (brandFilter === 'continental' && brand === 'cont') ||
-                    (brandFilter === 'nokian' && brand === 'nokian');
+                    (brandFilter === 'nokian' && brand === 'nokian') ||
+                    (brandFilter === 'genr' && brand === 'genr');
                 const matchesType = !typeFilter || type.includes(typeFilter);
                 
                 if (matchesSearch && matchesBrand && matchesType) {
@@ -1295,7 +1350,7 @@
         }
 
         function populateTypeFilter() {
-            const types = [...new Set([...bhkTires, ...contTires, ...nokianTires].map(tire => tire.type))];
+            const types = [...new Set([...bhkTires, ...contTires, ...nokianTires, ...genrTires].map(tire => tire.type))];
             const typeFilter = document.getElementById('typeFilter');
             
             typeFilter.innerHTML = '<option value="">All Types</option>';
@@ -1310,10 +1365,10 @@
             
             if (section.style.display === 'none') {
                 section.style.display = 'block';
-                button.textContent = `Hide ${brand === 'bhk' ? 'BHK' : brand === 'cont' ? 'Continental' : 'Nokian'}`;
+                button.textContent = `Hide ${brand === 'bhk' ? 'BHK' : brand === 'cont' ? 'Continental' : brand === 'nokian' ? 'Nokian' : 'General'}`;
             } else {
                 section.style.display = 'none';
-                button.textContent = `Show ${brand === 'bhk' ? 'BHK' : brand === 'cont' ? 'Continental' : 'Nokian'}`;
+                button.textContent = `Show ${brand === 'bhk' ? 'BHK' : brand === 'cont' ? 'Continental' : brand === 'nokian' ? 'Nokian' : 'General'}`;
             }
         }
 
@@ -1347,7 +1402,7 @@
             if (!partNumber) return;
             
             // Find the tire
-            const allTires = [...bhkTires, ...contTires, ...nokianTires];
+            const allTires = [...bhkTires, ...contTires, ...nokianTires, ...genrTires];
             const foundTire = allTires.find(tire => tire.part.toLowerCase() === partNumber);
             
             if (foundTire) {
@@ -1378,7 +1433,8 @@
             const allTires = [
                 ...bhkTires.map(tire => ({...tire, brand: 'BHK'})),
                 ...contTires.map(tire => ({...tire, brand: 'Continental'})),
-                ...nokianTires.map(tire => ({...tire, brand: 'Nokian'}))
+                ...nokianTires.map(tire => ({...tire, brand: 'Nokian'})),
+                ...genrTires.map(tire => ({...tire, brand: 'General'}))
             ];
             
             // Create CSV content
@@ -1433,7 +1489,7 @@
 
         function validatePartNumber(partNumber, brand) {
             // Check if part number already exists
-            const allTires = [...bhkTires, ...contTires, ...nokianTires];
+            const allTires = [...bhkTires, ...contTires, ...nokianTires, ...genrTires];
             return !allTires.some(tire => tire.part.toLowerCase() === partNumber.toLowerCase());
         }
 
@@ -1483,6 +1539,8 @@
                 contTires.push(newTire);
             } else if (brand === 'nokian') {
                 nokianTires.push(newTire);
+            } else if (brand === 'genr') {
+                genrTires.push(newTire);
             }
 
             // Show success message
@@ -1501,7 +1559,7 @@
         }
 
         function deleteTire(brand, index) {
-            const tires = brand === 'bhk' ? bhkTires : brand === 'cont' ? contTires : nokianTires;
+            const tires = brand === 'bhk' ? bhkTires : brand === 'cont' ? contTires : brand === 'nokian' ? nokianTires : genrTires;
             const tire = tires[index];
             
             deleteTarget = { brand, index, tire };
@@ -1527,7 +1585,7 @@
             if (!deleteTarget) return;
             
             const { brand, index, tire } = deleteTarget;
-            const tires = brand === 'bhk' ? bhkTires : brand === 'cont' ? contTires : nokianTires;
+            const tires = brand === 'bhk' ? bhkTires : brand === 'cont' ? contTires : brand === 'nokian' ? nokianTires : genrTires;
             
             // Add to transaction history before deletion
             addTransaction(tire, tire.qty, 0, 'Deleted Tire');
@@ -1553,6 +1611,9 @@
             const nokianGrid = document.getElementById('nokian-grid');
             nokianGrid.innerHTML = nokianTires.map((tire, index) => createTireCard(tire, 'nokian', index)).join('');
             
+            const genrGrid = document.getElementById('genr-grid');
+            genrGrid.innerHTML = genrTires.map((tire, index) => createTireCard(tire, 'genr', index)).join('');
+            
             // Update type filter options
             populateTypeFilter();
             
@@ -1576,6 +1637,10 @@
             // Populate Nokian tires
             const nokianGrid = document.getElementById('nokian-grid');
             nokianGrid.innerHTML = nokianTires.map((tire, index) => createTireCard(tire, 'nokian', index)).join('');
+            
+            // Populate General tires
+            const genrGrid = document.getElementById('genr-grid');
+            genrGrid.innerHTML = genrTires.map((tire, index) => createTireCard(tire, 'genr', index)).join('');
             
             // Populate type filter
             populateTypeFilter();
