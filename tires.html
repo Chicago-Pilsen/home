@@ -630,6 +630,7 @@
                         <option value="">All Brands</option>
                         <option value="bhk">BHK</option>
                         <option value="continental">Continental</option>
+                        <option value="nokian">Nokian</option>
                     </select>
                 </div>
                 <div class="control-group">
@@ -658,13 +659,18 @@
                     <div class="stat-label">Continental Tires</div>
                 </div>
                 <div class="stat-card">
+                    <span class="stat-icon">❄️</span>
+                    <span class="stat-number" id="nokian-total">31</span>
+                    <div class="stat-label">Nokian Tires</div>
+                </div>
+                <div class="stat-card">
                     <span class="stat-icon">📊</span>
-                    <span class="stat-number" id="total-inventory">113</span>
+                    <span class="stat-number" id="total-inventory">144</span>
                     <div class="stat-label">Total Inventory</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-icon">🔧</span>
-                    <span class="stat-number" id="tire-models">42</span>
+                    <span class="stat-number" id="tire-models">73</span>
                     <div class="stat-label">Tire Models</div>
                 </div>
                 <div class="stat-card">
@@ -695,6 +701,25 @@
                 </div>
                 <div class="tire-grid" id="bhk-grid">
                     <!-- BHK tires will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Nokian Tires Section -->
+            <div class="brand-section" id="nokian-section">
+                <div class="brand-header">
+                    <div class="brand-info">
+                        <div class="brand-logo">NOK</div>
+                        <div class="brand-details">
+                            <h2>Nokian Tires</h2>
+                            <div class="brand-total">31 models • <span id="nokian-display-total">31</span> units in stock</div>
+                        </div>
+                    </div>
+                    <div class="section-controls">
+                        <button class="toggle-btn" onclick="toggleSection('nokian')">Hide Nokian</button>
+                    </div>
+                </div>
+                <div class="tire-grid" id="nokian-grid">
+                    <!-- Nokian tires will be populated by JavaScript -->
                 </div>
             </div>
 
@@ -764,6 +789,40 @@
             { size: "225/45R18", part: "5546821V", qty: 4.00, type: "Hh11", cost: 49.56, supplier: "BHK Warehouse", minStock: 2 },
             { size: "235/45R18", part: "5546822V", qty: 4.00, type: "Hh11", cost: 46.26, supplier: "BHK Direct", minStock: 2 },
             { size: "225/45R17", part: "5546823V", qty: 4.00, type: "Hh11", cost: 38.34, supplier: "BHK Warehouse", minStock: 2 }
+        ];
+
+        const nokianTires = [
+            { size: "235/55R20", part: "T431308", qty: 1.00, type: "One", cost: 185.50, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "245/50R20", part: "T431311", qty: 1.00, type: "One", cost: 195.75, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "255/45R20", part: "T431312", qty: 1.00, type: "One", cost: 205.25, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "235/55R19", part: "T431315", qty: 1.00, type: "One", cost: 175.80, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "225/55R19", part: "T431316", qty: 1.00, type: "One", cost: 165.90, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "235/65R18", part: "T431318", qty: 1.00, type: "One", cost: 155.45, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "265/60R18", part: "T431319", qty: 1.00, type: "One", cost: 180.30, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "245/60R18", part: "T431320", qty: 1.00, type: "One", cost: 170.65, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "235/60R18", part: "T431321", qty: 1.00, type: "One", cost: 160.85, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "225/60R18", part: "T431322", qty: 1.00, type: "One", cost: 150.95, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "235/55R18", part: "T431323", qty: 1.00, type: "One", cost: 145.75, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "215/55R18", part: "T431325", qty: 1.00, type: "One", cost: 135.60, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "235/50R18", part: "T431326", qty: 1.00, type: "One", cost: 140.85, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "245/65R17", part: "T431327", qty: 1.00, type: "One", cost: 155.45, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "235/65R17", part: "T431328", qty: 1.00, type: "One", cost: 145.30, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "225/65R17", part: "T431329", qty: 1.00, type: "One", cost: 135.70, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "215/65R17", part: "T431330", qty: 1.00, type: "One", cost: 125.85, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "225/60R17", part: "T431332", qty: 1.00, type: "One", cost: 130.50, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "235/55R17", part: "T431334", qty: 1.00, type: "One", cost: 135.90, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "185/65R15", part: "T431340", qty: 1.00, type: "One", cost: 95.40, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "185/60R15", part: "T431343", qty: 1.00, type: "One", cost: 90.25, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "195/60R15", part: "T431344", qty: 1.00, type: "One", cost: 98.60, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "225/70R16", part: "T431345", qty: 1.00, type: "One", cost: 120.75, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "235/70R16", part: "T431346", qty: 1.00, type: "One", cost: 125.90, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "205/65R16", part: "T431347", qty: 1.00, type: "One", cost: 105.80, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "205/60R16", part: "T431350", qty: 1.00, type: "One", cost: 100.65, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "215/60R16", part: "T431351", qty: 1.00, type: "One", cost: 110.45, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "235/60R16", part: "T431353", qty: 1.00, type: "One", cost: 125.30, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "205/55R16", part: "T431354", qty: 1.00, type: "One", cost: 95.75, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "225/55R17", part: "T431358", qty: 1.00, type: "One", cost: 125.45, supplier: "Nokian Nordic", minStock: 1 },
+            { size: "225/50R17", part: "T431361", qty: 1.00, type: "One", cost: 120.85, supplier: "Nokian Nordic", minStock: 1 }
         ];
 
         const contTires = [
@@ -962,8 +1021,8 @@
 
         function updateLowStockAlert() {
             const threshold = parseInt(document.getElementById('thresholdInput').value) || 2;
-            const lowStockItems = [...bhkTires, ...contTires].filter(tire => tire.qty <= threshold && tire.qty > 0);
-            const outOfStockItems = [...bhkTires, ...contTires].filter(tire => tire.qty === 0);
+            const lowStockItems = [...bhkTires, ...contTires, ...nokianTires].filter(tire => tire.qty <= threshold && tire.qty > 0);
+            const outOfStockItems = [...bhkTires, ...contTires, ...nokianTires].filter(tire => tire.qty === 0);
             const totalLowStock = lowStockItems.length + outOfStockItems.length;
             
             document.getElementById('low-stock-count').textContent = totalLowStock;
@@ -991,7 +1050,10 @@
                 const part = card.dataset.part;
                 
                 const matchesSearch = !searchTerm || size.includes(searchTerm) || part.includes(searchTerm) || type.includes(searchTerm);
-                const matchesBrand = !brandFilter || (brandFilter === 'bhk' && brand === 'bhk') || (brandFilter === 'continental' && brand === 'cont');
+                const matchesBrand = !brandFilter || 
+                    (brandFilter === 'bhk' && brand === 'bhk') || 
+                    (brandFilter === 'continental' && brand === 'cont') ||
+                    (brandFilter === 'nokian' && brand === 'nokian');
                 const matchesType = !typeFilter || type.includes(typeFilter);
                 
                 if (matchesSearch && matchesBrand && matchesType) {
@@ -1003,7 +1065,7 @@
         }
 
         function populateTypeFilter() {
-            const types = [...new Set([...bhkTires, ...contTires].map(tire => tire.type))];
+            const types = [...new Set([...bhkTires, ...contTires, ...nokianTires].map(tire => tire.type))];
             const typeFilter = document.getElementById('typeFilter');
             
             typeFilter.innerHTML = '<option value="">All Types</option>';
@@ -1018,10 +1080,10 @@
             
             if (section.style.display === 'none') {
                 section.style.display = 'block';
-                button.textContent = `Hide ${brand === 'bhk' ? 'BHK' : 'Continental'}`;
+                button.textContent = `Hide ${brand === 'bhk' ? 'BHK' : brand === 'cont' ? 'Continental' : 'Nokian'}`;
             } else {
                 section.style.display = 'none';
-                button.textContent = `Show ${brand === 'bhk' ? 'BHK' : 'Continental'}`;
+                button.textContent = `Show ${brand === 'bhk' ? 'BHK' : brand === 'cont' ? 'Continental' : 'Nokian'}`;
             }
         }
 
@@ -1055,7 +1117,7 @@
             if (!partNumber) return;
             
             // Find the tire
-            const allTires = [...bhkTires, ...contTires];
+            const allTires = [...bhkTires, ...contTires, ...nokianTires];
             const foundTire = allTires.find(tire => tire.part.toLowerCase() === partNumber);
             
             if (foundTire) {
@@ -1085,7 +1147,8 @@
         function exportData() {
             const allTires = [
                 ...bhkTires.map(tire => ({...tire, brand: 'BHK'})),
-                ...contTires.map(tire => ({...tire, brand: 'Continental'}))
+                ...contTires.map(tire => ({...tire, brand: 'Continental'})),
+                ...nokianTires.map(tire => ({...tire, brand: 'Nokian'}))
             ];
             
             // Create CSV content
@@ -1129,6 +1192,10 @@
             // Populate Continental tires
             const contGrid = document.getElementById('cont-grid');
             contGrid.innerHTML = contTires.map((tire, index) => createTireCard(tire, 'cont', index)).join('');
+            
+            // Populate Nokian tires
+            const nokianGrid = document.getElementById('nokian-grid');
+            nokianGrid.innerHTML = nokianTires.map((tire, index) => createTireCard(tire, 'nokian', index)).join('');
             
             // Populate type filter
             populateTypeFilter();
