@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tire Inventory Management</title>
+    <title>Advanced Tire Inventory Management</title>
     <style>
         * {
             margin: 0;
@@ -11,27 +11,64 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --border-color: #e9ecef;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --light-bg: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border-color: #404040;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--light-bg);
+            color: var(--text-primary);
             min-height: 100vh;
             padding: 20px;
+            transition: all 0.3s ease;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--card-bg);
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             overflow: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
             color: white;
             padding: 30px;
-            text-align: center;
+            position: relative;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-title {
+            flex: 1;
         }
 
         .header h1 {
@@ -45,63 +82,220 @@
             opacity: 0.9;
         }
 
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .theme-toggle, .export-btn, .scanner-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle:hover, .export-btn:hover, .scanner-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .controls-panel {
+            padding: 30px;
+            background: var(--light-bg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .controls-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .search-input, .filter-select, .threshold-input {
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus, .filter-select:focus, .threshold-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .alert-banner {
+            background: linear-gradient(135deg, var(--warning-color), #e67e22);
+            color: white;
+            padding: 15px 30px;
+            margin: 20px 30px;
+            border-radius: 10px;
+            display: none;
+            align-items: center;
+            gap: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
         .content {
             padding: 40px;
         }
 
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
         .brand-section {
             margin-bottom: 50px;
-            background: white;
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e0e0e0;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
         }
 
         .brand-header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 3px solid #3498db;
+            border-bottom: 3px solid var(--primary-color);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .brand-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
         .brand-logo {
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #3498db, #2980b9);
+            background: linear-gradient(135deg, var(--primary-color), #2980b9);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 20px;
             font-weight: bold;
             color: white;
             font-size: 1.2rem;
         }
 
-        .brand-info h2 {
-            color: #2c3e50;
+        .brand-details h2 {
+            color: var(--text-primary);
             font-size: 1.8rem;
             margin-bottom: 5px;
         }
 
         .brand-total {
-            color: #7f8c8d;
+            color: var(--text-secondary);
             font-size: 1rem;
+        }
+
+        .section-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .toggle-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            background: #2980b9;
+            transform: scale(1.05);
         }
 
         .tire-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
             gap: 20px;
         }
 
         .tire-card {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
+            background: var(--light-bg);
+            border: 2px solid var(--border-color);
             border-radius: 12px;
-            padding: 20px;
+            padding: 25px;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -114,59 +308,114 @@
             left: 0;
             width: 4px;
             height: 100%;
-            background: linear-gradient(135deg, #3498db, #2980b9);
+            background: linear-gradient(135deg, var(--primary-color), #2980b9);
+        }
+
+        .tire-card.low-stock::before {
+            background: linear-gradient(135deg, var(--warning-color), #e67e22);
+        }
+
+        .tire-card.out-of-stock::before {
+            background: linear-gradient(135deg, var(--danger-color), #c0392b);
         }
 
         .tire-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            border-color: #3498db;
+            box-shadow: var(--shadow);
+            border-color: var(--primary-color);
         }
 
-        .tire-info {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 15px;
-            align-items: center;
+        .tire-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
         }
 
         .tire-details h3 {
-            color: #2c3e50;
-            font-size: 1.3rem;
+            color: var(--text-primary);
+            font-size: 1.4rem;
             margin-bottom: 8px;
             font-weight: 600;
         }
 
         .tire-part {
-            color: #7f8c8d;
+            color: var(--text-secondary);
             font-family: 'Courier New', monospace;
             font-size: 0.95rem;
-            background: #e9ecef;
+            background: var(--border-color);
             padding: 4px 8px;
             border-radius: 6px;
             display: inline-block;
         }
 
         .tire-type {
-            color: #3498db;
+            color: var(--primary-color);
             font-size: 0.85rem;
             margin-top: 5px;
             font-style: italic;
+        }
+
+        .stock-indicator {
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .stock-good { background: var(--success-color); color: white; }
+        .stock-low { background: var(--warning-color); color: white; }
+        .stock-out { background: var(--danger-color); color: white; }
+
+        .tire-info {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .tire-details-expanded {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .detail-item {
+            text-align: center;
+        }
+
+        .detail-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--text-primary);
         }
 
         .quantity-control {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
         }
 
         .qty-label {
             font-size: 0.8rem;
-            color: #7f8c8d;
+            color: var(--text-secondary);
             margin-bottom: 8px;
             font-weight: 600;
             text-transform: uppercase;
@@ -174,28 +423,28 @@
         }
 
         .qty-display {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: bold;
-            color: #2c3e50;
+            color: var(--text-primary);
             margin: 10px 0;
-            min-width: 40px;
+            min-width: 50px;
             text-align: center;
         }
 
         .qty-buttons {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
         }
 
         .qty-btn {
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             border: none;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary-color), #2980b9);
             color: white;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -214,40 +463,105 @@
         }
 
         .qty-btn:disabled {
-            background: #bdc3c7;
+            background: var(--text-secondary);
             cursor: not-allowed;
             transform: none;
+            opacity: 0.5;
         }
 
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        .history-panel {
+            background: var(--card-bg);
             border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
         }
 
-        .stat-item {
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .scanner-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .scanner-content {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
             text-align: center;
-            padding: 15px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
         }
 
-        .stat-number {
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
             font-size: 2rem;
-            font-weight: bold;
-            color: #3498db;
-            display: block;
+            color: var(--text-secondary);
+            cursor: pointer;
         }
 
-        .stat-label {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            margin-top: 5px;
+        .supplier-info {
+            background: var(--light-bg);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        .reorder-alert {
+            background: linear-gradient(135deg, var(--danger-color), #c0392b);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 10px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.7; }
+        }
+
+        .hidden {
+            display: none !important;
         }
 
         @media (max-width: 768px) {
@@ -262,43 +576,121 @@
             .content {
                 padding: 20px;
             }
+            
+            .controls-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
-<body>
+<body data-theme="light">
     <div class="container">
         <div class="header">
-            <h1>🏁 Tire Inventory Management</h1>
-            <p>Real-time tire stock tracking and management system</p>
+            <div class="header-content">
+                <div class="header-title">
+                    <h1>🏁 Advanced Tire Inventory Management</h1>
+                    <p>Complete tire stock tracking with real-time analytics and alerts</p>
+                </div>
+                <div class="header-controls">
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        🌙 Dark Mode
+                    </button>
+                    <button class="scanner-btn" onclick="openScanner()">
+                        📱 Scanner
+                    </button>
+                    <button class="export-btn" onclick="exportData()">
+                        📊 Export
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert-banner" id="lowStockAlert">
+            <span>⚠️</span>
+            <div>
+                <strong>Low Stock Alert:</strong>
+                <span id="lowStockCount">0</span> items below threshold
+            </div>
+        </div>
+
+        <div class="controls-panel">
+            <div class="controls-row">
+                <div class="control-group">
+                    <label class="control-label">Search Inventory</label>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search by size, part number, or type..." onInput="filterTires()">
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Filter by Brand</label>
+                    <select class="filter-select" id="brandFilter" onChange="filterTires()">
+                        <option value="">All Brands</option>
+                        <option value="bhk">BHK</option>
+                        <option value="continental">Continental</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Filter by Type</label>
+                    <select class="filter-select" id="typeFilter" onChange="filterTires()">
+                        <option value="">All Types</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Low Stock Threshold</label>
+                    <input type="number" class="threshold-input" id="thresholdInput" value="2" min="0" onChange="updateLowStockAlert()">
+                </div>
+            </div>
         </div>
 
         <div class="content">
-            <div class="stats-bar">
-                <div class="stat-item">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-icon">📦</span>
                     <span class="stat-number" id="bhk-total">59</span>
                     <div class="stat-label">BHK Tires</div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-card">
+                    <span class="stat-icon">🏭</span>
                     <span class="stat-number" id="cont-total">54</span>
                     <div class="stat-label">Continental Tires</div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-card">
+                    <span class="stat-icon">📊</span>
                     <span class="stat-number" id="total-inventory">113</span>
                     <div class="stat-label">Total Inventory</div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-card">
+                    <span class="stat-icon">🔧</span>
                     <span class="stat-number" id="tire-models">42</span>
                     <div class="stat-label">Tire Models</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">💰</span>
+                    <span class="stat-number" id="total-value">$12,547</span>
+                    <div class="stat-label">Total Value</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">⚠️</span>
+                    <span class="stat-number" id="low-stock-count">0</span>
+                    <div class="stat-label">Low Stock Items</div>
                 </div>
             </div>
 
             <!-- BHK Tires Section -->
-            <div class="brand-section">
+            <div class="brand-section" id="bhk-section">
                 <div class="brand-header">
-                    <div class="brand-logo">BHK</div>
                     <div class="brand-info">
-                        <h2>BHK Passenger Tires</h2>
-                        <div class="brand-total">17 models • <span id="bhk-display-total">59</span> units in stock</div>
+                        <div class="brand-logo">BHK</div>
+                        <div class="brand-details">
+                            <h2>BHK Passenger Tires</h2>
+                            <div class="brand-total">17 models • <span id="bhk-display-total">59</span> units in stock</div>
+                        </div>
+                    </div>
+                    <div class="section-controls">
+                        <button class="toggle-btn" onclick="toggleSection('bhk')">Hide BHK</button>
                     </div>
                 </div>
                 <div class="tire-grid" id="bhk-grid">
@@ -307,97 +699,173 @@
             </div>
 
             <!-- Continental Tires Section -->
-            <div class="brand-section">
+            <div class="brand-section" id="cont-section">
                 <div class="brand-header">
-                    <div class="brand-logo">CONT</div>
                     <div class="brand-info">
-                        <h2>Continental Tires</h2>
-                        <div class="brand-total">25 models • <span id="cont-display-total">54</span> units in stock</div>
+                        <div class="brand-logo">CONT</div>
+                        <div class="brand-details">
+                            <h2>Continental Tires</h2>
+                            <div class="brand-total">25 models • <span id="cont-display-total">54</span> units in stock</div>
+                        </div>
+                    </div>
+                    <div class="section-controls">
+                        <button class="toggle-btn" onclick="toggleSection('cont')">Hide Continental</button>
                     </div>
                 </div>
                 <div class="tire-grid" id="cont-grid">
                     <!-- Continental tires will be populated by JavaScript -->
                 </div>
             </div>
+
+            <!-- Transaction History -->
+            <div class="history-panel">
+                <div class="history-header">
+                    <h3>📋 Recent Transactions</h3>
+                    <button class="toggle-btn" onclick="clearHistory()">Clear History</button>
+                </div>
+                <div class="history-list" id="historyList">
+                    <div class="history-item">
+                        <span>No transactions yet</span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scanner Modal -->
+    <div class="scanner-modal" id="scannerModal">
+        <div class="scanner-content">
+            <button class="close-btn" onclick="closeScanner()">×</button>
+            <h3>📱 Barcode Scanner</h3>
+            <p>Enter part number to quickly find tire:</p>
+            <input type="text" class="search-input" id="scannerInput" placeholder="Enter or scan part number..." style="margin: 20px 0;">
+            <button class="export-btn" onclick="searchByPartNumber()">Search</button>
         </div>
     </div>
 
     <script>
-        // BHK Tire Data
+        // Enhanced tire data with additional fields
         const bhkTires = [
-            { size: "235/45R19", part: "4120164V", qty: 3.00, type: "Agility SUV" },
-            { size: "225/50R18", part: "4120177V", qty: 5.00, type: "Agility SUV" },
-            { size: "225/40R18", part: "5546240V", qty: 4.00, type: "Street-h hu01" },
-            { size: "235/50R18", part: "5546248V", qty: 3.00, type: "Street-h hu01" },
-            { size: "235/55R17", part: "5546249V", qty: 1.00, type: "Street-h hu01" },
-            { size: "215/60R16", part: "5546778V", qty: 3.00, type: "Hh11" },
-            { size: "225/60R16", part: "5546782V", qty: 2.00, type: "Hh11" },
-            { size: "205/60R16", part: "5546784V", qty: 3.00, type: "Hh11" },
-            { size: "185/65R15", part: "5546787V", qty: 4.00, type: "Hh11" },
-            { size: "235/60R17", part: "5546788V", qty: 4.00, type: "Hh11" },
-            { size: "215/55R17", part: "5546789V", qty: 6.00, type: "Hh11" },
-            { size: "215/55R17", part: "5546793V", qty: 4.00, type: "Hh11" },
-            { size: "215/50R17", part: "5546798V", qty: 4.00, type: "Hh11" },
-            { size: "235/55R18", part: "5546806V", qty: 1.00, type: "Hh11" },
-            { size: "225/45R18", part: "5546821V", qty: 4.00, type: "Hh11" },
-            { size: "235/45R18", part: "5546822V", qty: 4.00, type: "Hh11" },
-            { size: "225/45R17", part: "5546823V", qty: 4.00, type: "Hh11" }
+            { size: "235/45R19", part: "4120164V", qty: 3.00, type: "Agility SUV", cost: 61.76, supplier: "BHK Direct", minStock: 2 },
+            { size: "225/50R18", part: "4120177V", qty: 5.00, type: "Agility SUV", cost: 57.97, supplier: "BHK Direct", minStock: 3 },
+            { size: "225/40R18", part: "5546240V", qty: 4.00, type: "Street-h hu01", cost: 40.20, supplier: "BHK Warehouse", minStock: 2 },
+            { size: "235/50R18", part: "5546248V", qty: 3.00, type: "Street-h hu01", cost: 58.66, supplier: "BHK Direct", minStock: 2 },
+            { size: "235/55R17", part: "5546249V", qty: 1.00, type: "Street-h hu01", cost: 49.40, supplier: "BHK Warehouse", minStock: 2 },
+            { size: "215/60R16", part: "5546778V", qty: 3.00, type: "Hh11", cost: 39.19, supplier: "BHK Direct", minStock: 2 },
+            { size: "225/60R16", part: "5546782V", qty: 2.00, type: "Hh11", cost: 41.70, supplier: "BHK Warehouse", minStock: 3 },
+            { size: "205/60R16", part: "5546784V", qty: 3.00, type: "Hh11", cost: 36.65, supplier: "BHK Direct", minStock: 2 },
+            { size: "185/65R15", part: "5546787V", qty: 4.00, type: "Hh11", cost: 29.06, supplier: "BHK Warehouse", minStock: 3 },
+            { size: "235/60R17", part: "5546788V", qty: 4.00, type: "Hh11", cost: 51.23, supplier: "BHK Direct", minStock: 2 },
+            { size: "215/55R17", part: "5546789V", qty: 6.00, type: "Hh11", cost: 40.93, supplier: "BHK Warehouse", minStock: 3 },
+            { size: "215/55R17", part: "5546793V", qty: 4.00, type: "Hh11", cost: 38.46, supplier: "BHK Direct", minStock: 2 },
+            { size: "215/50R17", part: "5546798V", qty: 4.00, type: "Hh11", cost: 40.09, supplier: "BHK Warehouse", minStock: 2 },
+            { size: "235/55R18", part: "5546806V", qty: 1.00, type: "Hh11", cost: 50.84, supplier: "BHK Direct", minStock: 2 },
+            { size: "225/45R18", part: "5546821V", qty: 4.00, type: "Hh11", cost: 49.56, supplier: "BHK Warehouse", minStock: 2 },
+            { size: "235/45R18", part: "5546822V", qty: 4.00, type: "Hh11", cost: 46.26, supplier: "BHK Direct", minStock: 2 },
+            { size: "225/45R17", part: "5546823V", qty: 4.00, type: "Hh11", cost: 38.34, supplier: "BHK Warehouse", minStock: 2 }
         ];
 
-        // Continental Tire Data
         const contTires = [
-            { size: "245/45R18/XL", part: "03503180000", qty: 1.00, type: "Procontact SSR" },
-            { size: "225/50R17", part: "03508250000", qty: 4.00, type: "Procontact SSR" },
-            { size: "235/45R19", part: "15484960000", qty: 2.00, type: "Procontact" },
-            { size: "P205/70R16", part: "15496930000", qty: 1.00, type: "Procontact" },
-            { size: "225/65R17", part: "15499360000", qty: 2.00, type: "Procontact TX" },
-            { size: "215/45ZR17", part: "15572680000", qty: 2.00, type: "ExtremeContact DWS06 Plus" },
-            { size: "215/45ZR18", part: "15572690000", qty: 2.00, type: "ExtremeContact DWS06 Plus" },
-            { size: "225/40ZR18", part: "15572730000", qty: 4.00, type: "ExtremeContact DWS06 Plus" },
-            { size: "225/45ZR17", part: "15572750000", qty: 2.00, type: "ExtremeContact DWS06 Plus" },
-            { size: "235/40ZR19", part: "15572860000", qty: 1.00, type: "ExtremeContact DWS06 Plus" },
-            { size: "235/50ZR18", part: "15572900000", qty: 2.00, type: "ExtremeContact DWS06 Plus" },
-            { size: "245/40ZR19", part: "15573010000", qty: 2.00, type: "ExtremeContact DWS06 Plus" },
-            { size: "245/45ZR17", part: "15573030000", qty: 3.00, type: "ExtremeContact DWS06 Plus" },
-            { size: "255/35ZR19", part: "15573130000", qty: 2.00, type: "ExtremeContact DWS06 Plus" },
-            { size: "255/40ZR19", part: "15573170000", qty: 1.00, type: "ExtremeContact DWS06 Plus" },
-            { size: "255/45ZR18", part: "15573190000", qty: 2.00, type: "ExtremeContact DWS06 Plus" },
-            { size: "265/35ZR19", part: "15573290000", qty: 1.00, type: "ExtremeContact DWS06 Plus" },
-            { size: "265/35ZR20", part: "15573300000", qty: 1.00, type: "ExtremeContact DWS06 Plus" },
-            { size: "275/45ZR19", part: "15573450000", qty: 2.00, type: "ExtremeContact DWS06 Plus" },
-            { size: "205/50R17", part: "15578310000", qty: 4.00, type: "TrueContact Tour 54" },
-            { size: "255/45R19", part: "15578540000", qty: 3.00, type: "ProContact RX L2 ContiSilent" },
-            { size: "245/45R18", part: "15578930000", qty: 1.00, type: "TrueContact Tour 54" },
-            { size: "255/45R19", part: "15579190000", qty: 2.00, type: "TrueContact Tour 54" },
-            { size: "225/45R17", part: "15580000000", qty: 4.00, type: "TrueContact Tour 54" },
-            { size: "225/60R18", part: "15580070000", qty: 4.00, type: "TrueContact Tour 54" }
+            { size: "245/45R18/XL", part: "03503180000", qty: 1.00, type: "Procontact SSR", cost: 310.08, supplier: "Continental USA", minStock: 1 },
+            { size: "225/50R17", part: "03508250000", qty: 4.00, type: "Procontact SSR", cost: 189.21, supplier: "Continental USA", minStock: 2 },
+            { size: "235/45R19", part: "15484960000", qty: 2.00, type: "Procontact", cost: 243.52, supplier: "Continental Direct", minStock: 2 },
+            { size: "P205/70R16", part: "15496930000", qty: 1.00, type: "Procontact", cost: 134.38, supplier: "Continental USA", minStock: 1 },
+            { size: "225/65R17", part: "15499360000", qty: 2.00, type: "Procontact TX", cost: 100.41, supplier: "Continental Direct", minStock: 2 },
+            { size: "215/45ZR17", part: "15572680000", qty: 2.00, type: "ExtremeContact DWS06 Plus", cost: 125.46, supplier: "Continental USA", minStock: 2 },
+            { size: "215/45ZR18", part: "15572690000", qty: 2.00, type: "ExtremeContact DWS06 Plus", cost: 139.74, supplier: "Continental Direct", minStock: 2 },
+            { size: "225/40ZR18", part: "15572730000", qty: 4.00, type: "ExtremeContact DWS06 Plus", cost: 131.83, supplier: "Continental USA", minStock: 2 },
+            { size: "225/45ZR17", part: "15572750000", qty: 2.00, type: "ExtremeContact DWS06 Plus", cost: 127.75, supplier: "Continental Direct", minStock: 2 },
+            { size: "235/40ZR19", part: "15572860000", qty: 1.00, type: "ExtremeContact DWS06 Plus", cost: 174.93, supplier: "Continental USA", minStock: 1 },
+            { size: "235/50ZR18", part: "15572900000", qty: 2.00, type: "ExtremeContact DWS06 Plus", cost: 159.12, supplier: "Continental Direct", minStock: 2 },
+            { size: "245/40ZR19", part: "15573010000", qty: 2.00, type: "ExtremeContact DWS06 Plus", cost: 195.33, supplier: "Continental USA", minStock: 2 },
+            { size: "245/45ZR17", part: "15573030000", qty: 3.00, type: "ExtremeContact DWS06 Plus", cost: 158.10, supplier: "Continental Direct", minStock: 2 },
+            { size: "255/35ZR19", part: "15573130000", qty: 2.00, type: "ExtremeContact DWS06 Plus", cost: 186.15, supplier: "Continental USA", minStock: 2 },
+            { size: "255/40ZR19", part: "15573170000", qty: 1.00, type: "ExtremeContact DWS06 Plus", cost: 208.65, supplier: "Continental Direct", minStock: 1 },
+            { size: "255/45ZR18", part: "15573190000", qty: 2.00, type: "ExtremeContact DWS06 Plus", cost: 166.26, supplier: "Continental USA", minStock: 2 },
+            { size: "265/35ZR19", part: "15573290000", qty: 1.00, type: "ExtremeContact DWS06 Plus", cost: 218.02, supplier: "Continental Direct", minStock: 1 },
+            { size: "265/35ZR20", part: "15573300000", qty: 1.00, type: "ExtremeContact DWS06 Plus", cost: 267.24, supplier: "Continental USA", minStock: 1 },
+            { size: "275/45ZR19", part: "15573450000", qty: 2.00, type: "ExtremeContact DWS06 Plus", cost: 266.86, supplier: "Continental Direct", minStock: 2 },
+            { size: "205/50R17", part: "15578310000", qty: 4.00, type: "TrueContact Tour 54", cost: 139.48, supplier: "Continental USA", minStock: 3 },
+            { size: "255/45R19", part: "15578540000", qty: 3.00, type: "ProContact RX L2 ContiSilent", cost: 252.96, supplier: "Continental Direct", minStock: 2 },
+            { size: "245/45R18", part: "15578930000", qty: 1.00, type: "TrueContact Tour 54", cost: 191.76, supplier: "Continental USA", minStock: 1 },
+            { size: "255/45R19", part: "15579190000", qty: 2.00, type: "TrueContact Tour 54", cost: 214.71, supplier: "Continental Direct", minStock: 2 },
+            { size: "225/45R17", part: "15580000000", qty: 4.00, type: "TrueContact Tour 54", cost: 136.17, supplier: "Continental USA", minStock: 3 },
+            { size: "225/60R18", part: "15580070000", qty: 4.00, type: "TrueContact Tour 54", cost: 139.48, supplier: "Continental Direct", minStock: 3 }
         ];
+
+        let transactionHistory = [];
+        let currentTheme = 'light';
 
         function createTireCard(tire, brand, index) {
+            const stockStatus = getStockStatus(tire);
+            const needsReorder = tire.qty <= tire.minStock;
+            
             return `
-                <div class="tire-card">
-                    <div class="tire-info">
+                <div class="tire-card ${stockStatus}" data-brand="${brand}" data-type="${tire.type.toLowerCase()}" data-size="${tire.size.toLowerCase()}" data-part="${tire.part.toLowerCase()}">
+                    <div class="tire-header">
                         <div class="tire-details">
                             <h3>${tire.size}</h3>
                             <div class="tire-part">${tire.part}</div>
                             <div class="tire-type">${tire.type}</div>
                         </div>
+                        <div class="stock-indicator ${stockStatus.replace('-', '-')}">${getStockLabel(stockStatus)}</div>
+                    </div>
+                    <div class="tire-info">
+                        <div class="tire-details-expanded">
+                            <div class="detail-item">
+                                <div class="detail-label">Cost</div>
+                                <div class="detail-value">${tire.cost.toFixed(2)}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Value</div>
+                                <div class="detail-value">${(tire.qty * tire.cost).toFixed(2)}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Min Stock</div>
+                                <div class="detail-value">${tire.minStock}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Supplier</div>
+                                <div class="detail-value" style="font-size: 0.9rem;">${tire.supplier}</div>
+                            </div>
+                        </div>
                         <div class="quantity-control">
                             <div class="qty-label">QOH</div>
                             <div class="qty-display" id="${brand}-qty-${index}">${tire.qty.toFixed(2)}</div>
                             <div class="qty-buttons">
-                                <button class="qty-btn" onclick="updateQuantity('${brand}', ${index}, 1)">▲</button>
-                                <button class="qty-btn" onclick="updateQuantity('${brand}', ${index}, -1)" ${tire.qty <= 0 ? 'disabled' : ''}>▼</button>
+                                <button class="qty-btn" onclick="updateQuantity('${brand}', ${index}, 1)" title="Increase quantity">▲</button>
+                                <button class="qty-btn" onclick="updateQuantity('${brand}', ${index}, -1)" ${tire.qty <= 0 ? 'disabled' : ''} title="Decrease quantity">▼</button>
                             </div>
                         </div>
+                    </div>
+                    ${needsReorder ? '<div class="reorder-alert">🔔 Reorder Required</div>' : ''}
+                    <div class="supplier-info">
+                        📞 Supplier: ${tire.supplier} | Min Stock: ${tire.minStock} units
                     </div>
                 </div>
             `;
         }
 
+        function getStockStatus(tire) {
+            if (tire.qty === 0) return 'out-of-stock';
+            if (tire.qty <= tire.minStock) return 'low-stock';
+            return 'good-stock';
+        }
+
+        function getStockLabel(status) {
+            switch(status) {
+                case 'out-of-stock': return 'Out of Stock';
+                case 'low-stock': return 'Low Stock';
+                case 'good-stock': return 'In Stock';
+                default: return 'Unknown';
+            }
+        }
+
         function updateQuantity(brand, index, change) {
             const tires = brand === 'bhk' ? bhkTires : contTires;
             const tire = tires[index];
+            const oldQty = tire.qty;
             
             // Update quantity (minimum 0)
             tire.qty = Math.max(0, tire.qty + change);
@@ -409,20 +877,248 @@
             const downBtn = document.querySelector(`button[onclick="updateQuantity('${brand}', ${index}, -1)"]`);
             downBtn.disabled = tire.qty <= 0;
             
-            // Update totals
+            // Update card styling
+            const card = downBtn.closest('.tire-card');
+            card.className = `tire-card ${getStockStatus(tire)}`;
+            
+            // Update stock indicator
+            const stockIndicator = card.querySelector('.stock-indicator');
+            const stockStatus = getStockStatus(tire);
+            stockIndicator.className = `stock-indicator ${stockStatus.replace('-', '-')}`;
+            stockIndicator.textContent = getStockLabel(stockStatus);
+            
+            // Add reorder alert if needed
+            let reorderAlert = card.querySelector('.reorder-alert');
+            if (tire.qty <= tire.minStock && !reorderAlert) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'reorder-alert';
+                alertDiv.innerHTML = '🔔 Reorder Required';
+                card.appendChild(alertDiv);
+            } else if (tire.qty > tire.minStock && reorderAlert) {
+                reorderAlert.remove();
+            }
+            
+            // Update value display
+            const valueDisplay = card.querySelector('.detail-item:nth-child(2) .detail-value');
+            valueDisplay.textContent = `${(tire.qty * tire.cost).toFixed(2)}`;
+            
+            // Add to transaction history
+            addTransaction(tire, oldQty, tire.qty, change > 0 ? 'Added' : 'Removed');
+            
+            // Update totals and alerts
             updateTotals();
+            updateLowStockAlert();
+        }
+
+        function addTransaction(tire, oldQty, newQty, action) {
+            const transaction = {
+                time: new Date().toLocaleString(),
+                tire: `${tire.size} (${tire.part})`,
+                action: action,
+                oldQty: oldQty.toFixed(2),
+                newQty: newQty.toFixed(2),
+                change: Math.abs(newQty - oldQty).toFixed(2)
+            };
+            
+            transactionHistory.unshift(transaction);
+            if (transactionHistory.length > 50) {
+                transactionHistory = transactionHistory.slice(0, 50);
+            }
+            
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            const historyList = document.getElementById('historyList');
+            if (transactionHistory.length === 0) {
+                historyList.innerHTML = '<div class="history-item"><span>No transactions yet</span><span></span></div>';
+                return;
+            }
+            
+            historyList.innerHTML = transactionHistory.slice(0, 10).map(t => `
+                <div class="history-item">
+                    <div>
+                        <strong>${t.action}</strong> ${t.change} units of ${t.tire}
+                        <br><small style="color: var(--text-secondary);">${t.oldQty} → ${t.newQty} units</small>
+                    </div>
+                    <small style="color: var(--text-secondary);">${t.time}</small>
+                </div>
+            `).join('');
         }
 
         function updateTotals() {
             const bhkTotal = bhkTires.reduce((sum, tire) => sum + tire.qty, 0);
             const contTotal = contTires.reduce((sum, tire) => sum + tire.qty, 0);
             const totalInventory = bhkTotal + contTotal;
+            const totalValue = [...bhkTires, ...contTires].reduce((sum, tire) => sum + (tire.qty * tire.cost), 0);
             
             document.getElementById('bhk-total').textContent = Math.round(bhkTotal);
             document.getElementById('cont-total').textContent = Math.round(contTotal);
             document.getElementById('total-inventory').textContent = Math.round(totalInventory);
             document.getElementById('bhk-display-total').textContent = Math.round(bhkTotal);
             document.getElementById('cont-display-total').textContent = Math.round(contTotal);
+            document.getElementById('total-value').textContent = `${totalValue.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+        }
+
+        function updateLowStockAlert() {
+            const threshold = parseInt(document.getElementById('thresholdInput').value) || 2;
+            const lowStockItems = [...bhkTires, ...contTires].filter(tire => tire.qty <= threshold && tire.qty > 0);
+            const outOfStockItems = [...bhkTires, ...contTires].filter(tire => tire.qty === 0);
+            const totalLowStock = lowStockItems.length + outOfStockItems.length;
+            
+            document.getElementById('low-stock-count').textContent = totalLowStock;
+            document.getElementById('lowStockCount').textContent = totalLowStock;
+            
+            const alertBanner = document.getElementById('lowStockAlert');
+            if (totalLowStock > 0) {
+                alertBanner.style.display = 'flex';
+            } else {
+                alertBanner.style.display = 'none';
+            }
+        }
+
+        function filterTires() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const brandFilter = document.getElementById('brandFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value.toLowerCase();
+            
+            const allCards = document.querySelectorAll('.tire-card');
+            
+            allCards.forEach(card => {
+                const brand = card.dataset.brand;
+                const type = card.dataset.type;
+                const size = card.dataset.size;
+                const part = card.dataset.part;
+                
+                const matchesSearch = !searchTerm || size.includes(searchTerm) || part.includes(searchTerm) || type.includes(searchTerm);
+                const matchesBrand = !brandFilter || (brandFilter === 'bhk' && brand === 'bhk') || (brandFilter === 'continental' && brand === 'cont');
+                const matchesType = !typeFilter || type.includes(typeFilter);
+                
+                if (matchesSearch && matchesBrand && matchesType) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function populateTypeFilter() {
+            const types = [...new Set([...bhkTires, ...contTires].map(tire => tire.type))];
+            const typeFilter = document.getElementById('typeFilter');
+            
+            typeFilter.innerHTML = '<option value="">All Types</option>';
+            types.forEach(type => {
+                typeFilter.innerHTML += `<option value="${type.toLowerCase()}">${type}</option>`;
+            });
+        }
+
+        function toggleSection(brand) {
+            const section = document.getElementById(`${brand}-section`);
+            const button = section.querySelector('.toggle-btn');
+            
+            if (section.style.display === 'none') {
+                section.style.display = 'block';
+                button.textContent = `Hide ${brand === 'bhk' ? 'BHK' : 'Continental'}`;
+            } else {
+                section.style.display = 'none';
+                button.textContent = `Show ${brand === 'bhk' ? 'BHK' : 'Continental'}`;
+            }
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const button = document.querySelector('.theme-toggle');
+            
+            if (currentTheme === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                button.innerHTML = '☀️ Light Mode';
+                currentTheme = 'dark';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                button.innerHTML = '🌙 Dark Mode';
+                currentTheme = 'light';
+            }
+        }
+
+        function openScanner() {
+            document.getElementById('scannerModal').style.display = 'flex';
+            document.getElementById('scannerInput').focus();
+        }
+
+        function closeScanner() {
+            document.getElementById('scannerModal').style.display = 'none';
+            document.getElementById('scannerInput').value = '';
+        }
+
+        function searchByPartNumber() {
+            const partNumber = document.getElementById('scannerInput').value.toLowerCase();
+            if (!partNumber) return;
+            
+            // Find the tire
+            const allTires = [...bhkTires, ...contTires];
+            const foundTire = allTires.find(tire => tire.part.toLowerCase() === partNumber);
+            
+            if (foundTire) {
+                // Close scanner
+                closeScanner();
+                
+                // Clear search and scroll to tire
+                document.getElementById('searchInput').value = partNumber;
+                filterTires();
+                
+                // Highlight the found tire
+                const cards = document.querySelectorAll('.tire-card');
+                cards.forEach(card => {
+                    if (card.dataset.part === partNumber) {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        card.style.border = '3px solid var(--primary-color)';
+                        setTimeout(() => {
+                            card.style.border = '2px solid var(--border-color)';
+                        }, 3000);
+                    }
+                });
+            } else {
+                alert('Part number not found in inventory!');
+            }
+        }
+
+        function exportData() {
+            const allTires = [
+                ...bhkTires.map(tire => ({...tire, brand: 'BHK'})),
+                ...contTires.map(tire => ({...tire, brand: 'Continental'}))
+            ];
+            
+            // Create CSV content
+            const headers = ['Brand', 'Size', 'Part Number', 'Type', 'Quantity', 'Cost', 'Total Value', 'Supplier', 'Min Stock', 'Status'];
+            const csvContent = [
+                headers.join(','),
+                ...allTires.map(tire => [
+                    tire.brand,
+                    tire.size,
+                    tire.part,
+                    `"${tire.type}"`,
+                    tire.qty.toFixed(2),
+                    tire.cost.toFixed(2),
+                    (tire.qty * tire.cost).toFixed(2),
+                    `"${tire.supplier}"`,
+                    tire.minStock,
+                    getStockLabel(getStockStatus(tire))
+                ].join(','))
+            ].join('\n');
+            
+            // Download CSV
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tire_inventory_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function clearHistory() {
+            transactionHistory = [];
+            updateHistoryDisplay();
         }
 
         function initializeInventory() {
@@ -434,8 +1130,27 @@
             const contGrid = document.getElementById('cont-grid');
             contGrid.innerHTML = contTires.map((tire, index) => createTireCard(tire, 'cont', index)).join('');
             
-            // Update initial totals
+            // Populate type filter
+            populateTypeFilter();
+            
+            // Update initial totals and alerts
             updateTotals();
+            updateLowStockAlert();
+            
+            // Add scanner keyboard shortcut
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'k') {
+                    e.preventDefault();
+                    openScanner();
+                }
+            });
+            
+            // Add enter key support for scanner
+            document.getElementById('scannerInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchByPartNumber();
+                }
+            });
         }
 
         // Initialize the inventory when page loads
