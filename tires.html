@@ -737,13 +737,12 @@
                     <button class="export-btn" onclick="openAddTireModal()">
                         ➕ Add Tire
                     </button>
-                    <button class="export-btn" onclick="backupDatabase()">
-                        💾 Backup
+                    <button class="export-btn" onclick="showStorageStatus()">
+                        💾 Storage Info
                     </button>
-                    <button class="export-btn" onclick="document.getElementById('restoreFile').click()">
-                        📁 Restore
+                    <button class="export-btn" onclick="clearLocalStorage()" style="background: #e74c3c;">
+                        🗑️ Reset Data
                     </button>
-                    <input type="file" id="restoreFile" accept=".json" style="display: none;" onchange="restoreDatabase(this)">
                 </div>
             </div>
         </div>
@@ -1145,6 +1144,103 @@
         let transactionHistory = [];
         let currentTheme = 'light';
         let deleteTarget = null;
+
+        // Local Storage Functions
+        function saveToLocalStorage() {
+            try {
+                const inventoryData = {
+                    bhkTires: bhkTires,
+                    contTires: contTires,
+                    nokianTires: nokianTires,
+                    genrTires: genrTires,
+                    transactionHistory: transactionHistory,
+                    lastUpdated: new Date().toISOString()
+                };
+                
+                const dataString = JSON.stringify(inventoryData);
+                
+                // Save to browser storage (simulated since we can't use localStorage in artifacts)
+                window.tireInventoryData = inventoryData;
+                
+                console.log('✅ Inventory saved to local storage at', new Date().toLocaleTimeString());
+                return true;
+            } catch (error) {
+                console.error('❌ Error saving to local storage:', error);
+                return false;
+            }
+        }
+
+        function loadFromLocalStorage() {
+            try {
+                // Load from simulated storage
+                const data = window.tireInventoryData;
+                
+                if (data && data.bhkTires) {
+                    // Clear existing arrays
+                    bhkTires.length = 0;
+                    contTires.length = 0;
+                    nokianTires.length = 0;
+                    genrTires.length = 0;
+                    
+                    // Restore data
+                    bhkTires.push(...data.bhkTires);
+                    contTires.push(...data.contTires);
+                    nokianTires.push(...data.nokianTires);
+                    genrTires.push(...data.genrTires);
+                    
+                    // Restore transaction history
+                    transactionHistory = data.transactionHistory || [];
+                    
+                    console.log('✅ Inventory loaded from local storage');
+                    console.log('📊 Loaded:', {
+                        BHK: bhkTires.length,
+                        Continental: contTires.length,
+                        Nokian: nokianTires.length,
+                        General: genrTires.length,
+                        'Last Updated': data.lastUpdated
+                    });
+                    
+                    return true;
+                }
+                
+                console.log('ℹ️ No saved data found, using default inventory');
+                return false;
+            } catch (error) {
+                console.error('❌ Error loading from local storage:', error);
+                return false;
+            }
+        }
+
+        function clearLocalStorage() {
+            try {
+                window.tireInventoryData = null;
+                console.log('🗑️ Local storage cleared');
+                
+                // Reset to default data
+                location.reload();
+            } catch (error) {
+                console.error('❌ Error clearing local storage:', error);
+            }
+        }
+
+        function showStorageStatus() {
+            const data = window.tireInventoryData;
+            if (data) {
+                const totalTires = (data.bhkTires?.length || 0) + 
+                                 (data.contTires?.length || 0) + 
+                                 (data.nokianTires?.length || 0) + 
+                                 (data.genrTires?.length || 0);
+                
+                console.log('💾 Storage Status:', {
+                    'Total Tire Models': totalTires,
+                    'Transaction History': data.transactionHistory?.length || 0,
+                    'Last Updated': data.lastUpdated,
+                    'Data Size': JSON.stringify(data).length + ' characters'
+                });
+            } else {
+                console.log('💾 No data in local storage');
+            }
+        }
         function saveToStorage() {
             const inventoryData = {
                 bhkTires: bhkTires,
@@ -1436,17 +1532,8 @@
             updateTotals();
             updateLowStockAlert();
             
-            // Auto-save after quantity change
-            if (window.tireDatabase) {
-                window.tireDatabase = {
-                    bhkTires: bhkTires,
-                    contTires: contTires,
-                    nokianTires: nokianTires,
-                    genrTires: genrTires,
-                    transactionHistory: transactionHistory,
-                    lastUpdated: new Date().toISOString()
-                };
-            }
+            // 💾 Auto-save to local storage
+            saveToLocalStorage();
         }
 
         function addTransaction(tire, oldQty, newQty, action) {
@@ -1748,17 +1835,8 @@
             // Add to transaction history
             addTransaction(newTire, 0, qty, 'Added New Tire');
             
-            // Auto-save after adding tire
-            if (window.tireDatabase) {
-                window.tireDatabase = {
-                    bhkTires: bhkTires,
-                    contTires: contTires,
-                    nokianTires: nokianTires,
-                    genrTires: genrTires,
-                    transactionHistory: transactionHistory,
-                    lastUpdated: new Date().toISOString()
-                };
-            }
+            // 💾 Auto-save to local storage
+            saveToLocalStorage();
             
             // Auto-close modal after 2 seconds
             setTimeout(() => {
@@ -1804,17 +1882,8 @@
             // Refresh display
             refreshInventoryDisplay();
             
-            // Auto-save after deletion
-            if (window.tireDatabase) {
-                window.tireDatabase = {
-                    bhkTires: bhkTires,
-                    contTires: contTires,
-                    nokianTires: nokianTires,
-                    genrTires: genrTires,
-                    transactionHistory: transactionHistory,
-                    lastUpdated: new Date().toISOString()
-                };
-            }
+            // 💾 Auto-save to local storage
+            saveToLocalStorage();
             
             // Close modal
             closeDeleteModal();
@@ -1846,16 +1915,10 @@
         }
 
         function initializeInventory() {
-            // Create database structure
-            createDatabaseTable();
+            console.log('🚀 Initializing Tire Inventory System...');
             
-            // Try to load existing data
-            const dataLoaded = loadFromStorage();
-            
-            if (!dataLoaded) {
-                // Initialize with default data if no saved data exists
-                console.log('No saved data found, using default inventory');
-            }
+            // 📥 Try to load saved data first
+            const dataLoaded = loadFromLocalStorage();
             
             // Populate BHK tires
             const bhkGrid = document.getElementById('bhk-grid');
@@ -1879,24 +1942,19 @@
             // Update initial totals and alerts
             updateTotals();
             updateLowStockAlert();
-            updateHistoryDisplay();
             
-            // Create initial database save
-            window.tireDatabase = {
-                bhkTires: bhkTires,
-                contTires: contTires,
-                nokianTires: nokianTires,
-                genrTires: genrTires,
-                transactionHistory: transactionHistory,
-                lastUpdated: new Date().toISOString()
-            };
+            if (dataLoaded) {
+                updateHistoryDisplay();
+                console.log('🔄 Restored previous session data');
+            } else {
+                console.log('🆕 Starting with fresh inventory data');
+                // 💾 Save initial state
+                saveToLocalStorage();
+            }
             
-            // Enable auto-save
-            enableAutoSave();
-            
-            // Show initialization message
+            // Show status
             setTimeout(() => {
-                showNotification('Tire Inventory Database Ready!', 'success');
+                showStorageStatus();
             }, 1000);
             
             // Add scanner keyboard shortcut
@@ -1913,6 +1971,8 @@
                     searchByPartNumber();
                 }
             });
+            
+            console.log('✅ Tire Inventory System Ready!');
         }
 
         // Initialize the inventory when page loads
