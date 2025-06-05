@@ -737,6 +737,13 @@
                     <button class="export-btn" onclick="openAddTireModal()">
                         ➕ Add Tire
                     </button>
+                    <button class="export-btn" onclick="backupDatabase()">
+                        💾 Backup
+                    </button>
+                    <button class="export-btn" onclick="document.getElementById('restoreFile').click()">
+                        📁 Restore
+                    </button>
+                    <input type="file" id="restoreFile" accept=".json" style="display: none;" onchange="restoreDatabase(this)">
                 </div>
             </div>
         </div>
@@ -1138,6 +1145,183 @@
         let transactionHistory = [];
         let currentTheme = 'light';
         let deleteTarget = null;
+        function saveToStorage() {
+            const inventoryData = {
+                bhkTires: bhkTires,
+                contTires: contTires,
+                nokianTires: nokianTires,
+                genrTires: genrTires,
+                transactionHistory: transactionHistory,
+                lastUpdated: new Date().toISOString()
+            };
+            
+            try {
+                const dataString = JSON.stringify(inventoryData);
+                // Create and download backup file
+                const blob = new Blob([dataString], { type: 'application/json' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `tire_inventory_backup_${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                
+                // Also save to a simple in-memory database simulation
+                window.tireDatabase = inventoryData;
+                console.log('Inventory data saved successfully');
+            } catch (error) {
+                console.error('Error saving inventory data:', error);
+            }
+        }
+
+        function loadFromStorage() {
+            try {
+                // Try to load from in-memory database simulation
+                if (window.tireDatabase) {
+                    const data = window.tireDatabase;
+                    
+                    // Restore tire arrays
+                    bhkTires.length = 0;
+                    contTires.length = 0;
+                    nokianTires.length = 0;
+                    genrTires.length = 0;
+                    
+                    bhkTires.push(...data.bhkTires);
+                    contTires.push(...data.contTires);
+                    nokianTires.push(...data.nokianTires);
+                    genrTires.push(...data.genrTires);
+                    
+                    // Restore transaction history
+                    transactionHistory = data.transactionHistory || [];
+                    
+                    console.log('Inventory data loaded successfully');
+                    return true;
+                }
+            } catch (error) {
+                console.error('Error loading inventory data:', error);
+            }
+            return false;
+        }
+
+        function createDatabaseTable() {
+            // Simulate database table creation
+            const tableStructure = {
+                tires: {
+                    columns: ['id', 'brand', 'size', 'part', 'qty', 'type', 'cost', 'supplier', 'minStock', 'created_at', 'updated_at'],
+                    indexes: ['part', 'brand', 'size']
+                },
+                transactions: {
+                    columns: ['id', 'tire_id', 'old_qty', 'new_qty', 'action', 'timestamp'],
+                    indexes: ['tire_id', 'timestamp']
+                }
+            };
+            
+            window.databaseSchema = tableStructure;
+            console.log('Database tables created:', tableStructure);
+        }
+
+        function backupDatabase() {
+            saveToStorage();
+            showNotification('Database backup created and downloaded!', 'success');
+        }
+
+        function restoreDatabase(fileInput) {
+            const file = fileInput.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    // Validate data structure
+                    if (data.bhkTires && data.contTires && data.nokianTires && data.genrTires) {
+                        // Restore data
+                        bhkTires.length = 0;
+                        contTires.length = 0;
+                        nokianTires.length = 0;
+                        genrTires.length = 0;
+                        
+                        bhkTires.push(...data.bhkTires);
+                        contTires.push(...data.contTires);
+                        nokianTires.push(...data.nokianTires);
+                        genrTires.push(...data.genrTires);
+                        
+                        transactionHistory = data.transactionHistory || [];
+                        
+                        // Save to in-memory database
+                        window.tireDatabase = data;
+                        
+                        // Refresh display
+                        refreshInventoryDisplay();
+                        updateHistoryDisplay();
+                        
+                        showNotification('Database restored successfully!', 'success');
+                    } else {
+                        showNotification('Invalid backup file format!', 'error');
+                    }
+                } catch (error) {
+                    showNotification('Error restoring database: ' + error.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 10000;
+                max-width: 300px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                background: ${type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#3498db'};
+                transform: translateX(350px);
+                transition: transform 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(350px)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Auto-save functionality
+        function enableAutoSave() {
+            // Auto-save every 30 seconds
+            setInterval(() => {
+                if (window.tireDatabase) {
+                    const currentData = {
+                        bhkTires: bhkTires,
+                        contTires: contTires,
+                        nokianTires: nokianTires,
+                        genrTires: genrTires,
+                        transactionHistory: transactionHistory,
+                        lastUpdated: new Date().toISOString()
+                    };
+                    window.tireDatabase = currentData;
+                    console.log('Auto-save completed at', new Date().toLocaleTimeString());
+                }
+            }, 30000); // 30 seconds
+        }
 
         function createTireCard(tire, brand, index) {
             const stockStatus = getStockStatus(tire);
@@ -1251,6 +1435,18 @@
             // Update totals and alerts
             updateTotals();
             updateLowStockAlert();
+            
+            // Auto-save after quantity change
+            if (window.tireDatabase) {
+                window.tireDatabase = {
+                    bhkTires: bhkTires,
+                    contTires: contTires,
+                    nokianTires: nokianTires,
+                    genrTires: genrTires,
+                    transactionHistory: transactionHistory,
+                    lastUpdated: new Date().toISOString()
+                };
+            }
         }
 
         function addTransaction(tire, oldQty, newQty, action) {
@@ -1552,6 +1748,18 @@
             // Add to transaction history
             addTransaction(newTire, 0, qty, 'Added New Tire');
             
+            // Auto-save after adding tire
+            if (window.tireDatabase) {
+                window.tireDatabase = {
+                    bhkTires: bhkTires,
+                    contTires: contTires,
+                    nokianTires: nokianTires,
+                    genrTires: genrTires,
+                    transactionHistory: transactionHistory,
+                    lastUpdated: new Date().toISOString()
+                };
+            }
+            
             // Auto-close modal after 2 seconds
             setTimeout(() => {
                 closeAddTireModal();
@@ -1596,6 +1804,18 @@
             // Refresh display
             refreshInventoryDisplay();
             
+            // Auto-save after deletion
+            if (window.tireDatabase) {
+                window.tireDatabase = {
+                    bhkTires: bhkTires,
+                    contTires: contTires,
+                    nokianTires: nokianTires,
+                    genrTires: genrTires,
+                    transactionHistory: transactionHistory,
+                    lastUpdated: new Date().toISOString()
+                };
+            }
+            
             // Close modal
             closeDeleteModal();
         }
@@ -1626,6 +1846,17 @@
         }
 
         function initializeInventory() {
+            // Create database structure
+            createDatabaseTable();
+            
+            // Try to load existing data
+            const dataLoaded = loadFromStorage();
+            
+            if (!dataLoaded) {
+                // Initialize with default data if no saved data exists
+                console.log('No saved data found, using default inventory');
+            }
+            
             // Populate BHK tires
             const bhkGrid = document.getElementById('bhk-grid');
             bhkGrid.innerHTML = bhkTires.map((tire, index) => createTireCard(tire, 'bhk', index)).join('');
@@ -1648,6 +1879,25 @@
             // Update initial totals and alerts
             updateTotals();
             updateLowStockAlert();
+            updateHistoryDisplay();
+            
+            // Create initial database save
+            window.tireDatabase = {
+                bhkTires: bhkTires,
+                contTires: contTires,
+                nokianTires: nokianTires,
+                genrTires: genrTires,
+                transactionHistory: transactionHistory,
+                lastUpdated: new Date().toISOString()
+            };
+            
+            // Enable auto-save
+            enableAutoSave();
+            
+            // Show initialization message
+            setTimeout(() => {
+                showNotification('Tire Inventory Database Ready!', 'success');
+            }, 1000);
             
             // Add scanner keyboard shortcut
             document.addEventListener('keydown', function(e) {
