@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tire Inventory System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            max-width: 1400px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .brand-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .brand-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .brand-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-logo {
+            background: #667eea;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .brand-details h2 {
+            margin-bottom: 0.25rem;
+            color: #333;
+            font-size: 1.3rem;
+        }
+
+        .brand-total {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .toggle-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .tire-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            padding: 1.5rem;
+        }
+
+        .tire-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .tire-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .tire-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .tire-size {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .tire-stock {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stock-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stock-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stock-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .stock-btn.decrease {
+            background: #dc3545;
+        }
+
+        .stock-btn.decrease:hover {
+            background: #c82333;
+        }
+
+        .stock-number {
+            font-weight: bold;
+            min-width: 40px;
+            text-align: center;
+            padding: 0.25rem;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .controls-panel {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .controls-panel h3 {
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .reset-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 0 0.25rem;
+        }
+
+        .reset-btn:hover {
+            background: #c82333;
+        }
+
+        .add-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 0 0.25rem;
+        }
+
+        .add-btn:hover {
+            background: #218838;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+      .modal-content {
+             background-color: white;
+             margin: 5% auto; /* Reduced from 15% */
+             padding: 2rem;
+             border-radius: 10px;
+             width: 90%;
+             max-width: 500px;
+             position: relative;
+             max-height: 85vh; /* Add this */
+             overflow-y: auto; /* Add this */
+}     
+
+        .modal-header {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚗 Tire Inventory Management System</h1>
+        <p>Persistent inventory tracking with automatic calculations</p>
+    </div>
+
+    <div class="content">
+        <div class="controls-panel">
+            <h3>System Controls</h3>
+            <button class="add-btn" onclick="openAddTireModal()">➕ Add New Tire</button>
+            <button class="reset-btn" onclick="resetAllInventory()">Reset All to Default</button>
+            <button class="reset-btn" onclick="exportData()">Export Data</button>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-icon">📦</span>
+                <span class="stat-number" id="bhk-total">59</span>
+                <div class="stat-label">BHK Tires</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🏭</span>
+                <span class="stat-number" id="cont-total">54</span>
+                <div class="stat-label">Continental Tires</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">❄️</span>
+                <span class="stat-number" id="nokian-total">44</span>
+                <div class="stat-label">Nokian Tires</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🔵</span>
+                <span class="stat-number" id="genr-total">25</span>
+                <div class="stat-label">General Tires</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">📊</span>
+                <span class="stat-number" id="total-inventory">182</span>
+                <div class="stat-label">Total Inventory</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🔧</span>
+                <span class="stat-number" id="tire-models">111</span>
+                <div class="stat-label">Tire Models</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">💰</span>
+                <span class="stat-number" id="total-value">$12,547</span>
+                <div class="stat-label">Total Value</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">⚠️</span>
+                <span class="stat-number" id="low-stock-count">0</span>
+                <div class="stat-label">Low Stock Items</div>
+            </div>
+        </div>
+
+        <!-- BHK Tires Section -->
+        <div class="brand-section" id="bhk-section">
+            <div class="brand-header">
+                <div class="brand-info">
+                    <div class="brand-logo">BHK</div>
+                    <div class="brand-details">
+                        <h2>BHK Passenger Tires</h2>
+                        <div class="brand-total">17 models • <span id="bhk-display-total">59</span> units in stock</div>
+                    </div>
+                </div>
+                <div class="section-controls">
+                    <button class="toggle-btn" onclick="toggleSection('bhk')">Hide BHK</button>
+                </div>
+            </div>
+            <div class="tire-grid" id="bhk-grid">
+                <!-- BHK tires will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Continental Tires Section -->
+        <div class="brand-section" id="cont-section">
+            <div class="brand-header">
+                <div class="brand-info">
+                    <div class="brand-logo">CONT</div>
+                    <div class="brand-details">
+                        <h2>Continental Tires</h2>
+                        <div class="brand-total">18 models • <span id="cont-display-total">54</span> units in stock</div>
+                    </div>
+                </div>
+                <div class="section-controls">
+                    <button class="toggle-btn" onclick="toggleSection('cont')">Hide Continental</button>
+                </div>
+            </div>
+            <div class="tire-grid" id="cont-grid">
+                <!-- Continental tires will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Nokian Tires Section -->
+        <div class="brand-section" id="nokian-section">
+            <div class="brand-header">
+                <div class="brand-info">
+                    <div class="brand-logo">NOK</div>
+                    <div class="brand-details">
+                        <h2>Nokian Tires</h2>
+                        <div class="brand-total">22 models • <span id="nokian-display-total">44</span> units in stock</div>
+                    </div>
+                </div>
+                <div class="section-controls">
+                    <button class="toggle-btn" onclick="toggleSection('nokian')">Hide Nokian</button>
+                </div>
+            </div>
+            <div class="tire-grid" id="nokian-grid">
+                <!-- Nokian tires will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- General Tires Section -->
+        <div class="brand-section" id="genr-section">
+            <div class="brand-header">
+                <div class="brand-info">
+                    <div class="brand-logo">GENR</div>
+                    <div class="brand-details">
+                        <h2>General Tires</h2>
+                        <div class="brand-total">25 models • <span id="genr-display-total">25</span> units in stock</div>
+                    </div>
+                </div>
+                <div class="section-controls">
+                    <button class="toggle-btn" onclick="toggleSection('genr')">Hide General</button>
+                </div>
+            </div>
+            <div class="tire-grid" id="genr-grid">
+                <!-- General tires will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Tire Modal -->
+    <div id="addTireModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Tire</h2>
+            </div>
+            <form id="addTireForm">
+                <div class="form-group">
+                    <label for="tireBrand">Brand:</label>
+                    <select id="tireBrand" required>
+                        <option value="">Select Brand</option>
+                        <option value="bhk">BHK</option>
+                        <option value="cont">Continental</option>
+                        <option value="nokian">Nokian</option>
+                        <option value="genr">General</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tireName">Tire Name:</label>
+                    <input type="text" id="tireName" placeholder="e.g., SportGrip Pro" required>
+                </div>
+                <div class="form-group">
+                    <label for="tireSize">Tire Size:</label>
+                    <input type="text" id="tireSize" placeholder="e.g., 205/55R16" required>
+                </div>
+                <div class="form-group">
+                    <label for="tireStock">Initial Stock:</label>
+                    <input type="number" id="tireStock" min="0" value="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="tirePrice">Price ($):</label>
+                    <input type="number" id="tirePrice" min="0" step="0.01" placeholder="e.g., 120.00" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn-primary">Add Tire</button>
+                    <button type="button" class="btn-secondary" onclick="closeAddTireModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Default inventory data
+        const defaultInventory = {
+            bhk: {
+                total: 59,
+                models: [
+                    { name: "BHK Comfort Plus", size: "205/55R16", stock: 4, price: 120 },
+                    { name: "BHK EcoMax", size: "215/60R17", stock: 3, price: 135 },
+                    { name: "BHK SportGrip", size: "225/45R18", stock: 5, price: 150 },
+                    { name: "BHK AllSeason", size: "195/65R15", stock: 6, price: 110 },
+                    { name: "BHK Performance", size: "235/40R19", stock: 2, price: 180 }
+                ]
+            },
+            cont: {
+                total: 54,
+                models: [
+                    { name: "Continental PremiumContact", size: "205/55R16", stock: 3, price: 140 },
+                    { name: "Continental EcoContact", size: "215/60R17", stock: 4, price: 155 },
+                    { name: "Continental SportContact", size: "225/45R18", stock: 2, price: 170 },
+                    { name: "Continental AllSeason", size: "195/65R15", stock: 5, price: 130 }
+                ]
+            },
+            nokian: {
+                total: 44,
+                models: [
+                    { name: "Nokian Hakkapeliitta", size: "205/55R16", stock: 2, price: 160 },
+                    { name: "Nokian WR Snowproof", size: "215/60R17", stock: 3, price: 145 },
+                    { name: "Nokian Powerproof", size: "225/45R18", stock: 4, price: 165 },
+                    { name: "Nokian Wetproof", size: "195/65R15", stock: 1, price: 125 }
+                ]
+            },
+            genr: {
+                total: 25,
+                models: [
+                    { name: "General Altimax RT45", size: "205/55R16", stock: 3, price: 95 },
+                    { name: "General Grabber APT", size: "215/60R17", stock: 2, price: 115 },
+                    { name: "General G-Max AS-05", size: "225/45R18", stock: 4, price: 125 },
+                    { name: "General Exclaim UHP", size: "195/65R15", stock: 1, price: 105 }
+                ]
+            }
+        };
+
+        // Load inventory from localStorage or use defaults
+        let inventory = JSON.parse(localStorage.getItem('tireInventory')) || JSON.parse(JSON.stringify(defaultInventory));
+
+        // Function to save inventory to localStorage
+        function saveInventory() {
+            localStorage.setItem('tireInventory', JSON.stringify(inventory));
+        }
+
+        // Function to update stock for a specific tire
+        function updateStock(brand, modelIndex, action) {
+            if (action === 'increase') {
+                inventory[brand].models[modelIndex].stock++;
+            } else if (action === 'decrease' && inventory[brand].models[modelIndex].stock > 0) {
+                inventory[brand].models[modelIndex].stock--;
+            }
+            
+            // Recalculate brand total
+            inventory[brand].total = inventory[brand].models.reduce((sum, model) => sum + model.stock, 0);
+            
+            saveInventory();
+            updateAllDisplays();
+        }
+
+        // Function to update all displays
+        function updateAllDisplays() {
+            // Update brand totals
+            document.getElementById('bhk-total').textContent = inventory.bhk.total;
+            document.getElementById('cont-total').textContent = inventory.cont.total;
+            document.getElementById('nokian-total').textContent = inventory.nokian.total;
+            document.getElementById('genr-total').textContent = inventory.genr.total;
+            
+            document.getElementById('bhk-display-total').textContent = inventory.bhk.total;
+            document.getElementById('cont-display-total').textContent = inventory.cont.total;
+            document.getElementById('nokian-display-total').textContent = inventory.nokian.total;
+            document.getElementById('genr-display-total').textContent = inventory.genr.total;
+
+            // Calculate total inventory
+            const totalInventory = inventory.bhk.total + inventory.cont.total + inventory.nokian.total + inventory.genr.total;
+            document.getElementById('total-inventory').textContent = totalInventory;
+
+            // Calculate total models
+            const totalModels = Object.values(inventory).reduce((sum, brand) => sum + brand.models.length, 0);
+            document.getElementById('tire-models').textContent = totalModels;
+
+            // Calculate total value
+            let totalValue = 0;
+            Object.values(inventory).forEach(brand => {
+                brand.models.forEach(model => {
+                    totalValue += model.stock * model.price;
+                });
+            });
+            document.getElementById('total-value').textContent = `$${totalValue.toLocaleString()}`;
+
+            // Calculate low stock items (stock <= 2)
+            let lowStockCount = 0;
+            Object.values(inventory).forEach(brand => {
+                brand.models.forEach(model => {
+                    if (model.stock <= 2) lowStockCount++;
+                });
+            });
+            document.getElementById('low-stock-count').textContent = lowStockCount;
+
+            // Update tire grids
+            populateTireGrid('bhk');
+            populateTireGrid('cont');
+            populateTireGrid('nokian');
+            populateTireGrid('genr');
+        }
+
+        // Function to populate tire grid for a brand
+        function populateTireGrid(brand) {
+            const grid = document.getElementById(`${brand}-grid`);
+            grid.innerHTML = '';
+
+            inventory[brand].models.forEach((model, index) => {
+                const tireItem = document.createElement('div');
+                tireItem.className = 'tire-item';
+                tireItem.innerHTML = `
+                    <div class="tire-info">
+                        <div>
+                            <div class="tire-name">
+                                ${model.name}
+                                <button class="delete-btn" onclick="deleteTire('${brand}', ${index})" title="Delete this tire">×</button>
+                            </div>
+                            <div class="tire-size">${model.size}</div>
+                        </div>
+                        <div class="tire-stock">
+                            <div class="stock-controls">
+                                <button class="stock-btn decrease" onclick="updateStock('${brand}', ${index}, 'decrease')">-</button>
+                                <span class="stock-number">${model.stock}</span>
+                                <button class="stock-btn" onclick="updateStock('${brand}', ${index}, 'increase')">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">
+                        Price: ${model.price} • Value: ${(model.stock * model.price).toLocaleString()}
+                    </div>
+                `;
+                grid.appendChild(tireItem);
+            });
+        }
+
+        // Function to toggle section visibility
+        function toggleSection(brand) {
+            const grid = document.getElementById(`${brand}-grid`);
+            const button = document.querySelector(`#${brand}-section .toggle-btn`);
+            
+            if (grid.classList.contains('hidden')) {
+                grid.classList.remove('hidden');
+                button.textContent = `Hide ${brand.charAt(0).toUpperCase() + brand.slice(1)}`;
+            } else {
+                grid.classList.add('hidden');
+                button.textContent = `Show ${brand.charAt(0).toUpperCase() + brand.slice(1)}`;
+            }
+        }
+
+        // Function to reset all inventory to default
+        function resetAllInventory() {
+            if (confirm('Are you sure you want to reset all inventory to default values? This cannot be undone.')) {
+                inventory = JSON.parse(JSON.stringify(defaultInventory));
+                saveInventory();
+                updateAllDisplays();
+                alert('Inventory has been reset to default values.');
+            }
+        }
+
+        // Function to export data
+        function exportData() {
+            const dataStr = JSON.stringify(inventory, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'tire_inventory_backup.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Function to open add tire modal
+        function openAddTireModal() {
+            document.getElementById('addTireModal').style.display = 'block';
+        }
+
+        // Function to close add tire modal
+        function closeAddTireModal() {
+            document.getElementById('addTireModal').style.display = 'none';
+            document.getElementById('addTireForm').reset();
+        }
+
+        // Function to add a new tire
+        function addNewTire(brand, name, size, stock, price) {
+            const newTire = {
+                name: name,
+                size: size,
+                stock: parseInt(stock),
+                price: parseFloat(price)
+            };
+
+            inventory[brand].models.push(newTire);
+            inventory[brand].total += newTire.stock;
+            
+            saveInventory();
+            updateAllDisplays();
+        }
+
+        // Function to delete a tire
+        function deleteTire(brand, modelIndex) {
+            const tire = inventory[brand].models[modelIndex];
+            const confirmMessage = `Are you sure you want to delete "${tire.name}" (${tire.size})?\nThis will remove ${tire.stock} units from inventory.`;
+            
+            if (confirm(confirmMessage)) {
+                // Remove stock from brand total
+                inventory[brand].total -= tire.stock;
+                
+                // Remove the tire from the models array
+                inventory[brand].models.splice(modelIndex, 1);
+                
+                saveInventory();
+                updateAllDisplays();
+            }
+        }
+
+        // Handle add tire form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAllDisplays();
+
+            // Add form submission handler
+            document.getElementById('addTireForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const brand = document.getElementById('tireBrand').value;
+                const name = document.getElementById('tireName').value;
+                const size = document.getElementById('tireSize').value;
+                const stock = document.getElementById('tireStock').value;
+                const price = document.getElementById('tirePrice').value;
+
+                if (brand && name && size && stock && price) {
+                    addNewTire(brand, name, size, stock, price);
+                    closeAddTireModal();
+                    alert('New tire added successfully!');
+                }
+            });
+
+            // Close modal when clicking outside of it
+            window.addEventListener('click', function(e) {
+                const modal = document.getElementById('addTireModal');
+                if (e.target === modal) {
+                    closeAddTireModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
