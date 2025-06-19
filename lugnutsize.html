@@ -48,6 +48,69 @@
             gap: 15px;
         }
 
+        .timer-section {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 15px 25px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 5px;
+        }
+
+        .timer.warning {
+            color: #ff6b6b;
+            animation: timerPulse 1s infinite;
+        }
+
+        @keyframes timerPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .timer-label {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .start-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .start-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .game-paused {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
         .user-input {
             display: flex;
             align-items: center;
@@ -245,8 +308,15 @@
             </div>
             <div class="score-display">
                 <span id="current-score">Score: 0</span> | 
-                <span id="top-score">Best: 0</span>
+                <span id="top-score">Top Score: 0</span> |
+                <span id="player-name">Player</span>
             </div>
+        </div>
+
+        <div class="timer-section">
+            <div class="timer" id="timer">30</div>
+            <div class="timer-label">seconds remaining</div>
+            <button class="start-btn" id="start-btn" onclick="startTimer()">Start Timer</button>
         </div>
 
         <div class="game-section">
@@ -267,7 +337,8 @@
 
             <div class="stats">
                 <span id="streak">Streak: 0</span> | 
-                <span id="total-questions">Questions: 0</span>
+                <span id="total-questions">Questions: 0</span> |
+                <span id="accuracy">Accuracy: 0%</span>
             </div>
         </div>
 
@@ -341,24 +412,125 @@
         let currentQuestion = {};
         let score = 0;
         let topScore = 0;
+        let topScorePlayer = '';
         let streak = 0;
         let totalQuestions = 0;
+        let correctAnswers = 0;
         let answered = false;
+        let timeLeft = 30;
+        let timerInterval;
+        let gameActive = false;
+        let timerStarted = false;
 
         // Load top score from memory
         function loadTopScore() {
             // In a real application, this would use localStorage
             // For this demo, we'll keep it in memory
             topScore = topScore || 0;
-            document.getElementById('top-score').textContent = `Best: ${topScore}`;
+            topScorePlayer = topScorePlayer || 'Player';
+            updateTopScoreDisplay();
+        }
+
+        // Update top score display
+        function updateTopScoreDisplay() {
+            document.getElementById('top-score').textContent = `Top Score: ${topScore} (${topScorePlayer})`;
         }
 
         // Save top score to memory
         function saveTopScore() {
+            const currentPlayer = document.getElementById('username').value || 'Player';
             if (score > topScore) {
                 topScore = score;
-                document.getElementById('top-score').textContent = `Best: ${topScore}`;
+                topScorePlayer = currentPlayer;
+                updateTopScoreDisplay();
             }
+        }
+
+        // Timer functions
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timeLeft = 30;
+            gameActive = true;
+            timerStarted = true;
+            answered = false;
+            
+            // Update button and game state
+            const startBtn = document.getElementById('start-btn');
+            startBtn.textContent = 'Timer Running...';
+            startBtn.disabled = true;
+            
+            // Enable the game
+            const gameSection = document.querySelector('.game-section');
+            gameSection.classList.remove('game-paused');
+            
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 30;
+            timerStarted = false;
+            gameActive = false;
+            
+            const startBtn = document.getElementById('start-btn');
+            startBtn.textContent = 'Start Timer';
+            startBtn.disabled = false;
+            
+            // Disable the game
+            const gameSection = document.querySelector('.game-section');
+            gameSection.classList.add('game-paused');
+            
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const timerElement = document.getElementById('timer');
+            timerElement.textContent = timeLeft;
+            
+            if (timeLeft <= 10) {
+                timerElement.classList.add('warning');
+            } else {
+                timerElement.classList.remove('warning');
+            }
+        }
+
+        function timeUp() {
+            if (answered || !gameActive) return;
+            
+            clearInterval(timerInterval);
+            answered = true;
+            totalQuestions++;
+            streak = 0;
+            timerStarted = false;
+            
+            // Show correct answer
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === currentQuestion.correctSize) {
+                    btn.classList.add('correct');
+                }
+            });
+            
+            // Reset timer button
+            const startBtn = document.getElementById('start-btn');
+            startBtn.textContent = 'Start Timer';
+            startBtn.disabled = false;
+            
+            updateStats();
+            saveTopScore();
+            
+            document.getElementById('next-btn').style.display = 'block';
         }
 
         // Generate reference grid
@@ -427,14 +599,22 @@
             });
             
             document.getElementById('next-btn').style.display = 'none';
+            
+            // Pause the game until timer is started
+            const gameSection = document.querySelector('.game-section');
+            gameSection.classList.add('game-paused');
+            
+            resetTimer();
         }
 
         // Select answer
         function selectAnswer(selected, btnElement) {
-            if (answered) return;
+            if (answered || !gameActive || !timerStarted) return;
             
+            clearInterval(timerInterval);
             answered = true;
             totalQuestions++;
+            timerStarted = false;
             
             const allBtns = document.querySelectorAll('.option-btn');
             
@@ -442,6 +622,12 @@
                 btnElement.classList.add('correct');
                 score += 10;
                 streak++;
+                correctAnswers++;
+                
+                // Bonus points for quick answers
+                if (timeLeft > 20) {
+                    score += 5; // Speed bonus
+                }
             } else {
                 btnElement.classList.add('incorrect');
                 // Show correct answer
@@ -456,6 +642,11 @@
             // Disable all buttons
             allBtns.forEach(btn => btn.disabled = true);
             
+            // Reset timer button
+            const startBtn = document.getElementById('start-btn');
+            startBtn.textContent = 'Start Timer';
+            startBtn.disabled = false;
+            
             updateStats();
             saveTopScore();
             
@@ -467,18 +658,26 @@
             document.getElementById('current-score').textContent = `Score: ${score}`;
             document.getElementById('streak').textContent = `Streak: ${streak}`;
             document.getElementById('total-questions').textContent = `Questions: ${totalQuestions}`;
+            
+            const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
+            document.getElementById('accuracy').textContent = `Accuracy: ${accuracy}%`;
         }
 
         // Next question
         function nextQuestion() {
+            if (!gameActive) return;
             generateQuestion();
         }
 
         // Reset game
         function resetGame() {
+            clearInterval(timerInterval);
             score = 0;
             streak = 0;
             totalQuestions = 0;
+            correctAnswers = 0;
+            gameActive = false;
+            timerStarted = false;
             updateStats();
             generateQuestion();
         }
@@ -489,6 +688,10 @@
             generateReference();
             generateQuestion();
             updateStats();
+            
+            // Start with game paused
+            const gameSection = document.querySelector('.game-section');
+            gameSection.classList.add('game-paused');
         }
 
         // Start the game
@@ -496,8 +699,12 @@
 
         // Update player name display
         document.getElementById('username').addEventListener('input', function() {
-            // In a real app, you might want to save this to localStorage
+            const playerName = this.value || 'Player';
+            document.getElementById('player-name').textContent = playerName;
         });
+
+        // Initialize player name
+        document.getElementById('player-name').textContent = document.getElementById('username').value || 'Player';
     </script>
 </body>
 </html>
