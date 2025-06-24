@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electrical Symbols Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            margin: 10px 0;
+            opacity: 0.9;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .symbols-column, .names-column {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            min-height: 500px;
+        }
+
+        .column-title {
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .symbol-item, .name-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 60px;
+            margin: 10px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            user-select: none;
+        }
+
+        .symbol-item:hover, .name-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .symbol-item.selected, .name-item.selected {
+            border-color: #FFD700;
+            background: rgba(255, 215, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .symbol-item.matched, .name-item.matched {
+            border-color: #00FF7F;
+            background: rgba(0, 255, 127, 0.2);
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .symbol-item.wrong, .name-item.wrong {
+            border-color: #FF4444;
+            background: rgba(255, 68, 68, 0.2);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .symbol-display {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 20px 0;
+            min-height: 30px;
+        }
+
+        .success {
+            color: #00FF7F;
+            text-shadow: 0 0 10px rgba(0, 255, 127, 0.5);
+        }
+
+        .error {
+            color: #FF4444;
+            text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 0.6s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            .game-area {
+                grid-template-columns: 1fr;
+            }
+            
+            .score-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1 class="title">⚡ Electrical Symbols Game ⚡</h1>
+            <p class="subtitle">Match the electrical symbols with their correct names!</p>
+        </div>
+
+        <div class="score-board">
+            <div>Score: <span id="score">0</span></div>
+            <div>Matches: <span id="matches">0</span> / <span id="total">0</span></div>
+            <div>Time: <span id="timer">0:00</span></div>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="game-area">
+            <div class="symbols-column">
+                <div class="column-title">🔌 Symbols</div>
+                <div id="symbols-container"></div>
+            </div>
+            
+            <div class="names-column">
+                <div class="column-title">📝 Names</div>
+                <div id="names-container"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="startNewGame()">🎮 New Game</button>
+            <button class="btn" onclick="showHint()">💡 Hint</button>
+            <button class="btn" onclick="resetGame()">🔄 Reset</button>
+        </div>
+    </div>
+
+    <script>
+        // Electrical symbols data based on the image
+        const symbolsData = [
+            { symbol: '+', name: 'Positive', id: 1 },
+            { symbol: '⊥', name: 'Ground', id: 2 },
+            { symbol: '~∩~', name: 'Fuse', id: 3 },
+            { symbol: '⌒⌒', name: 'Circuit breaker', id: 4 },
+            { symbol: ')|', name: 'Condenser', id: 5 },
+            { symbol: 'Ω', name: 'Ohms', id: 6 },
+            { symbol: '∿∿∿', name: 'Fixed value resistor', id: 7 },
+            { symbol: '∿∿∿↗', name: 'Variable resistor', id: 8 },
+            { symbol: '))))', name: 'Coil', id: 9 },
+            { symbol: '⊔⊓', name: 'Open contacts', id: 10 },
+            { symbol: '⊓⊔', name: 'Closed contacts', id: 11 },
+            { symbol: '↔●', name: 'Closed switch', id: 12 },
+            { symbol: '↗●', name: 'Open switch', id: 13 },
+            { symbol: '⊚', name: 'Temperature switch', id: 14 },
+            { symbol: '→|', name: 'Diode', id: 15 },
+            { symbol: '→|←', name: 'Zener diode', id: 16 },
+            { symbol: '(M)', name: 'Motor', id: 17 },
+            { symbol: '→C101', name: 'Connector 101', id: 18 },
+            { symbol: '→', name: 'Male connector', id: 19 },
+            { symbol: '←', name: 'Female connector', id: 20 },
+            { symbol: '⧨', name: 'Splice', id: 21 },
+            { symbol: 'LED', name: 'Light-emitting diode', id: 22 },
+            { symbol: '⊙', name: 'Single filament bulb', id: 23 },
+            { symbol: '⊙⊙', name: 'Dual filament bulb', id: 24 }
+        ];
+
+        let gameState = {
+            currentSymbols: [],
+            currentNames: [],
+            selectedSymbol: null,
+            selectedName: null,
+            matches: 0,
+            score: 0,
+            startTime: null,
+            timerInterval: null,
+            gameStarted: false
+        };
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function startNewGame() {
+            // Select 12 random symbols for the game
+            const selectedSymbols = shuffleArray(symbolsData).slice(0, 12);
+            
+            gameState.currentSymbols = shuffleArray(selectedSymbols);
+            gameState.currentNames = shuffleArray([...selectedSymbols]);
+            gameState.selectedSymbol = null;
+            gameState.selectedName = null;
+            gameState.matches = 0;
+            gameState.score = 0;
+            gameState.startTime = Date.now();
+            gameState.gameStarted = true;
+
+            updateDisplay();
+            renderGame();
+            startTimer();
+            showFeedback('Game started! Match symbols with their names.', 'success');
+        }
+
+        function renderGame() {
+            const symbolsContainer = document.getElementById('symbols-container');
+            const namesContainer = document.getElementById('names-container');
+
+            symbolsContainer.innerHTML = '';
+            namesContainer.innerHTML = '';
+
+            gameState.currentSymbols.forEach(item => {
+                const symbolElement = document.createElement('div');
+                symbolElement.className = 'symbol-item';
+                symbolElement.dataset.id = item.id;
+                symbolElement.innerHTML = `<div class="symbol-display">${item.symbol}</div>`;
+                symbolElement.addEventListener('click', () => selectSymbol(item.id));
+                symbolsContainer.appendChild(symbolElement);
+            });
+
+            gameState.currentNames.forEach(item => {
+                const nameElement = document.createElement('div');
+                nameElement.className = 'name-item';
+                nameElement.dataset.id = item.id;
+                nameElement.innerHTML = item.name;
+                nameElement.addEventListener('click', () => selectName(item.id));
+                namesContainer.appendChild(nameElement);
+            });
+        }
+
+        function selectSymbol(id) {
+            if (!gameState.gameStarted) return;
+
+            // Clear previous selections
+            document.querySelectorAll('.symbol-item').forEach(el => {
+                el.classList.remove('selected', 'wrong');
+            });
+
+            const symbolElement = document.querySelector(`.symbol-item[data-id="${id}"]`);
+            if (symbolElement.classList.contains('matched')) return;
+
+            symbolElement.classList.add('selected');
+            gameState.selectedSymbol = id;
+
+            if (gameState.selectedName) {
+                checkMatch();
+            }
+        }
+
+        function selectName(id) {
+            if (!gameState.gameStarted) return;
+
+            // Clear previous selections
+            document.querySelectorAll('.name-item').forEach(el => {
+                el.classList.remove('selected', 'wrong');
+            });
+
+            const nameElement = document.querySelector(`.name-item[data-id="${id}"]`);
+            if (nameElement.classList.contains('matched')) return;
+
+            nameElement.classList.add('selected');
+            gameState.selectedName = id;
+
+            if (gameState.selectedSymbol) {
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const symbolElement = document.querySelector(`.symbol-item[data-id="${gameState.selectedSymbol}"]`);
+            const nameElement = document.querySelector(`.name-item[data-id="${gameState.selectedName}"]`);
+
+            if (gameState.selectedSymbol === gameState.selectedName) {
+                // Correct match!
+                symbolElement.classList.remove('selected');
+                nameElement.classList.remove('selected');
+                symbolElement.classList.add('matched', 'pulse');
+                nameElement.classList.add('matched', 'pulse');
+                
+                gameState.matches++;
+                gameState.score += 100;
+                
+                showFeedback('Correct match! ⚡', 'success');
+
+                if (gameState.matches === gameState.currentSymbols.length) {
+                    endGame();
+                }
+            } else {
+                // Wrong match
+                symbolElement.classList.add('wrong');
+                nameElement.classList.add('wrong');
+                gameState.score = Math.max(0, gameState.score - 10);
+                
+                showFeedback('Try again! ❌', 'error');
+
+                setTimeout(() => {
+                    symbolElement.classList.remove('selected', 'wrong');
+                    nameElement.classList.remove('selected', 'wrong');
+                }, 1000);
+            }
+
+            gameState.selectedSymbol = null;
+            gameState.selectedName = null;
+            updateDisplay();
+        }
+
+        function showHint() {
+            if (!gameState.gameStarted) {
+                showFeedback('Start a new game first!', 'error');
+                return;
+            }
+
+            const unmatchedSymbols = gameState.currentSymbols.filter(symbol => {
+                const symbolElement = document.querySelector(`.symbol-item[data-id="${symbol.id}"]`);
+                return !symbolElement.classList.contains('matched');
+            });
+
+            if (unmatchedSymbols.length === 0) return;
+
+            const randomSymbol = unmatchedSymbols[Math.floor(Math.random() * unmatchedSymbols.length)];
+            showFeedback(`Hint: "${randomSymbol.symbol}" is ${randomSymbol.name}`, 'success');
+            gameState.score = Math.max(0, gameState.score - 25);
+            updateDisplay();
+        }
+
+        function showFeedback(message, type) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.className = `feedback ${type}`;
+            
+            setTimeout(() => {
+                feedback.textContent = '';
+                feedback.className = 'feedback';
+            }, 3000);
+        }
+
+        function updateDisplay() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('matches').textContent = gameState.matches;
+            document.getElementById('total').textContent = gameState.currentSymbols.length;
+        }
+
+        function startTimer() {
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+            }
+
+            gameState.timerInterval = setInterval(() => {
+                if (!gameState.startTime) return;
+                
+                const elapsed = Math.floor((Date.now() - gameState.startTime) / 1000);
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = elapsed % 60;
+                document.getElementById('timer').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function endGame() {
+            gameState.gameStarted = false;
+            clearInterval(gameState.timerInterval);
+            
+            const elapsed = Math.floor((Date.now() - gameState.startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            
+            showFeedback(`🎉 Congratulations! You completed the game in ${minutes}:${seconds.toString().padStart(2, '0')} with ${gameState.score} points!`, 'success');
+        }
+
+        function resetGame() {
+            gameState.gameStarted = false;
+            clearInterval(gameState.timerInterval);
+            
+            document.getElementById('symbols-container').innerHTML = '';
+            document.getElementById('names-container').innerHTML = '';
+            document.getElementById('score').textContent = '0';
+            document.getElementById('matches').textContent = '0';
+            document.getElementById('total').textContent = '0';
+            document.getElementById('timer').textContent = '0:00';
+            document.getElementById('feedback').textContent = '';
+            
+            gameState = {
+                currentSymbols: [],
+                currentNames: [],
+                selectedSymbol: null,
+                selectedName: null,
+                matches: 0,
+                score: 0,
+                startTime: null,
+                timerInterval: null,
+                gameStarted: false
+            };
+        }
+
+        // Initialize the game
+        updateDisplay();
+        showFeedback('Click "New Game" to start matching electrical symbols!', 'success');
+    </script>
+</body>
+</html>
