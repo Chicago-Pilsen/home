@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Maintenance Recommendation Engine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .search-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .results-section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .vehicle-info {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .recommendation-card {
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .recommendation-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .immediate {
+            background: #dc3545;
+            color: white;
+        }
+
+        .upcoming {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .future {
+            background: #28a745;
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .maintenance-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .item-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .item-description {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .item-mileage {
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .priority-high {
+            border-left-color: #dc3545;
+        }
+
+        .priority-medium {
+            border-left-color: #ffc107;
+        }
+
+        .priority-low {
+            border-left-color: #28a745;
+        }
+
+        .cost-estimate {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .tips-section {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .tips-title {
+            color: #0c5460;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .tip-item {
+            margin-bottom: 10px;
+            color: #0c5460;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .search-section, .results-section {
+                padding: 20px;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .recommendations-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔧 Vehicle Maintenance Engine</h1>
+            <p class="subtitle">Smart Maintenance Recommendations Based on Mileage</p>
+        </header>
+
+        <div class="search-section">
+            <form class="search-form" onsubmit="searchRecommendations(event)">
+                <div class="form-group">
+                    <label for="currentMiles">Current Mileage</label>
+                    <input type="number" id="currentMiles" placeholder="e.g., 75000" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="vehicleYear">Vehicle Year</label>
+                    <input type="number" id="vehicleYear" placeholder="e.g., 2018" min="1990" max="2025">
+                </div>
+                
+                <div class="form-group">
+                    <label for="vehicleType">Vehicle Type</label>
+                    <select id="vehicleType">
+                        <option value="sedan">Sedan</option>
+                        <option value="suv">SUV</option>
+                        <option value="truck">Truck</option>
+                        <option value="hybrid">Hybrid</option>
+                        <option value="luxury">Luxury</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="search-btn">Get Recommendations</button>
+            </form>
+        </div>
+
+        <div class="results-section" id="resultsSection">
+            <div class="results-header">
+                <h2>Maintenance Recommendations</h2>
+            </div>
+            
+            <div class="vehicle-info" id="vehicleInfo">
+                <!-- Vehicle info will be populated here -->
+            </div>
+            
+            <div class="recommendations-grid" id="recommendationsGrid">
+                <!-- Recommendations will be populated here -->
+            </div>
+            
+            <div class="tips-section">
+                <div class="tips-title">💡 Maintenance Tips</div>
+                <div class="tip-item">• Regular maintenance can prevent costly repairs and extend vehicle life</div>
+                <div class="tip-item">• Keep detailed records of all maintenance performed</div>
+                <div class="tip-item">• Address immediate needs first, then plan for upcoming maintenance</div>
+                <div class="tip-item">• Consider bundling similar services to save on labor costs</div>
+                <div class="tip-item">• Use quality parts and fluids recommended by your vehicle manufacturer</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive maintenance database
+        const maintenanceSchedule = {
+            immediate: [
+                { name: "Oil Change", miles: 5000, description: "Engine oil and filter replacement", cost: "$30-80", priority: "high" },
+                { name: "Tire Rotation", miles: 5000, description: "Rotate tires for even wear", cost: "$20-50", priority: "medium" },
+                { name: "Air Filter", miles: 12000, description: "Replace engine air filter", cost: "$15-30", priority: "low" }
+            ],
+            routine: [
+                { name: "Brake Inspection", miles: 15000, description: "Check brake pads and rotors", cost: "$50-100", priority: "high" },
+                { name: "Transmission Service", miles: 30000, description: "Transmission fluid change", cost: "$150-300", priority: "high" },
+                { name: "Coolant Flush", miles: 30000, description: "Replace engine coolant", cost: "$100-150", priority: "medium" },
+                { name: "Spark Plugs", miles: 30000, description: "Replace spark plugs", cost: "$100-200", priority: "medium" },
+                { name: "Cabin Air Filter", miles: 15000, description: "Replace cabin air filter", cost: "$20-40", priority: "low" },
+                { name: "Power Steering Flush", miles: 60000, description: "Replace power steering fluid", cost: "$80-120", priority: "medium" },
+                { name: "Brake Fluid Flush", miles: 24000, description: "Replace brake fluid", cost: "$70-120", priority: "high" }
+            ],
+            major: [
+                { name: "Timing Belt", miles: 60000, description: "Replace timing belt (if equipped)", cost: "$500-1000", priority: "high" },
+                { name: "Water Pump", miles: 90000, description: "Replace water pump", cost: "$400-800", priority: "high" },
+                { name: "Fuel System Service", miles: 60000, description: "Clean fuel injectors and system", cost: "$150-300", priority: "medium" },
+                { name: "Differential Service", miles: 60000, description: "Replace differential fluid", cost: "$100-200", priority: "medium" },
+                { name: "Suspension Check", miles: 75000, description: "Inspect shocks and struts", cost: "$200-600", priority: "medium" }
+            ],
+            highMileage: [
+                { name: "Engine Overhaul", miles: 150000, description: "Major engine service or rebuild", cost: "$3000-8000", priority: "high" },
+                { name: "Transmission Rebuild", miles: 150000, description: "Transmission overhaul", cost: "$2500-5000", priority: "high" },
+                { name: "Complete Brake System", miles: 100000, description: "Replace all brake components", cost: "$800-1500", priority: "high" },
+                { name: "Suspension Replacement", miles: 120000, description: "Replace worn suspension parts", cost: "$1000-2500", priority: "medium" },
+                { name: "AC System Service", miles: 100000, description: "Complete AC system refresh", cost: "$300-800", priority: "low" }
+            ]
+        };
+
+        function searchRecommendations(event) {
+            event.preventDefault();
+            
+            const currentMiles = parseInt(document.getElementById('currentMiles').value);
+            const vehicleYear = parseInt(document.getElementById('vehicleYear').value) || new Date().getFullYear();
+            const vehicleType = document.getElementById('vehicleType').value;
+            
+            if (!currentMiles || currentMiles < 0) {
+                alert('Please enter a valid mileage');
+                return;
+            }
+            
+            displayResults(currentMiles, vehicleYear, vehicleType);
+        }
+
+        function displayResults(currentMiles, vehicleYear, vehicleType) {
+            const resultsSection = document.getElementById('resultsSection');
+            const vehicleInfo = document.getElementById('vehicleInfo');
+            const recommendationsGrid = document.getElementById('recommendationsGrid');
+            
+            // Show results section
+            resultsSection.style.display = 'block';
+            
+            // Update vehicle info
+            const vehicleAge = new Date().getFullYear() - vehicleYear;
+            vehicleInfo.innerHTML = `
+                <h3>${vehicleYear} ${vehicleType.toUpperCase()}</h3>
+                <p><strong>Current Mileage:</strong> ${currentMiles.toLocaleString()} miles</p>
+                <p><strong>Vehicle Age:</strong> ${vehicleAge} years</p>
+            `;
+            
+            // Generate recommendations
+            const recommendations = generateRecommendations(currentMiles, vehicleAge, vehicleType);
+            
+            // Clear previous results
+            recommendationsGrid.innerHTML = '';
+            
+            // Create recommendation cards
+            if (recommendations.immediate.length > 0) {
+                recommendationsGrid.appendChild(createRecommendationCard('Immediate Needs', recommendations.immediate, 'immediate', '🚨'));
+            }
+            
+            if (recommendations.upcoming.length > 0) {
+                recommendationsGrid.appendChild(createRecommendationCard('Upcoming (Next 5,000 miles)', recommendations.upcoming, 'upcoming', '⚠️'));
+            }
+            
+            if (recommendations.future.length > 0) {
+                recommendationsGrid.appendChild(createRecommendationCard('Future Planning', recommendations.future, 'future', '📅'));
+            }
+            
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function generateRecommendations(currentMiles, vehicleAge, vehicleType) {
+            const immediate = [];
+            const upcoming = [];
+            const future = [];
+            
+            const allMaintenance = [
+                ...maintenanceSchedule.immediate,
+                ...maintenanceSchedule.routine,
+                ...maintenanceSchedule.major,
+                ...(currentMiles > 100000 ? maintenanceSchedule.highMileage : [])
+            ];
+            
+            allMaintenance.forEach(item => {
+                const nextDue = Math.ceil(currentMiles / item.miles) * item.miles;
+                const milesSinceLastService = currentMiles % item.miles;
+                const milesUntilNext = nextDue - currentMiles;
+                
+                // Adjust for vehicle type
+                let adjustedCost = item.cost;
+                if (vehicleType === 'luxury') {
+                    adjustedCost = adjustCostRange(item.cost, 1.5);
+                } else if (vehicleType === 'hybrid') {
+                    adjustedCost = adjustCostRange(item.cost, 1.2);
+                }
+                
+                const recommendation = {
+                    ...item,
+                    cost: adjustedCost,
+                    nextDue: nextDue,
+                    milesUntilNext: milesUntilNext,
+                    overdue: milesUntilNext <= 0
+                };
+                
+                if (milesUntilNext <= 0 || milesSinceLastService >= item.miles * 0.9) {
+                    immediate.push(recommendation);
+                } else if (milesUntilNext <= 5000) {
+                    upcoming.push(recommendation);
+                } else if (milesUntilNext <= 20000) {
+                    future.push(recommendation);
+                }
+            });
+            
+            // Sort by priority and mileage
+            immediate.sort((a, b) => priorityWeight(a.priority) - priorityWeight(b.priority));
+            upcoming.sort((a, b) => a.milesUntilNext - b.milesUntilNext);
+            future.sort((a, b) => a.milesUntilNext - b.milesUntilNext);
+            
+            return { immediate, upcoming, future };
+        }
+
+        function adjustCostRange(costRange, multiplier) {
+            const costs = costRange.replace(/\$/, '').split('-');
+            const low = Math.round(parseInt(costs[0]) * multiplier);
+            const high = Math.round(parseInt(costs[1]) * multiplier);
+            return `$${low}-${high}`;
+        }
+
+        function priorityWeight(priority) {
+            const weights = { 'high': 1, 'medium': 2, 'low': 3 };
+            return weights[priority] || 4;
+        }
+
+        function createRecommendationCard(title, items, type, icon) {
+            const card = document.createElement('div');
+            card.className = 'recommendation-card';
+            
+            let itemsHtml = '';
+            items.forEach(item => {
+                const priorityClass = `priority-${item.priority}`;
+                const overdueText = item.overdue ? ' (OVERDUE)' : '';
+                const milesText = item.overdue 
+                    ? `${Math.abs(item.milesUntilNext)} miles overdue`
+                    : `Due at ${item.nextDue.toLocaleString()} miles`;
+                
+                itemsHtml += `
+                    <div class="maintenance-item ${priorityClass}">
+                        <div class="item-name">${item.name}${overdueText}</div>
+                        <div class="item-description">${item.description}</div>
+                        <div class="item-mileage">${milesText}</div>
+                        <div class="cost-estimate">Estimated Cost: ${item.cost}</div>
+                    </div>
+                `;
+            });
+            
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="card-icon ${type}">${icon}</div>
+                    <div class="card-title">${title}</div>
+                </div>
+                ${itemsHtml}
+            `;
+            
+            return card;
+        }
+
+        // Auto-focus on mileage input
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('currentMiles').focus();
+        });
+    </script>
+</body>
+</html>
