@@ -48,8 +48,6 @@
             gap: 15px;
         }
 
-
-
         .user-input {
             display: flex;
             align-items: center;
@@ -242,7 +240,7 @@
     <div class="container">
         <div class="header">
             <h1>🔧 Lugnut Size Matcher 🔧</h1>
-            <p>Test your automotive knowledge!</p>
+            <p>Test your automotive knowledge! (Updated with corrected data)</p>
         </div>
 
         <div class="user-section">
@@ -260,7 +258,7 @@
 
         <div class="game-section">
             <div class="question">
-                <h2>What's the lugnut size for this vehicle?</h2>
+                <h2>What's the lugnut socket size for this vehicle?</h2>
                 <div class="vehicle-card" id="current-vehicle">
                     Loading...
                 </div>
@@ -282,7 +280,7 @@
         </div>
 
         <div class="reference-section">
-            <h2 style="text-align: center; margin-bottom: 25px; color: #ffd700;">📋 Lugnut Size Reference</h2>
+            <h2 style="text-align: center; margin-bottom: 25px; color: #ffd700;">📋 Lugnut Socket Size Reference</h2>
             <div class="reference-grid" id="reference-grid">
                 <!-- Reference will be generated here -->
             </div>
@@ -290,61 +288,96 @@
     </div>
 
     <script>
-        // Vehicle database with lugnut sizes
+        // Vehicle database with CORRECTED lugnut socket sizes (socket size, not thread diameter)
         const vehicles = {
             'Ford': {
-                'F-150': '21mm',
-                'Mustang': '19mm',
-                'Explorer': '19mm',
-                'Escape': '19mm',
-                'Focus': '19mm',
-                'Fusion': '19mm',
-                'Edge': '19mm'
+                'F-150 (2015+)': '21mm',  // M14x1.5, uses 21mm socket
+                'F-150 (2004-2014)': '22mm',  // Different lug nuts for older generation
+                'Mustang (2015+)': '21mm',  // M14x1.5, uses 21mm socket
+                'Mustang (2005-2014)': '19mm',  // 1/2"-20, uses 19mm socket
+                'Explorer (2020+)': '19mm',  // M12x1.5, uses 19mm socket
+                'Explorer (2011-2019)': '19mm',  // M12x1.5, uses 19mm socket
+                'Escape': '19mm',  // M12x1.5, uses 19mm socket
+                'Focus': '19mm',  // M12x1.5, uses 19mm socket
+                'Fusion': '19mm',  // M12x1.5, uses 19mm socket
+                'Edge': '21mm',  // M14x1.5, uses 21mm socket
+                'Maverick': '21mm'  // M14x1.5, uses 21mm socket
             },
             'Chevrolet': {
-                'Silverado': '22mm',
-                'Camaro': '21mm',
-                'Equinox': '19mm',
-                'Malibu': '19mm',
-                'Cruze': '19mm',
-                'Tahoe': '22mm',
-                'Suburban': '22mm'
+                'Silverado 1500': '22mm',  // 14mm x 1.5, uses 22mm socket
+                'Silverado 2500/3500': '22mm',  // 14mm x 1.5, uses 22mm socket
+                'Camaro (2010+)': '21mm',  // 14mm x 1.5, uses 21mm socket
+                'Camaro (1982-2009)': '19mm',  // Different lug nuts for older generation
+                'Equinox': '19mm',  // M12 x 1.5, uses 19mm socket (CORRECTED)
+                'Malibu': '19mm',  // M12 x 1.5, uses 19mm socket
+                'Cruze': '19mm',  // M12 x 1.5, uses 19mm socket
+                'Tahoe': '22mm',  // 14mm x 1.5, uses 22mm socket
+                'Suburban': '22mm',  // 14mm x 1.5, uses 22mm socket
+                'Impala': '19mm'  // M12 x 1.5, uses 19mm socket
             },
             'Toyota': {
-                'Camry': '19mm',
-                'Corolla': '19mm',
-                'RAV4': '19mm',
-                'Highlander': '19mm',
-                'Prius': '19mm',
-                'Tacoma': '21mm',
-                'Tundra': '22mm'
+                'Camry': '21mm',  // M12 x 1.5, uses 21mm socket (CORRECTED)
+                'Corolla': '21mm',  // M12 x 1.5, uses 21mm socket (CORRECTED)
+                'RAV4': '21mm',  // M12 x 1.5, uses 21mm socket (CORRECTED)
+                'Highlander': '21mm',  // M12 x 1.5, uses 21mm socket (CORRECTED)
+                'Prius': '21mm',  // M12 x 1.5, uses 21mm socket (CORRECTED)
+                'Tacoma': '21mm',  // M12 x 1.5, uses 21mm socket (CORRECTED)
+                'Tundra': '22mm',  // Larger truck, different lug nuts
+                'Sienna': '21mm',  // M12 x 1.5, uses 21mm socket
+                'Avalon': '21mm'  // M12 x 1.5, uses 21mm socket
             },
             'Honda': {
-                'Civic': '19mm',
-                'Accord': '19mm',
-                'CR-V': '19mm',
-                'Pilot': '19mm',
-                'Odyssey': '19mm',
-                'Ridgeline': '19mm'
+                'Civic': '19mm',  // M12 x 1.5, uses 19mm socket (CORRECTED)
+                'Accord': '19mm',  // M12 x 1.5, uses 19mm socket (CORRECTED)
+                'CR-V': '19mm',  // M12 x 1.5, uses 19mm socket (CORRECTED)
+                'Pilot': '19mm',  // M12 x 1.5, uses 19mm socket (CORRECTED)
+                'Odyssey': '19mm',  // M12 x 1.5, uses 19mm socket (CORRECTED)
+                'Ridgeline': '19mm',  // M12 x 1.5, uses 19mm socket (CORRECTED)
+                'HR-V': '19mm',  // M12 x 1.5, uses 19mm socket
+                'Passport': '19mm'  // M12 x 1.5, uses 19mm socket
             },
             'Nissan': {
-                'Altima': '19mm',
-                'Sentra': '19mm',
-                'Rogue': '19mm',
-                'Pathfinder': '21mm',
-                'Titan': '22mm',
-                'Frontier': '21mm'
+                'Altima': '21mm',  // M12 x 1.25, uses 21mm socket
+                'Sentra': '21mm',  // M12 x 1.25, uses 21mm socket
+                'Rogue': '21mm',  // M12 x 1.25, uses 21mm socket
+                'Pathfinder': '21mm',  // M12 x 1.25, uses 21mm socket
+                'Titan': '22mm',  // Larger truck lug nuts
+                'Frontier': '21mm',  // M12 x 1.25, uses 21mm socket
+                'Maxima': '21mm',  // M12 x 1.25, uses 21mm socket
+                'Murano': '21mm'  // M12 x 1.25, uses 21mm socket
             },
             'RAM': {
-                '1500': '22mm',
-                '2500': '22mm',
-                '3500': '22mm'
+                '1500': '22mm',  // 14mm x 1.5, uses 22mm socket
+                '2500': '22mm',  // 14mm x 1.5, uses 22mm socket
+                '3500': '22mm'  // 14mm x 1.5, uses 22mm socket
             },
             'GMC': {
-                'Sierra': '22mm',
-                'Terrain': '19mm',
-                'Acadia': '19mm',
-                'Yukon': '22mm'
+                'Sierra 1500': '22mm',  // 14mm x 1.5, uses 22mm socket
+                'Sierra 2500/3500': '22mm',  // 14mm x 1.5, uses 22mm socket
+                'Terrain': '19mm',  // M12 x 1.5, uses 19mm socket
+                'Acadia': '19mm',  // M12 x 1.5, uses 19mm socket
+                'Yukon': '22mm'  // 14mm x 1.5, uses 22mm socket
+            },
+            'Hyundai': {
+                'Elantra': '19mm',  // M12 x 1.5, uses 19mm socket
+                'Sonata': '19mm',  // M12 x 1.5, uses 19mm socket
+                'Tucson': '19mm',  // M12 x 1.5, uses 19mm socket
+                'Santa Fe': '19mm',  // M12 x 1.5, uses 19mm socket
+                'Genesis': '19mm'  // M12 x 1.5, uses 19mm socket
+            },
+            'Kia': {
+                'Forte': '19mm',  // M12 x 1.5, uses 19mm socket
+                'Optima': '19mm',  // M12 x 1.5, uses 19mm socket
+                'Sorento': '19mm',  // M12 x 1.5, uses 19mm socket
+                'Sportage': '19mm',  // M12 x 1.5, uses 19mm socket
+                'Telluride': '19mm'  // M12 x 1.5, uses 19mm socket
+            },
+            'Subaru': {
+                'Outback': '19mm',  // M12 x 1.25, uses 19mm socket
+                'Forester': '19mm',  // M12 x 1.25, uses 19mm socket
+                'Impreza': '19mm',  // M12 x 1.25, uses 19mm socket
+                'Legacy': '19mm',  // M12 x 1.25, uses 19mm socket
+                'Ascent': '19mm'  // M12 x 1.25, uses 19mm socket
             }
         };
 
@@ -436,8 +469,6 @@
             const currentPlayer = document.getElementById('username').value.trim() || 'Player';
             return topScores[currentPlayer] || 0;
         }
-
-
 
         // Generate reference grid
         function generateReference() {
