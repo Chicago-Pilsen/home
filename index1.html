@@ -102,6 +102,7 @@
             padding: 20px;
             border-radius: 10px;
             border: 1px solid #333;
+            min-height: 220px;
         }
 
         .tire-container h3 {
@@ -116,7 +117,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .measurement-input {
@@ -133,6 +134,57 @@
             padding: 8px;
             font-size: 0.9em;
             text-align: center;
+        }
+
+        .dry-rot-container {
+            text-align: center;
+            margin-top: 15px;
+            padding: 5px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .dry-rot-btn, .bubble-btn {
+            background: #8b0000;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .bubble-btn {
+            background: #8b4513;
+        }
+
+        .dry-rot-btn:hover, .bubble-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .dry-rot-btn:hover {
+            background: #a50000;
+        }
+
+        .bubble-btn:hover {
+            background: #a0522d;
+        }
+
+        .dry-rot-btn.active {
+            background: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .bubble-btn.active {
+            background: #ff6347;
+            box-shadow: 0 0 10px rgba(255, 99, 71, 0.5);
         }
 
         .buttons-container {
@@ -163,17 +215,6 @@
         .inspect-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6);
-        }
-
-        .clear-btn {
-            background: linear-gradient(45deg, #666, #888);
-            color: white;
-            box-shadow: 0 5px 15px rgba(102, 102, 102, 0.4);
-        }
-
-        .clear-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 102, 102, 0.6);
         }
 
         .print-btn {
@@ -280,6 +321,24 @@
             font-weight: bold;
         }
 
+        .alignment-critical {
+            background: #c0392b;
+            color: white;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+            border: 2px solid #e74c3c;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+
         .overall-recommendation {
             margin-top: 20px;
             padding: 20px;
@@ -371,6 +430,7 @@
                         <option value="fwd">Front-Wheel Drive (FWD)</option>
                         <option value="rwd">Rear-Wheel Drive (RWD)</option>
                         <option value="awd">All-Wheel Drive (AWD)</option>
+                        <option value="4wd">Four-Wheel Drive (4WD)</option>
                     </select>
                 </div>
             </div>
@@ -382,7 +442,7 @@
                         <h3>Front Left</h3>
                         <div class="tire-measurements-grid">
                             <div class="measurement-input">
-                                <label>Left Shoulder</label>
+                                <label>Inner</label>
                                 <input type="number" id="fl_left" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
@@ -390,9 +450,17 @@
                                 <input type="number" id="fl_crown" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
-                                <label>Right Shoulder</label>
+                                <label>Outer</label>
                                 <input type="number" id="fl_right" placeholder="Depth" min="1" max="12">
                             </div>
+                        </div>
+                        <div class="dry-rot-container">
+                            <button type="button" class="dry-rot-btn" id="fl_dryrot" onclick="toggleDryRot('fl_dryrot')">
+                                🔴 Dry Rot
+                            </button>
+                            <button type="button" class="bubble-btn" id="fl_bubble" onclick="toggleBubble('fl_bubble')">
+                                🫧 Bubble
+                            </button>
                         </div>
                     </div>
                     
@@ -400,7 +468,7 @@
                         <h3>Front Right</h3>
                         <div class="tire-measurements-grid">
                             <div class="measurement-input">
-                                <label>Left Shoulder</label>
+                                <label>Inner</label>
                                 <input type="number" id="fr_left" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
@@ -408,9 +476,17 @@
                                 <input type="number" id="fr_crown" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
-                                <label>Right Shoulder</label>
+                                <label>Outer</label>
                                 <input type="number" id="fr_right" placeholder="Depth" min="1" max="12">
                             </div>
+                        </div>
+                        <div class="dry-rot-container">
+                            <button type="button" class="dry-rot-btn" id="fr_dryrot" onclick="toggleDryRot('fr_dryrot')">
+                                🔴 Dry Rot
+                            </button>
+                            <button type="button" class="bubble-btn" id="fr_bubble" onclick="toggleBubble('fr_bubble')">
+                                🫧 Bubble
+                            </button>
                         </div>
                     </div>
                     
@@ -418,7 +494,7 @@
                         <h3>Rear Left</h3>
                         <div class="tire-measurements-grid">
                             <div class="measurement-input">
-                                <label>Left Shoulder</label>
+                                <label>Inner</label>
                                 <input type="number" id="rl_left" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
@@ -426,9 +502,17 @@
                                 <input type="number" id="rl_crown" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
-                                <label>Right Shoulder</label>
+                                <label>Outer</label>
                                 <input type="number" id="rl_right" placeholder="Depth" min="1" max="12">
                             </div>
+                        </div>
+                        <div class="dry-rot-container">
+                            <button type="button" class="dry-rot-btn" id="rl_dryrot" onclick="toggleDryRot('rl_dryrot')">
+                                🔴 Dry Rot
+                            </button>
+                            <button type="button" class="bubble-btn" id="rl_bubble" onclick="toggleBubble('rl_bubble')">
+                                🫧 Bubble
+                            </button>
                         </div>
                     </div>
                     
@@ -436,7 +520,7 @@
                         <h3>Rear Right</h3>
                         <div class="tire-measurements-grid">
                             <div class="measurement-input">
-                                <label>Left Shoulder</label>
+                                <label>Inner</label>
                                 <input type="number" id="rr_left" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
@@ -444,9 +528,17 @@
                                 <input type="number" id="rr_crown" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
-                                <label>Right Shoulder</label>
+                                <label>Outer</label>
                                 <input type="number" id="rr_right" placeholder="Depth" min="1" max="12">
                             </div>
+                        </div>
+                        <div class="dry-rot-container">
+                            <button type="button" class="dry-rot-btn" id="rr_dryrot" onclick="toggleDryRot('rr_dryrot')">
+                                🔴 Dry Rot
+                            </button>
+                            <button type="button" class="bubble-btn" id="rr_bubble" onclick="toggleBubble('rr_bubble')">
+                                🫧 Bubble
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -455,7 +547,6 @@
 
         <div class="buttons-container">
             <button class="btn inspect-btn" onclick="inspectTires()">🔍 INSPECT TIRES 🔍</button>
-            <button class="btn clear-btn" onclick="clearForm()">🗑️ CLEAR & RESET 🗑️</button>
             <button class="btn print-btn" id="printBtn" onclick="printResults()">🖨️ PRINT RESULTS 🖨️</button>
         </div>
 
@@ -488,29 +579,73 @@
             return 'bad';
         }
 
-        function checkAlignment(measurements) {
+        function toggleDryRot(buttonId) {
+            const button = document.getElementById(buttonId);
+            button.classList.toggle('active');
+            
+            if (button.classList.contains('active')) {
+                button.textContent = '🔴 DRY ROT DETECTED';
+            } else {
+                button.textContent = '🔴 Dry Rot';
+            }
+        }
+
+        function toggleBubble(buttonId) {
+            const button = document.getElementById(buttonId);
+            button.classList.toggle('active');
+            
+            if (button.classList.contains('active')) {
+                button.textContent = '🫧 BUBBLE DETECTED';
+            } else {
+                button.textContent = '🫧 Bubble';
+            }
+        }
+
+        function checkAlignment(measurements, tireName) {
             const maxDifference = 2; // More than 2/32" difference indicates alignment issues
             
+            const innerWear = Math.abs(measurements.left - measurements.crown) > maxDifference;
+            const outerWear = Math.abs(measurements.right - measurements.crown) > maxDifference;
+            const edgeToEdgeWear = Math.abs(measurements.left - measurements.right) > maxDifference;
+            
+            // Check for exactly 2/32" difference - highly recommend alignment
+            const diff1 = Math.abs(measurements.left - measurements.crown);
+            const diff2 = Math.abs(measurements.crown - measurements.right);
+            const diff3 = Math.abs(measurements.left - measurements.right);
+            const hasExactly2Diff = (diff1 === 2 || diff2 === 2 || diff3 === 2);
+            
+            let alignmentIssue = '';
+            
+            // Check for specific wear patterns
+            if (measurements.left < measurements.crown && measurements.left < measurements.right) {
+                alignmentIssue = hasExactly2Diff ? 'Inner edge wear detected - HIGHLY RECOMMEND ALIGNMENT' : 'Inner edge wear detected - Likely camber/toe alignment issue';
+            } else if (measurements.right < measurements.crown && measurements.right < measurements.left) {
+                alignmentIssue = hasExactly2Diff ? 'Outer edge wear detected - HIGHLY RECOMMEND ALIGNMENT' : 'Outer edge wear detected - Likely camber/toe alignment issue';
+            } else if (measurements.crown < measurements.left && measurements.crown < measurements.right) {
+                alignmentIssue = hasExactly2Diff ? 'Center wear detected - Check tire pressure and HIGHLY RECOMMEND ALIGNMENT' : 'Center wear detected - Check tire pressure (overinflation)';
+            } else if ((measurements.left < measurements.crown || measurements.right < measurements.crown) && edgeToEdgeWear) {
+                alignmentIssue = hasExactly2Diff ? 'Uneven edge wear - HIGHLY RECOMMEND ALIGNMENT IMMEDIATELY' : 'Uneven edge wear - Wheel alignment needed';
+            } else if (hasExactly2Diff) {
+                alignmentIssue = 'Measurements off by 2/32" - HIGHLY RECOMMEND ALIGNMENT';
+            }
+            
             return {
-                leftShoulder: Math.abs(measurements.left - measurements.crown) > maxDifference,
-                rightShoulder: Math.abs(measurements.right - measurements.crown) > maxDifference,
-                overall: Math.abs(measurements.left - measurements.right) > maxDifference || 
-                        Math.abs(measurements.left - measurements.crown) > maxDifference ||
-                        Math.abs(measurements.right - measurements.crown) > maxDifference
+                innerWear: innerWear,
+                outerWear: outerWear,
+                overall: innerWear || outerWear || edgeToEdgeWear || hasExactly2Diff,
+                issue: alignmentIssue,
+                highlyRecommend: hasExactly2Diff
             };
         }
 
-        function clearForm() {
-            document.getElementById('dotDate').value = '';
-            document.getElementById('driveType').value = 'fwd';
+        function autoDetectDryRot(measurements) {
+            // Auto-detect dry rot if measurements are off by exactly 1/32"
+            const diff1 = Math.abs(measurements.left - measurements.crown);
+            const diff2 = Math.abs(measurements.crown - measurements.right);
+            const diff3 = Math.abs(measurements.left - measurements.right);
             
-            // Clear all measurement inputs
-            const inputs = document.querySelectorAll('input[type="number"]');
-            inputs.forEach(input => input.value = '');
-            
-            // Hide results and print button
-            document.getElementById('results').style.display = 'none';
-            document.getElementById('printBtn').style.display = 'none';
+            // Check if any measurement differs by exactly 1/32"
+            return (diff1 === 1 || diff2 === 1 || diff3 === 1);
         }
 
         function printResults() {
@@ -525,22 +660,30 @@
                 frontLeft: {
                     left: parseInt(document.getElementById('fl_left').value),
                     crown: parseInt(document.getElementById('fl_crown').value),
-                    right: parseInt(document.getElementById('fl_right').value)
+                    right: parseInt(document.getElementById('fl_right').value),
+                    dryRot: document.getElementById('fl_dryrot').classList.contains('active'),
+                    bubble: document.getElementById('fl_bubble').classList.contains('active')
                 },
                 frontRight: {
                     left: parseInt(document.getElementById('fr_left').value),
                     crown: parseInt(document.getElementById('fr_crown').value),
-                    right: parseInt(document.getElementById('fr_right').value)
+                    right: parseInt(document.getElementById('fr_right').value),
+                    dryRot: document.getElementById('fr_dryrot').classList.contains('active'),
+                    bubble: document.getElementById('fr_bubble').classList.contains('active')
                 },
                 rearLeft: {
                     left: parseInt(document.getElementById('rl_left').value),
                     crown: parseInt(document.getElementById('rl_crown').value),
-                    right: parseInt(document.getElementById('rl_right').value)
+                    right: parseInt(document.getElementById('rl_right').value),
+                    dryRot: document.getElementById('rl_dryrot').classList.contains('active'),
+                    bubble: document.getElementById('rl_bubble').classList.contains('active')
                 },
                 rearRight: {
                     left: parseInt(document.getElementById('rr_left').value),
                     crown: parseInt(document.getElementById('rr_crown').value),
-                    right: parseInt(document.getElementById('rr_right').value)
+                    right: parseInt(document.getElementById('rr_right').value),
+                    dryRot: document.getElementById('rr_dryrot').classList.contains('active'),
+                    bubble: document.getElementById('rr_bubble').classList.contains('active')
                 }
             };
 
@@ -571,44 +714,80 @@
             
             let overallConditions = [];
             let badTireCount = 0;
+            let dryRotCount = 0;
+            let bubbleCount = 0;
             let alignmentIssues = false;
+            let criticalAlignmentNeeded = false;
             
             // Display individual tire results
             tireKeys.forEach((key, index) => {
                 const tire = tires[key];
                 const minDepth = Math.min(tire.left, tire.crown, tire.right);
-                const condition = getTireCondition(minDepth);
-                const alignment = checkAlignment(tire);
+                let condition = getTireCondition(minDepth);
+                const alignment = checkAlignment(tire, tireNames[index]);
+                
+                // Auto-detect dry rot if measurements are off by exactly 1/32"
+                const autoDryRot = autoDetectDryRot(tire);
+                const hasDryRot = tire.dryRot || autoDryRot;
+                const hasBubble = tire.bubble;
+                
+                // Check for dry rot or bubble - both override tread depth condition
+                if (hasDryRot || hasBubble) {
+                    condition = 'bad';
+                    if (hasDryRot) dryRotCount++;
+                    if (hasBubble) bubbleCount++;
+                    
+                    // Auto-activate dry rot button if detected
+                    if (autoDryRot && !tire.dryRot) {
+                        const buttonIds = ['fl_dryrot', 'fr_dryrot', 'rl_dryrot', 'rr_dryrot'];
+                        const button = document.getElementById(buttonIds[index]);
+                        if (button) {
+                            button.classList.add('active');
+                            button.textContent = '🔴 DRY ROT AUTO-DETECTED';
+                        }
+                    }
+                }
                 
                 overallConditions.push(condition);
                 if (condition === 'bad') badTireCount++;
                 if (alignment.overall) alignmentIssues = true;
+                if (alignment.highlyRecommend) criticalAlignmentNeeded = true;
                 
                 const tireDiv = document.createElement('div');
                 tireDiv.className = 'tire-result';
                 
                 let statusText = '';
-                if (condition === 'good') statusText = 'GOOD';
-                else if (condition === 'ok') statusText = 'OK - MONITOR';
-                else statusText = 'BAD - REPLACE';
+                if (hasDryRot && hasBubble) {
+                    statusText = 'DRY ROT & BUBBLE - REPLACE IMMEDIATELY';
+                } else if (hasDryRot) {
+                    statusText = autoDryRot && !tire.dryRot ? 'DRY ROT AUTO-DETECTED - REPLACE IMMEDIATELY' : 'DRY ROT - REPLACE IMMEDIATELY';
+                } else if (hasBubble) {
+                    statusText = 'BUBBLE DETECTED - REPLACE IMMEDIATELY';
+                } else if (condition === 'good') {
+                    statusText = 'GOOD';
+                } else if (condition === 'ok') {
+                    statusText = 'OK - MONITOR';
+                } else {
+                    statusText = 'BAD - REPLACE';
+                }
                 
                 tireDiv.innerHTML = `
                     <h4>${tireNames[index]}</h4>
                     <div class="measurement-results">
                         <div class="measurement-result ${getTireCondition(tire.left)}">
-                            Left: ${tire.left}/32"
+                            Inner: ${tire.left}/32"
                         </div>
                         <div class="measurement-result ${getTireCondition(tire.crown)}">
                             Crown: ${tire.crown}/32"
                         </div>
                         <div class="measurement-result ${getTireCondition(tire.right)}">
-                            Right: ${tire.right}/32"
+                            Outer: ${tire.right}/32"
                         </div>
                     </div>
                     <div class="tire-status ${condition}">
                         ${statusText}
                     </div>
-                    ${alignment.overall ? '<div class="alignment-warning">⚠️ ALIGNMENT CHECK NEEDED ⚠️</div>' : ''}
+                    ${alignment.overall ? `<div class="alignment-warning ${alignment.highlyRecommend ? 'alignment-critical' : ''}">⚠️ ${alignment.issue} ⚠️</div>` : ''}
                 `;
                 
                 tireResultsDiv.appendChild(tireDiv);
@@ -621,9 +800,36 @@
             if (tireAge !== null && tireAge >= 6) {
                 recommendation = 'TIRES ARE OLD (6+ YEARS) - REPLACE FOR SAFETY';
                 recommendationClass = 'recommendation-replace';
+            } else if (dryRotCount > 0 || bubbleCount > 0) {
+                if (driveType === 'awd' || driveType === '4wd') {
+                    if (dryRotCount > 0 && bubbleCount > 0) {
+                        recommendation = 'DRY ROT & BUBBLE DETECTED - REPLACE ALL 4 TIRES (AWD/4WD REQUIRES MATCHING TIRES)';
+                    } else if (dryRotCount > 0) {
+                        recommendation = 'DRY ROT DETECTED - REPLACE ALL 4 TIRES (AWD/4WD REQUIRES MATCHING TIRES)';
+                    } else {
+                        recommendation = 'BUBBLE DETECTED - HIGHLY RECOMMEND ALL 4 TIRES (AWD/4WD REQUIRES MATCHING TIRES)';
+                    }
+                } else {
+                    if (dryRotCount > 0 && bubbleCount > 0) {
+                        recommendation = 'DRY ROT & BUBBLE DETECTED - TIRES NEED IMMEDIATE REPLACEMENT';
+                    } else if (dryRotCount > 0) {
+                        if (dryRotCount === 1) {
+                            recommendation = 'DRY ROT DETECTED - TIRE NEEDS IMMEDIATE REPLACEMENT';
+                        } else {
+                            recommendation = 'DRY ROT DETECTED - TIRES NEED IMMEDIATE REPLACEMENT';
+                        }
+                    } else {
+                        if (bubbleCount === 1) {
+                            recommendation = 'BUBBLE DETECTED - HIGHLY RECOMMEND TIRE REPLACEMENT';
+                        } else {
+                            recommendation = 'BUBBLES DETECTED - HIGHLY RECOMMEND TIRE REPLACEMENT';
+                        }
+                    }
+                }
+                recommendationClass = 'recommendation-replace';
             } else if (badTireCount > 0) {
-                if (driveType === 'awd') {
-                    recommendation = 'REPLACE ALL 4 TIRES (AWD REQUIRES MATCHING TIRES)';
+                if (driveType === 'awd' || driveType === '4wd') {
+                    recommendation = 'REPLACE ALL 4 TIRES (AWD/4WD REQUIRES MATCHING TIRES)';
                 } else if (badTireCount === 1) {
                     recommendation = 'TIRE NEEDS TO BE REPLACED';
                 } else {
@@ -656,13 +862,23 @@
             if (alignmentIssues) {
                 const alignmentDiv = document.createElement('div');
                 alignmentDiv.className = 'tire-result';
-                alignmentDiv.style.background = '#e67e22';
-                alignmentDiv.innerHTML = `
-                    <h4>⚠️ Alignment Warning ⚠️</h4>
-                    <div class="tire-status" style="background: transparent; color: white;">
-                        Uneven wear detected - Vehicle alignment should be checked immediately
-                    </div>
-                `;
+                if (criticalAlignmentNeeded) {
+                    alignmentDiv.style.background = '#c0392b';
+                    alignmentDiv.innerHTML = `
+                        <h4>🚨 CRITICAL ALIGNMENT WARNING 🚨</h4>
+                        <div class="tire-status" style="background: transparent; color: white;">
+                            Measurements off by exactly 2/32" detected - HIGHLY RECOMMEND ALIGNMENT IMMEDIATELY
+                        </div>
+                    `;
+                } else {
+                    alignmentDiv.style.background = '#e67e22';
+                    alignmentDiv.innerHTML = `
+                        <h4>⚠️ Alignment Warning ⚠️</h4>
+                        <div class="tire-status" style="background: transparent; color: white;">
+                            Uneven wear detected - Vehicle alignment should be checked
+                        </div>
+                    `;
+                }
                 tireResultsDiv.appendChild(alignmentDiv);
             }
 
