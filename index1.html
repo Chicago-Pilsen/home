@@ -102,7 +102,7 @@
             padding: 20px;
             border-radius: 10px;
             border: 1px solid #333;
-            min-height: 220px;
+            min-height: 280px;
         }
 
         .tire-container h3 {
@@ -141,31 +141,35 @@
             margin-top: 15px;
             padding: 5px;
             display: flex;
-            gap: 10px;
+            gap: 8px;
             justify-content: center;
             flex-wrap: wrap;
         }
 
-        .dry-rot-btn, .bubble-btn {
+        .dry-rot-btn, .bubble-btn, .camera-btn {
             background: #8b0000;
             color: white;
             border: none;
-            padding: 10px 16px;
+            padding: 8px 12px;
             border-radius: 5px;
             font-weight: bold;
-            font-size: 0.8em;
+            font-size: 0.75em;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
             flex: 1;
-            min-width: 120px;
+            min-width: 80px;
         }
 
         .bubble-btn {
             background: #8b4513;
         }
 
-        .dry-rot-btn:hover, .bubble-btn:hover {
+        .camera-btn {
+            background: #2c3e50;
+        }
+
+        .dry-rot-btn:hover, .bubble-btn:hover, .camera-btn:hover {
             transform: scale(1.05);
         }
 
@@ -177,6 +181,10 @@
             background: #a0522d;
         }
 
+        .camera-btn:hover {
+            background: #34495e;
+        }
+
         .dry-rot-btn.active {
             background: #ff0000;
             box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
@@ -185,6 +193,34 @@
         .bubble-btn.active {
             background: #ff6347;
             box-shadow: 0 0 10px rgba(255, 99, 71, 0.5);
+        }
+
+        .camera-btn.active {
+            background: #3498db;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .photo-preview {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .photo-preview img {
+            max-width: 120px;
+            max-height: 80px;
+            border-radius: 5px;
+            border: 2px solid #ff6b35;
+            object-fit: cover;
+        }
+
+        .photo-preview .photo-info {
+            font-size: 0.7em;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        .hidden-file-input {
+            display: none;
         }
 
         .buttons-container {
@@ -446,7 +482,7 @@
                                 <input type="number" id="fl_left" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
-                                <label>Crown</label>
+                                <label>Center</label>
                                 <input type="number" id="fl_crown" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
@@ -461,7 +497,12 @@
                             <button type="button" class="bubble-btn" id="fl_bubble" onclick="toggleBubble('fl_bubble')">
                                 🫧 Bubble
                             </button>
+                            <button type="button" class="camera-btn" id="fl_camera" onclick="takePhoto('fl')">
+                                📷 Photo
+                            </button>
                         </div>
+                        <input type="file" id="fl_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('fl', this)">
+                        <div id="fl_photo_preview" class="photo-preview"></div>
                     </div>
                     
                     <div class="tire-container">
@@ -472,7 +513,7 @@
                                 <input type="number" id="fr_left" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
-                                <label>Crown</label>
+                                <label>Center</label>
                                 <input type="number" id="fr_crown" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
@@ -487,7 +528,12 @@
                             <button type="button" class="bubble-btn" id="fr_bubble" onclick="toggleBubble('fr_bubble')">
                                 🫧 Bubble
                             </button>
+                            <button type="button" class="camera-btn" id="fr_camera" onclick="takePhoto('fr')">
+                                📷 Photo
+                            </button>
                         </div>
+                        <input type="file" id="fr_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('fr', this)">
+                        <div id="fr_photo_preview" class="photo-preview"></div>
                     </div>
                     
                     <div class="tire-container">
@@ -498,7 +544,7 @@
                                 <input type="number" id="rl_left" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
-                                <label>Crown</label>
+                                <label>Center</label>
                                 <input type="number" id="rl_crown" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
@@ -513,7 +559,12 @@
                             <button type="button" class="bubble-btn" id="rl_bubble" onclick="toggleBubble('rl_bubble')">
                                 🫧 Bubble
                             </button>
+                            <button type="button" class="camera-btn" id="rl_camera" onclick="takePhoto('rl')">
+                                📷 Photo
+                            </button>
                         </div>
+                        <input type="file" id="rl_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('rl', this)">
+                        <div id="rl_photo_preview" class="photo-preview"></div>
                     </div>
                     
                     <div class="tire-container">
@@ -524,7 +575,7 @@
                                 <input type="number" id="rr_left" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
-                                <label>Crown</label>
+                                <label>Center</label>
                                 <input type="number" id="rr_crown" placeholder="Depth" min="1" max="12">
                             </div>
                             <div class="measurement-input">
@@ -539,7 +590,12 @@
                             <button type="button" class="bubble-btn" id="rr_bubble" onclick="toggleBubble('rr_bubble')">
                                 🫧 Bubble
                             </button>
+                            <button type="button" class="camera-btn" id="rr_camera" onclick="takePhoto('rr')">
+                                📷 Photo
+                            </button>
                         </div>
+                        <input type="file" id="rr_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('rr', this)">
+                        <div id="rr_photo_preview" class="photo-preview"></div>
                     </div>
                 </div>
             </div>
@@ -601,51 +657,126 @@
             }
         }
 
+        function takePhoto(tireId) {
+            const fileInput = document.getElementById(tireId + '_photo_input');
+            fileInput.click();
+        }
+
+        function handlePhotoUpload(tireId, input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            // Check file size (limit to 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Photo size too large. Please choose a photo under 5MB.');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    // Resize image to optimal size (max 800x600)
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    const maxWidth = 800;
+                    const maxHeight = 600;
+                    let { width, height } = img;
+                    
+                    // Calculate new dimensions
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height = (height * maxWidth) / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width = (width * maxHeight) / height;
+                            height = maxHeight;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    // Draw and compress
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                    
+                    // Display preview
+                    displayPhotoPreview(tireId, compressedDataUrl, file.name);
+                    
+                    // Activate camera button
+                    const cameraBtn = document.getElementById(tireId + '_camera');
+                    cameraBtn.classList.add('active');
+                    cameraBtn.textContent = '📷 PHOTO TAKEN';
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function displayPhotoPreview(tireId, dataUrl, fileName) {
+            const previewDiv = document.getElementById(tireId + '_photo_preview');
+            previewDiv.innerHTML = `
+                <img src="${dataUrl}" alt="Tire damage photo">
+                <div class="photo-info">Photo: ${fileName}</div>
+            `;
+        }
+
         function checkAlignment(measurements, tireName) {
-            const maxDifference = 2; // More than 2/32" difference indicates alignment issues
-            
-            const innerWear = Math.abs(measurements.left - measurements.crown) > maxDifference;
-            const outerWear = Math.abs(measurements.right - measurements.crown) > maxDifference;
-            const edgeToEdgeWear = Math.abs(measurements.left - measurements.right) > maxDifference;
-            
-            // Check for exactly 2/32" difference - highly recommend alignment
             const diff1 = Math.abs(measurements.left - measurements.crown);
             const diff2 = Math.abs(measurements.crown - measurements.right);
             const diff3 = Math.abs(measurements.left - measurements.right);
-            const hasExactly2Diff = (diff1 === 2 || diff2 === 2 || diff3 === 2);
+            
+            // Check for exactly 1/32" or 2/32" differences
+            const has1Diff = (diff1 === 1 || diff2 === 1 || diff3 === 1);
+            const has2Diff = (diff1 === 2 || diff2 === 2 || diff3 === 2);
+            const hasOver2Diff = (diff1 > 2 || diff2 > 2 || diff3 > 2);
             
             let alignmentIssue = '';
+            let isHighlyRecommended = false;
             
-            // Check for specific wear patterns
+            // Determine specific wear pattern and recommendation level
             if (measurements.left < measurements.crown && measurements.left < measurements.right) {
-                alignmentIssue = hasExactly2Diff ? 'Inner edge wear detected - HIGHLY RECOMMEND ALIGNMENT' : 'Inner edge wear detected - Likely camber/toe alignment issue';
+                if (has2Diff || hasOver2Diff) {
+                    alignmentIssue = 'Inner edge wear detected - HIGHLY RECOMMEND ALIGNMENT';
+                    isHighlyRecommended = true;
+                } else if (has1Diff) {
+                    alignmentIssue = 'Inner edge wear detected - Recommend alignment';
+                }
             } else if (measurements.right < measurements.crown && measurements.right < measurements.left) {
-                alignmentIssue = hasExactly2Diff ? 'Outer edge wear detected - HIGHLY RECOMMEND ALIGNMENT' : 'Outer edge wear detected - Likely camber/toe alignment issue';
+                if (has2Diff || hasOver2Diff) {
+                    alignmentIssue = 'Outer edge wear detected - HIGHLY RECOMMEND ALIGNMENT';
+                    isHighlyRecommended = true;
+                } else if (has1Diff) {
+                    alignmentIssue = 'Outer edge wear detected - Recommend alignment';
+                }
             } else if (measurements.crown < measurements.left && measurements.crown < measurements.right) {
-                alignmentIssue = hasExactly2Diff ? 'Center wear detected - Check tire pressure and HIGHLY RECOMMEND ALIGNMENT' : 'Center wear detected - Check tire pressure (overinflation)';
-            } else if ((measurements.left < measurements.crown || measurements.right < measurements.crown) && edgeToEdgeWear) {
-                alignmentIssue = hasExactly2Diff ? 'Uneven edge wear - HIGHLY RECOMMEND ALIGNMENT IMMEDIATELY' : 'Uneven edge wear - Wheel alignment needed';
-            } else if (hasExactly2Diff) {
-                alignmentIssue = 'Measurements off by 2/32" - HIGHLY RECOMMEND ALIGNMENT';
+                if (has2Diff || hasOver2Diff) {
+                    alignmentIssue = 'Center wear detected - Check tire pressure and HIGHLY RECOMMEND ALIGNMENT';
+                    isHighlyRecommended = true;
+                } else if (has1Diff) {
+                    alignmentIssue = 'Center wear detected - Check tire pressure and recommend alignment';
+                }
+            } else if (has2Diff || hasOver2Diff) {
+                alignmentIssue = 'Measurements off by 2+ /32" - HIGHLY RECOMMEND ALIGNMENT';
+                isHighlyRecommended = true;
+            } else if (has1Diff) {
+                alignmentIssue = 'Measurements off by 1/32" - Recommend alignment';
             }
             
             return {
-                innerWear: innerWear,
-                outerWear: outerWear,
-                overall: innerWear || outerWear || edgeToEdgeWear || hasExactly2Diff,
+                overall: has1Diff || has2Diff || hasOver2Diff,
                 issue: alignmentIssue,
-                highlyRecommend: hasExactly2Diff
+                highlyRecommend: isHighlyRecommended
             };
         }
 
         function autoDetectDryRot(measurements) {
-            // Auto-detect dry rot if measurements are off by exactly 1/32"
-            const diff1 = Math.abs(measurements.left - measurements.crown);
-            const diff2 = Math.abs(measurements.crown - measurements.right);
-            const diff3 = Math.abs(measurements.left - measurements.right);
-            
-            // Check if any measurement differs by exactly 1/32"
-            return (diff1 === 1 || diff2 === 1 || diff3 === 1);
+            // Auto-detection removed - manual visual inspection required
+            return false;
         }
 
         function printResults() {
@@ -662,28 +793,32 @@
                     crown: parseInt(document.getElementById('fl_crown').value),
                     right: parseInt(document.getElementById('fl_right').value),
                     dryRot: document.getElementById('fl_dryrot').classList.contains('active'),
-                    bubble: document.getElementById('fl_bubble').classList.contains('active')
+                    bubble: document.getElementById('fl_bubble').classList.contains('active'),
+                    hasPhoto: document.getElementById('fl_camera').classList.contains('active')
                 },
                 frontRight: {
                     left: parseInt(document.getElementById('fr_left').value),
                     crown: parseInt(document.getElementById('fr_crown').value),
                     right: parseInt(document.getElementById('fr_right').value),
                     dryRot: document.getElementById('fr_dryrot').classList.contains('active'),
-                    bubble: document.getElementById('fr_bubble').classList.contains('active')
+                    bubble: document.getElementById('fr_bubble').classList.contains('active'),
+                    hasPhoto: document.getElementById('fr_camera').classList.contains('active')
                 },
                 rearLeft: {
                     left: parseInt(document.getElementById('rl_left').value),
                     crown: parseInt(document.getElementById('rl_crown').value),
                     right: parseInt(document.getElementById('rl_right').value),
                     dryRot: document.getElementById('rl_dryrot').classList.contains('active'),
-                    bubble: document.getElementById('rl_bubble').classList.contains('active')
+                    bubble: document.getElementById('rl_bubble').classList.contains('active'),
+                    hasPhoto: document.getElementById('rl_camera').classList.contains('active')
                 },
                 rearRight: {
                     left: parseInt(document.getElementById('rr_left').value),
                     crown: parseInt(document.getElementById('rr_crown').value),
                     right: parseInt(document.getElementById('rr_right').value),
                     dryRot: document.getElementById('rr_dryrot').classList.contains('active'),
-                    bubble: document.getElementById('rr_bubble').classList.contains('active')
+                    bubble: document.getElementById('rr_bubble').classList.contains('active'),
+                    hasPhoto: document.getElementById('rr_camera').classList.contains('active')
                 }
             };
 
@@ -726,9 +861,8 @@
                 let condition = getTireCondition(minDepth);
                 const alignment = checkAlignment(tire, tireNames[index]);
                 
-                // Auto-detect dry rot if measurements are off by exactly 1/32"
-                const autoDryRot = autoDetectDryRot(tire);
-                const hasDryRot = tire.dryRot || autoDryRot;
+                // Manual dry rot detection only - visual inspection required
+                const hasDryRot = tire.dryRot;
                 const hasBubble = tire.bubble;
                 
                 // Check for dry rot or bubble - both override tread depth condition
@@ -736,16 +870,6 @@
                     condition = 'bad';
                     if (hasDryRot) dryRotCount++;
                     if (hasBubble) bubbleCount++;
-                    
-                    // Auto-activate dry rot button if detected
-                    if (autoDryRot && !tire.dryRot) {
-                        const buttonIds = ['fl_dryrot', 'fr_dryrot', 'rl_dryrot', 'rr_dryrot'];
-                        const button = document.getElementById(buttonIds[index]);
-                        if (button) {
-                            button.classList.add('active');
-                            button.textContent = '🔴 DRY ROT AUTO-DETECTED';
-                        }
-                    }
                 }
                 
                 overallConditions.push(condition);
@@ -760,7 +884,7 @@
                 if (hasDryRot && hasBubble) {
                     statusText = 'DRY ROT & BUBBLE - REPLACE IMMEDIATELY';
                 } else if (hasDryRot) {
-                    statusText = autoDryRot && !tire.dryRot ? 'DRY ROT AUTO-DETECTED - REPLACE IMMEDIATELY' : 'DRY ROT - REPLACE IMMEDIATELY';
+                    statusText = 'DRY ROT - REPLACE IMMEDIATELY';
                 } else if (hasBubble) {
                     statusText = 'BUBBLE DETECTED - REPLACE IMMEDIATELY';
                 } else if (condition === 'good') {
@@ -771,6 +895,11 @@
                     statusText = 'BAD - REPLACE';
                 }
                 
+                // Add photo indicator if photo was taken
+                if (tire.hasPhoto) {
+                    statusText += ' 📷';
+                }
+                
                 tireDiv.innerHTML = `
                     <h4>${tireNames[index]}</h4>
                     <div class="measurement-results">
@@ -778,7 +907,7 @@
                             Inner: ${tire.left}/32"
                         </div>
                         <div class="measurement-result ${getTireCondition(tire.crown)}">
-                            Crown: ${tire.crown}/32"
+                            Center: ${tire.crown}/32"
                         </div>
                         <div class="measurement-result ${getTireCondition(tire.right)}">
                             Outer: ${tire.right}/32"
