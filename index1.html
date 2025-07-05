@@ -775,3 +775,337 @@
             setTimeout(() => {
                 cellInterference.textContent = 'High - 3 devices detected';
                 cellInterference.style.color = '#ef4444';
+                wifiOverlap.textContent = '2.4GHz conflict detected';
+                wifiOverlap.style.color = '#f59e0b';
+                garageFreq.textContent = '315.125 MHz - CONFLICT!';
+                garageFreq.style.color = '#ef4444';
+                keylessConflict.textContent = 'High Risk - Same frequency';
+                keylessConflict.style.color = '#ef4444';
+                signalBar.style.width = '35%';
+                signalBar.style.background = 'linear-gradient(90deg, #ef4444, #f59e0b)';
+                
+                // Add RF analysis
+                const rfAnalysis = `
+                    <div class="diagnostic-tree" style="margin-top: 20px;">
+                        <div class="tree-node" style="border-left-color: #ef4444;">
+                            <div class="tree-condition">⚠️ CRITICAL RF INTERFERENCE DETECTED</div>
+                            <div class="tree-warning">Multiple 315MHz sources causing signal degradation</div>
+                            <div class="tree-action">→ Move vehicle away from garage/building before testing</div>
+                            <div class="tree-action">→ Turn off cell phones and WiFi devices</div>
+                        </div>
+                    </div>
+                `;
+                document.querySelector('.frequency-analyzer').innerHTML += rfAnalysis;
+            }, 2000);
+        }
+        
+        function performSensorTest(testType) {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.classList.remove('hidden');
+            resultsDiv.classList.add('fade-in');
+            
+            let testResults = '';
+            
+            switch(testType) {
+                case 'visual':
+                    testResults = `
+                        <div class="diagnostic-tree">
+                            <div class="tree-node">
+                                <div class="tree-condition">Visual Inspection Results:</div>
+                                <div class="tree-action">✅ RF Sensor: No visible corrosion, antenna intact</div>
+                                <div class="tree-warning">⚠️ LF Sensor: Minor valve stem corrosion detected</div>
+                                <div class="tree-action">✅ RR Sensor: Good condition, proper mounting</div>
+                                <div class="tree-warning">⚠️ LR Sensor: Crack in housing near antenna</div>
+                            </div>
+                            <div class="tree-node" style="border-left-color: #ef4444;">
+                                <div class="tree-condition">CRITICAL FINDING:</div>
+                                <div class="tree-warning">LR sensor housing crack will cause intermittent signal loss</div>
+                                <div class="tree-action">→ Replace LR sensor before proceeding</div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'mechanical':
+                    testResults = `
+                        <div class="diagnostic-tree">
+                            <div class="tree-node">
+                                <div class="tree-condition">Mechanical Stress Analysis:</div>
+                                <div class="tree-action">✅ Valve stem torque: 35 in-lbs (within spec)</div>
+                                <div class="tree-action">✅ Sensor weight distribution: Balanced</div>
+                                <div class="tree-warning">⚠️ Excessive vibration wear on LF sensor mount</div>
+                                <div class="tree-action">→ Monitor for intermittent connection issues</div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'environmental':
+                    testResults = `
+                        <div class="diagnostic-tree">
+                            <div class="tree-node">
+                                <div class="tree-condition">Environmental Impact Assessment:</div>
+                                <div class="tree-action">Temperature coefficient: -0.5 PSI per 10°F (normal)</div>
+                                <div class="tree-warning">⚠️ Salt corrosion on valve threads affecting seal</div>
+                                <div class="tree-action">UV exposure: Minimal degradation on sensor housing</div>
+                                <div class="tree-action">→ Clean and apply anti-seize to valve threads</div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            resultsDiv.innerHTML = testResults;
+        }
+        
+        function analyzePressureCorrelation() {
+            const coldTemp = parseFloat(document.getElementById('coldTemp').value);
+            const hotTemp = parseFloat(document.getElementById('hotTemp').value);
+            const tpmsReading = parseFloat(document.getElementById('tpmsReading').value);
+            
+            const tempDiff = hotTemp - coldTemp;
+            const expectedRise = (tempDiff / 10) * 1; // Approximate 1 PSI per 10°F
+            document.getElementById('expectedRise').textContent = expectedRise.toFixed(1) + ' PSI';
+            
+            const analysisDiv = document.getElementById('pressureAnalysis');
+            let analysis = '';
+            
+            if (Math.abs(tpmsReading - (32 + expectedRise)) > 2) {
+                analysis = `
+                    <div class="tree-node" style="border-left-color: #ef4444;">
+                        <div class="tree-condition">⚠️ PRESSURE CORRELATION ERROR</div>
+                        <div class="tree-warning">TPMS reading deviates >2 PSI from expected thermal expansion</div>
+                        <div class="tree-action">→ Sensor calibration drift detected</div>
+                        <div class="tree-action">→ Perform sensor accuracy verification with precision gauge</div>
+                    </div>
+                `;
+            } else {
+                analysis = `
+                    <div class="tree-node" style="border-left-color: #10b981;">
+                        <div class="tree-condition">✅ PRESSURE CORRELATION NORMAL</div>
+                        <div class="tree-action">TPMS readings correlate with thermal expansion model</div>
+                        <div class="tree-action">→ Sensor accuracy within acceptable range</div>
+                    </div>
+                `;
+            }
+            
+            analysisDiv.innerHTML = analysis;
+        }
+        
+        function retrieveDTCs() {
+            const dtcDisplay = document.getElementById('dtcDisplay');
+            const currentDTCs = document.getElementById('currentDTCs');
+            const pendingDTCs = document.getElementById('pendingDTCs');
+            const historyDTCs = document.getElementById('historyDTCs');
+            
+            // Simulate DTC retrieval
+            setTimeout(() => {
+                const codes = [
+                    'C1A11: TPMS Sensor 1 Signal Missing',
+                    'C1A15: TPMS Sensor 3 Low Battery',
+                    'C1A01: TPMS System Communication Fault'
+                ];
+                
+                dtcDisplay.innerHTML = `
+                    <div class="dtc-code">Current DTCs Found:</div>
+                    ${codes.map(code => `<div class="pid-data">${code}</div>`).join('')}
+                `;
+                
+                currentDTCs.innerHTML = `
+                    <div style="color: #ef4444;">C1A11 - Active</div>
+                    <div style="color: #ef4444;">C1A15 - Active</div>
+                `;
+                
+                pendingDTCs.innerHTML = `
+                    <div style="color: #f59e0b;">C1A01 - Pending</div>
+                    <div style="color: #f59e0b;">C1A20 - Pending (Relearn Required)</div>
+                `;
+                
+                historyDTCs.innerHTML = `
+                    <div style="color: #94a3b8;">C1A12 - Sensor 2 Signal (Cleared)</div>
+                    <div style="color: #94a3b8;">C1A00 - System Malfunction (Cleared)</div>
+                `;
+                
+                diagnosticData.dtcCodes = codes;
+            }, 1500);
+        }
+        
+        function startLiveData() {
+            const positions = ['Front Left', 'Front Right', 'Rear Left', 'Rear Right'];
+            let dataCounter = 0;
+            
+            liveDataInterval = setInterval(() => {
+                // Simulate live sensor data
+                document.getElementById('rflfPos').textContent = Math.random() > 0.1 ? 'Active' : 'No Signal';
+                document.getElementById('rfrfPos').textContent = 'Active';
+                document.getElementById('lrlfPos').textContent = 'Weak Signal';
+                document.getElementById('lrrfPos').textContent = Math.random() > 0.3 ? 'Active' : 'Intermittent';
+                
+                document.getElementById('signalStrength').textContent = (-45 + Math.random() * 10).toFixed(1) + ' dBm';
+                document.getElementById('sensorBattery').textContent = (3.2 - Math.random() * 0.5).toFixed(1) + 'V';
+                document.getElementById('transmissionRate').textContent = 'Every ' + (60 + Math.random() * 30).toFixed(0) + 's';
+                document.getElementById('moduleTemp').textContent = (72 + Math.random() * 10).toFixed(0) + '°F';
+                
+                dataCounter++;
+                if (dataCounter > 10) {
+                    clearInterval(liveDataInterval);
+                    analyzeLiveData();
+                }
+            }, 1000);
+        }
+        
+        function analyzeLiveData() {
+            const liveDataGrid = document.getElementById('liveDataGrid');
+            const analysis = `
+                <div class="diagnostic-tree" style="grid-column: 1 / -1; margin-top: 20px;">
+                    <div class="tree-node" style="border-left-color: #ef4444;">
+                        <div class="tree-condition">⚠️ LIVE DATA ANALYSIS COMPLETE</div>
+                        <div class="tree-warning">RF sensor intermittent - signal strength varying</div>
+                        <div class="tree-warning">LR sensor weak signal - battery voltage low (2.7V)</div>
+                        <div class="tree-action">→ Replace LR sensor battery/sensor unit</div>
+                        <div class="tree-action">→ Investigate RF sensor connection</div>
+                    </div>
+                </div>
+            `;
+            liveDataGrid.innerHTML += analysis;
+        }
+        
+        function readSensorIDs() {
+            const originalIDs = document.getElementById('originalIDs');
+            
+            setTimeout(() => {
+                const sensorIDs = [
+                    'FL: 0x12345678 (315 MHz)',
+                    'FR: 0x87654321 (315 MHz)', 
+                    'RL: 0xABCDEF12 (315 MHz)',
+                    'RR: 0x34567890 (315 MHz)'
+                ];
+                
+                originalIDs.innerHTML = `
+                    <div class="pid-data">Original Sensor IDs:</div>
+                    ${sensorIDs.map(id => `<div class="dtc-code">${id}</div>`).join('')}
+                `;
+                
+                diagnosticData.sensorIDs = sensorIDs;
+            }, 2000);
+        }
+        
+        function programBlankSensors() {
+            const programmingStatus = document.getElementById('programmingStatus');
+            let progress = 0;
+            
+            const interval = setInterval(() => {
+                progress += 25;
+                programmingStatus.innerHTML = `
+                    <div class="pid-data">Programming Progress: ${progress}%</div>
+                    <div class="dtc-code">Writing sensor ID: 0x${Math.random().toString(16).substr(2, 8).toUpperCase()}</div>
+                `;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    programmingStatus.innerHTML += `
+                        <div style="color: #10b981; margin-top: 10px;">✅ Programming Complete - 4 sensors programmed</div>
+                        <div style="color: #10b981;">✅ IDs written to ECU memory</div>
+                    `;
+                }
+            }, 1000);
+        }
+        
+        function cloneSensors() {
+            const cloningStatus = document.getElementById('cloningStatus');
+            let step = 0;
+            const steps = [
+                'Reading original sensor signatures...',
+                'Extracting encryption keys...',
+                'Programming clone sensors...',
+                'Verifying sensor responses...',
+                'Updating ECU database...'
+            ];
+            
+            const interval = setInterval(() => {
+                if (step < steps.length) {
+                    cloningStatus.innerHTML = `
+                        <div class="pid-data">${steps[step]}</div>
+                        <div class="dtc-code">Step ${step + 1} of ${steps.length}</div>
+                    `;
+                    step++;
+                } else {
+                    clearInterval(interval);
+                    cloningStatus.innerHTML += `
+                        <div style="color: #10b981; margin-top: 10px;">✅ Cloning Complete</div>
+                        <div style="color: #10b981;">✅ All sensors responding with original IDs</div>
+                    `;
+                }
+            }, 1500);
+        }
+        
+        function performAdvancedRelearn() {
+            const relearnProgress = document.getElementById('relearnProgress');
+            const successRate = document.getElementById('successRate');
+            const responseTime = document.getElementById('responseTime');
+            const signalQuality = document.getElementById('signalQuality');
+            const positionAccuracy = document.getElementById('positionAccuracy');
+            
+            let currentStep = 0;
+            const steps = [
+                'Initializing TPMS receiver module...',
+                'Activating sensor learn mode...',
+                'Triggering FL sensor (315 MHz)...',
+                'Triggering FR sensor (315 MHz)...',
+                'Triggering RL sensor (315 MHz)...',
+                'Triggering RR sensor (315 MHz)...',
+                'Verifying sensor positions...',
+                'Updating ECU sensor database...',
+                'Performing final validation...'
+            ];
+            
+            const interval = setInterval(() => {
+                if (currentStep < steps.length) {
+                    const progress = ((currentStep + 1) / steps.length * 100).toFixed(0);
+                    successRate.textContent = progress + '%';
+                    responseTime.textContent = (100 + Math.random() * 50).toFixed(0) + 'ms';
+                    
+                    relearnProgress.innerHTML = `
+                        <div class="tree-node" style="border-left-color: #3b82f6;">
+                            <div class="tree-condition">Step ${currentStep + 1}: ${steps[currentStep]}</div>
+                            <div class="tree-action">Progress: ${progress}%</div>
+                        </div>
+                    `;
+                    
+                    if (currentStep === 2) signalQuality.textContent = 'Good';
+                    if (currentStep === 4) signalQuality.textContent = 'Excellent';
+                    if (currentStep === 6) positionAccuracy.textContent = '100%';
+                    
+                    currentStep++;
+                } else {
+                    clearInterval(interval);
+                    relearnProgress.innerHTML += `
+                        <div class="tree-node" style="border-left-color: #10b981;">
+                            <div class="tree-condition">✅ ADVANCED RELEARN COMPLETE</div>
+                            <div class="tree-action">All sensors learned and verified</div>
+                            <div class="tree-action">Position accuracy: 100%</div>
+                            <div class="tree-action">System ready for operation</div>
+                        </div>
+                    `;
+                }
+            }, 2000);
+        }
+        
+        // Initialize diagnostic system
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Advanced TPMS Diagnostic System Initialized');
+            
+            // Add some dynamic effects
+            setInterval(() => {
+                const freq315 = document.getElementById('freq315');
+                const freq433 = document.getElementById('freq433');
+                
+                if (freq315) {
+                    freq315.textContent = (315.00 + (Math.random() - 0.5) * 0.1).toFixed(2);
+                }
+                if (freq433) {
+                    freq433.textContent = (433.92 + (Math.random() - 0.5) * 0.1).toFixed(2);
+                }
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
