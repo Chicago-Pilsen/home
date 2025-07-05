@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Inspection System</title>
+    <title>Tire Inspector Pro</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial Black', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
             min-height: 100vh;
             padding: 20px;
         }
@@ -17,761 +22,368 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+            background: rgba(0, 0, 0, 0.7);
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 2px solid #ff6b35;
         }
 
-        .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 20px;
+        h1 {
             text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #ff6b35;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
         }
 
-        .nav-tabs {
-            display: flex;
-            background: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-        }
-
-        .nav-tab {
-            flex: 1;
-            padding: 15px;
-            text-align: center;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
-            color: #6c757d;
-            transition: all 0.3s ease;
-        }
-
-        .nav-tab:hover { background: #e9ecef; }
-        .nav-tab.active { color: #007bff; background: white; }
-
-        .tab-content {
-            display: none;
-            padding: 25px;
-        }
-
-        .tab-content.active { display: block; }
-
-        .section {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .form-group {
-            flex: 1;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: #007bff;
-        }
-
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .photo-upload {
-            border: 2px dashed #007bff;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            background: #f8f9ff;
-            margin: 15px 0;
-        }
-
-        .photo-upload input[type="file"] { display: none; }
-
-        .photo-upload label {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #007bff;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .photo-upload label:hover { background: #0056b3; }
-
-        .photo-preview {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .photo-preview img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 5px;
-            border: 2px solid #007bff;
-        }
-
-        .tire-grid {
+        .inspection-form {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #444;
+        }
+
+        .form-section h2 {
+            color: #ff6b35;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-group {
             margin-bottom: 20px;
         }
 
-        .tire-item {
-            background: white;
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #cccccc;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #555;
+            border-radius: 8px;
+            background: #222;
+            color: #ffffff;
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
+        }
+
+        .tire-measurements {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .tire-input {
+            background: rgba(255, 255, 255, 0.05);
             padding: 15px;
             border-radius: 8px;
-            border: 1px solid #ddd;
+            border: 1px solid #333;
         }
 
-        .tire-item h5 {
-            color: #495057;
+        .tire-input h3 {
+            color: #ff6b35;
             margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .measurement-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .submit-btn {
-            background: #28a745;
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 5px;
             font-size: 1.1em;
-            cursor: pointer;
-            margin-top: 20px;
         }
 
-        .submit-btn:hover {
-            background: #218838;
+        .inspect-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #ff6b35, #ff8c42);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .inspect-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6);
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border: 2px solid #444;
+            display: none;
+        }
+
+        .results h2 {
+            color: #ff6b35;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-transform: uppercase;
+        }
+
+        .tire-result {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .tire-result.good {
+            background: #27ae60;
+            color: white;
+        }
+
+        .tire-result.ok {
+            background: #f39c12;
+            color: white;
+        }
+
+        .tire-result.bad {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .overall-recommendation {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .recommendation-good {
+            background: #27ae60;
+            color: white;
+        }
+
+        .recommendation-suggest {
+            background: #f39c12;
+            color: white;
+        }
+
+        .recommendation-replace {
+            background: #e74c3c;
+            color: white;
         }
 
         @media (max-width: 768px) {
-            .nav-tabs { flex-direction: column; }
-            .form-row { flex-direction: column; }
-            .tire-grid { grid-template-columns: 1fr; }
+            .inspection-form {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .tire-measurements {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🔧 Vehicle Inspection System</h1>
-            <p>Professional Automotive Inspection & Documentation</p>
-        </div>
-
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('vehicle-info')">Vehicle Info</button>
-            <button class="nav-tab" onclick="showTab('tires')">Tires</button>
-            <button class="nav-tab" onclick="showTab('brakes')">Brakes</button>
-            <button class="nav-tab" onclick="showTab('suspension')">Suspension</button>
-            <button class="nav-tab" onclick="showTab('summary')">Summary</button>
-        </div>
-
-        <!-- Vehicle Info Tab -->
-        <div id="vehicle-info" class="tab-content active">
-            <div class="section">
-                <h3>Vehicle Information</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="vin">VIN Number:</label>
-                        <input type="text" id="vin" maxlength="17" placeholder="Enter 17-digit VIN">
-                    </div>
-                    <div class="form-group">
-                        <label for="license">License Plate:</label>
-                        <input type="text" id="license" placeholder="Enter license plate">
-                    </div>
+        <h1>🔧 Tire Inspector Pro 🔧</h1>
+        
+        <div class="inspection-form">
+            <div class="form-section">
+                <h2>Vehicle Information</h2>
+                <div class="input-group">
+                    <label for="dotDate">DOT Date (Week/Year - e.g., 2823 for week 28 of 2023)</label>
+                    <input type="text" id="dotDate" placeholder="Enter DOT date">
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="year">Year:</label>
-                        <input type="number" id="year" min="1900" max="2030" placeholder="2023">
-                    </div>
-                    <div class="form-group">
-                        <label for="make">Make:</label>
-                        <input type="text" id="make" placeholder="Toyota, Ford, etc.">
-                    </div>
-                    <div class="form-group">
-                        <label for="model">Model:</label>
-                        <input type="text" id="model" placeholder="Camry, F-150, etc.">
-                    </div>
+                <div class="input-group">
+                    <label for="driveType">Drive Type</label>
+                    <select id="driveType">
+                        <option value="fwd">Front-Wheel Drive (FWD)</option>
+                        <option value="rwd">Rear-Wheel Drive (RWD)</option>
+                        <option value="awd">All-Wheel Drive (AWD)</option>
+                    </select>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="mileage">Mileage:</label>
-                        <input type="number" id="mileage" placeholder="Current mileage">
+            </div>
+
+            <div class="form-section">
+                <h2>Tire Measurements</h2>
+                <div class="tire-measurements">
+                    <div class="tire-input">
+                        <h3>Front Left</h3>
+                        <input type="number" id="frontLeft" placeholder="Tread depth (32nds)" min="1" max="12">
                     </div>
-                    <div class="form-group">
-                        <label for="inspector">Inspector Name:</label>
-                        <input type="text" id="inspector" placeholder="Your name">
+                    <div class="tire-input">
+                        <h3>Front Right</h3>
+                        <input type="number" id="frontRight" placeholder="Tread depth (32nds)" min="1" max="12">
                     </div>
-                    <div class="form-group">
-                        <label for="inspection-date">Inspection Date:</label>
-                        <input type="date" id="inspection-date">
+                    <div class="tire-input">
+                        <h3>Rear Left</h3>
+                        <input type="number" id="rearLeft" placeholder="Tread depth (32nds)" min="1" max="12">
+                    </div>
+                    <div class="tire-input">
+                        <h3>Rear Right</h3>
+                        <input type="number" id="rearRight" placeholder="Tread depth (32nds)" min="1" max="12">
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Tires Tab -->
-        <div id="tires" class="tab-content">
-            <div class="section">
-                <h3>🛞 Tire Inspection</h3>
-                
-                <div class="tire-grid">
-                    <div class="tire-item">
-                        <h5>Front Left Tire</h5>
-                        <div class="form-group">
-                            <label>Tire Size:</label>
-                            <input type="text" id="fl-size" placeholder="e.g., 225/65R17">
-                        </div>
-                        <div class="form-group">
-                            <label>DOT Date:</label>
-                            <input type="text" id="fl-dot" placeholder="e.g., 2319 (23rd week of 2019)">
-                        </div>
-                        <div class="form-group">
-                            <label>Tread Depth (32nds):</label>
-                            <input type="number" id="fl-tread" min="0" max="32" step="0.5" placeholder="8.5">
-                        </div>
-                        <div class="form-group">
-                            <label>Tire Pressure (PSI):</label>
-                            <input type="number" id="fl-pressure" min="0" max="80" placeholder="32">
-                        </div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="fl-dryrot">
-                                <label for="fl-dryrot">Dry Rot</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="fl-sidewall">
-                                <label for="fl-sidewall">Sidewall Damage</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="fl-uneven">
-                                <label for="fl-uneven">Uneven Wear</label>
-                            </div>
-                        </div>
-                        <div class="photo-upload">
-                            <input type="file" id="fl-photos" accept="image/*" multiple>
-                            <label for="fl-photos">📸 Upload Front Left Photos</label>
-                            <div class="photo-preview" id="fl-preview"></div>
-                        </div>
-                    </div>
+        <button class="inspect-btn" onclick="inspectTires()">🔍 INSPECT TIRES 🔍</button>
 
-                    <div class="tire-item">
-                        <h5>Front Right Tire</h5>
-                        <div class="form-group">
-                            <label>Tire Size:</label>
-                            <input type="text" id="fr-size" placeholder="e.g., 225/65R17">
-                        </div>
-                        <div class="form-group">
-                            <label>DOT Date:</label>
-                            <input type="text" id="fr-dot" placeholder="e.g., 2319">
-                        </div>
-                        <div class="form-group">
-                            <label>Tread Depth (32nds):</label>
-                            <input type="number" id="fr-tread" min="0" max="32" step="0.5" placeholder="8.5">
-                        </div>
-                        <div class="form-group">
-                            <label>Tire Pressure (PSI):</label>
-                            <input type="number" id="fr-pressure" min="0" max="80" placeholder="32">
-                        </div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="fr-dryrot">
-                                <label for="fr-dryrot">Dry Rot</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="fr-sidewall">
-                                <label for="fr-sidewall">Sidewall Damage</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="fr-uneven">
-                                <label for="fr-uneven">Uneven Wear</label>
-                            </div>
-                        </div>
-                        <div class="photo-upload">
-                            <input type="file" id="fr-photos" accept="image/*" multiple>
-                            <label for="fr-photos">📸 Upload Front Right Photos</label>
-                            <div class="photo-preview" id="fr-preview"></div>
-                        </div>
-                    </div>
-
-                    <div class="tire-item">
-                        <h5>Rear Left Tire</h5>
-                        <div class="form-group">
-                            <label>Tire Size:</label>
-                            <input type="text" id="rl-size" placeholder="e.g., 225/65R17">
-                        </div>
-                        <div class="form-group">
-                            <label>DOT Date:</label>
-                            <input type="text" id="rl-dot" placeholder="e.g., 2319">
-                        </div>
-                        <div class="form-group">
-                            <label>Tread Depth (32nds):</label>
-                            <input type="number" id="rl-tread" min="0" max="32" step="0.5" placeholder="8.5">
-                        </div>
-                        <div class="form-group">
-                            <label>Tire Pressure (PSI):</label>
-                            <input type="number" id="rl-pressure" min="0" max="80" placeholder="32">
-                        </div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="rl-dryrot">
-                                <label for="rl-dryrot">Dry Rot</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="rl-sidewall">
-                                <label for="rl-sidewall">Sidewall Damage</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="rl-uneven">
-                                <label for="rl-uneven">Uneven Wear</label>
-                            </div>
-                        </div>
-                        <div class="photo-upload">
-                            <input type="file" id="rl-photos" accept="image/*" multiple>
-                            <label for="rl-photos">📸 Upload Rear Left Photos</label>
-                            <div class="photo-preview" id="rl-preview"></div>
-                        </div>
-                    </div>
-
-                    <div class="tire-item">
-                        <h5>Rear Right Tire</h5>
-                        <div class="form-group">
-                            <label>Tire Size:</label>
-                            <input type="text" id="rr-size" placeholder="e.g., 225/65R17">
-                        </div>
-                        <div class="form-group">
-                            <label>DOT Date:</label>
-                            <input type="text" id="rr-dot" placeholder="e.g., 2319">
-                        </div>
-                        <div class="form-group">
-                            <label>Tread Depth (32nds):</label>
-                            <input type="number" id="rr-tread" min="0" max="32" step="0.5" placeholder="8.5">
-                        </div>
-                        <div class="form-group">
-                            <label>Tire Pressure (PSI):</label>
-                            <input type="number" id="rr-pressure" min="0" max="80" placeholder="32">
-                        </div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="rr-dryrot">
-                                <label for="rr-dryrot">Dry Rot</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="rr-sidewall">
-                                <label for="rr-sidewall">Sidewall Damage</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="rr-uneven">
-                                <label for="rr-uneven">Uneven Wear</label>
-                            </div>
-                        </div>
-                        <div class="photo-upload">
-                            <input type="file" id="rr-photos" accept="image/*" multiple>
-                            <label for="rr-photos">📸 Upload Rear Right Photos</label>
-                            <div class="photo-preview" id="rr-preview"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="tire-notes">Additional Tire Notes:</label>
-                    <textarea id="tire-notes" rows="3" placeholder="Additional observations, recommendations, or notes about the tires..."></textarea>
-                </div>
-            </div>
-        </div>
-
-        <!-- Brakes Tab -->
-        <div id="brakes" class="tab-content">
-            <div class="section">
-                <h3>🛑 Brake System Inspection</h3>
-                
-                <div class="measurement-grid">
-                    <div class="form-group">
-                        <label>Front Left Pad Thickness (mm):</label>
-                        <input type="number" id="fl-pad" min="0" max="20" step="0.5" placeholder="8.5">
-                    </div>
-                    <div class="form-group">
-                        <label>Front Right Pad Thickness (mm):</label>
-                        <input type="number" id="fr-pad" min="0" max="20" step="0.5" placeholder="8.5">
-                    </div>
-                    <div class="form-group">
-                        <label>Rear Left Pad Thickness (mm):</label>
-                        <input type="number" id="rl-pad" min="0" max="20" step="0.5" placeholder="6.0">
-                    </div>
-                    <div class="form-group">
-                        <label>Rear Right Pad Thickness (mm):</label>
-                        <input type="number" id="rr-pad" min="0" max="20" step="0.5" placeholder="6.0">
-                    </div>
-                </div>
-
-                <div class="measurement-grid">
-                    <div class="form-group">
-                        <label>Front Left Rotor Thickness (mm):</label>
-                        <input type="number" id="fl-rotor" min="0" max="50" step="0.1" placeholder="28.5">
-                    </div>
-                    <div class="form-group">
-                        <label>Front Right Rotor Thickness (mm):</label>
-                        <input type="number" id="fr-rotor" min="0" max="50" step="0.1" placeholder="28.5">
-                    </div>
-                    <div class="form-group">
-                        <label>Rear Left Rotor Thickness (mm):</label>
-                        <input type="number" id="rl-rotor" min="0" max="50" step="0.1" placeholder="18.2">
-                    </div>
-                    <div class="form-group">
-                        <label>Rear Right Rotor Thickness (mm):</label>
-                        <input type="number" id="rr-rotor" min="0" max="50" step="0.1" placeholder="18.2">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Brake Fluid Level:</label>
-                        <select id="brake-fluid">
-                            <option value="">Select level</option>
-                            <option value="full">Full</option>
-                            <option value="good">Good</option>
-                            <option value="low">Low</option>
-                            <option value="empty">Empty</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Brake Fluid Color:</label>
-                        <select id="brake-fluid-color">
-                            <option value="">Select color</option>
-                            <option value="clear">Clear/Light Amber</option>
-                            <option value="amber">Amber</option>
-                            <option value="dark">Dark Brown</option>
-                            <option value="black">Black</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="checkbox-group">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="brake-noise">
-                        <label for="brake-noise">Brake Noise</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="brake-vibration">
-                        <label for="brake-vibration">Brake Vibration</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="brake-pull">
-                        <label for="brake-pull">Vehicle Pulls During Braking</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="brake-lines">
-                        <label for="brake-lines">Brake Line Damage/Leaks</label>
-                    </div>
-                </div>
-
-                <div class="photo-upload">
-                    <input type="file" id="brake-photos" accept="image/*" multiple>
-                    <label for="brake-photos">📸 Upload Brake System Photos</label>
-                    <div class="photo-preview" id="brake-preview"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="brake-notes">Brake System Notes:</label>
-                    <textarea id="brake-notes" rows="3" placeholder="Brake system observations, measurements, recommendations..."></textarea>
-                </div>
-            </div>
-        </div>
-
-        <!-- Suspension Tab -->
-        <div id="suspension" class="tab-content">
-            <div class="section">
-                <h3>⚙️ Suspension System Inspection</h3>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Front Left Shock/Strut:</label>
-                        <select id="fl-shock">
-                            <option value="">Select condition</option>
-                            <option value="good">Good</option>
-                            <option value="fair">Fair</option>
-                            <option value="poor">Poor</option>
-                            <option value="leaking">Leaking</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Front Right Shock/Strut:</label>
-                        <select id="fr-shock">
-                            <option value="">Select condition</option>
-                            <option value="good">Good</option>
-                            <option value="fair">Fair</option>
-                            <option value="poor">Poor</option>
-                            <option value="leaking">Leaking</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Rear Left Shock/Strut:</label>
-                        <select id="rl-shock">
-                            <option value="">Select condition</option>
-                            <option value="good">Good</option>
-                            <option value="fair">Fair</option>
-                            <option value="poor">Poor</option>
-                            <option value="leaking">Leaking</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Rear Right Shock/Strut:</label>
-                        <select id="rr-shock">
-                            <option value="">Select condition</option>
-                            <option value="good">Good</option>
-                            <option value="fair">Fair</option>
-                            <option value="poor">Poor</option>
-                            <option value="leaking">Leaking</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="checkbox-group">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="spring-damage">
-                        <label for="spring-damage">Spring Damage/Sagging</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="bushings">
-                        <label for="bushings">Worn Bushings</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="ball-joints">
-                        <label for="ball-joints">Ball Joint Wear</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="sway-bar">
-                        <label for="sway-bar">Sway Bar Issues</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="cv-joints">
-                        <label for="cv-joints">CV Joint Wear</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="alignment">
-                        <label for="alignment">Alignment Issues</label>
-                    </div>
-                </div>
-
-                <div class="photo-upload">
-                    <input type="file" id="suspension-photos" accept="image/*" multiple>
-                    <label for="suspension-photos">📸 Upload Suspension Photos</label>
-                    <div class="photo-preview" id="suspension-preview"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="suspension-notes">Suspension Notes:</label>
-                    <textarea id="suspension-notes" rows="3" placeholder="Suspension system observations, measurements, recommendations..."></textarea>
-                </div>
-            </div>
-        </div>
-
-        <!-- Summary Tab -->
-        <div id="summary" class="tab-content">
-            <div class="section">
-                <h3>📋 Inspection Summary</h3>
-                <div id="summary-content">
-                    <p>Complete the inspection forms in the other tabs to generate a summary report.</p>
-                </div>
-                <button class="submit-btn" onclick="generateReport()">Generate Final Report</button>
-            </div>
+        <div id="results" class="results">
+            <h2>Inspection Results</h2>
+            <div id="tireResults"></div>
+            <div id="overallRecommendation" class="overall-recommendation"></div>
         </div>
     </div>
 
     <script>
-        // Tab switching
-        function showTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        function calculateTireAge(dotDate) {
+            if (!dotDate || dotDate.length !== 4) return null;
             
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
+            const week = parseInt(dotDate.substring(0, 2));
+            const year = parseInt(dotDate.substring(2, 4));
+            
+            // Convert 2-digit year to 4-digit year
+            const fullYear = year < 50 ? 2000 + year : 1900 + year;
+            
+            const currentYear = new Date().getFullYear();
+            const ageInYears = currentYear - fullYear;
+            
+            return ageInYears;
         }
 
-        // Photo preview functionality
-        function setupPhotoPreview(inputId, previewId) {
-            const input = document.getElementById(inputId);
-            const preview = document.getElementById(previewId);
-            
-            input.addEventListener('change', function(e) {
-                preview.innerHTML = '';
-                
-                Array.from(e.target.files).forEach(file => {
-                    if (file.type.startsWith('image/')) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            const img = document.createElement('img');
-                            img.src = e.target.result;
-                            preview.appendChild(img);
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
-            });
+        function getTireCondition(treadDepth) {
+            if (treadDepth >= 7) return 'good';
+            if (treadDepth >= 4) return 'ok';
+            return 'bad';
         }
 
-        // Initialize photo previews
-        ['fl-photos', 'fr-photos', 'rl-photos', 'rr-photos', 'brake-photos', 'suspension-photos'].forEach(id => {
-            setupPhotoPreview(id, id.replace('-photos', '-preview'));
-        });
-
-        // Generate report function
-        function generateReport() {
-            const vehicleInfo = {
-                vin: document.getElementById('vin').value,
-                license: document.getElementById('license').value,
-                year: document.getElementById('year').value,
-                make: document.getElementById('make').value,
-                model: document.getElementById('model').value,
-                mileage: document.getElementById('mileage').value,
-                inspector: document.getElementById('inspector').value,
-                date: document.getElementById('inspection-date').value
+        function inspectTires() {
+            const dotDate = document.getElementById('dotDate').value;
+            const driveType = document.getElementById('driveType').value;
+            
+            const measurements = {
+                frontLeft: parseInt(document.getElementById('frontLeft').value),
+                frontRight: parseInt(document.getElementById('frontRight').value),
+                rearLeft: parseInt(document.getElementById('rearLeft').value),
+                rearRight: parseInt(document.getElementById('rearRight').value)
             };
 
-            let report = `
-                <h4>Vehicle Inspection Report</h4>
-                <p><strong>Vehicle:</strong> ${vehicleInfo.year} ${vehicleInfo.make} ${vehicleInfo.model}</p>
-                <p><strong>VIN:</strong> ${vehicleInfo.vin}</p>
-                <p><strong>License:</strong> ${vehicleInfo.license}</p>
-                <p><strong>Mileage:</strong> ${vehicleInfo.mileage}</p>
-                <p><strong>Inspector:</strong> ${vehicleInfo.inspector}</p>
-                <p><strong>Date:</strong> ${vehicleInfo.date}</p>
-                <hr>
-                
-                <h5>Tire Summary:</h5>
-                <ul>
-                    <li>Front Left - DOT: ${document.getElementById('fl-dot').value}, Tread: ${document.getElementById('fl-tread').value}/32"</li>
-                    <li>Front Right - DOT: ${document.getElementById('fr-dot').value}, Tread: ${document.getElementById('fr-tread').value}/32"</li>
-                    <li>Rear Left - DOT: ${document.getElementById('rl-dot').value}, Tread: ${document.getElementById('rl-tread').value}/32"</li>
-                    <li>Rear Right - DOT: ${document.getElementById('rr-dot').value}, Tread: ${document.getElementById('rr-tread').value}/32"</li>
-                </ul>
-                
-                <h5>Brake Summary:</h5>
-                <p>Pad Thickness: FL: ${document.getElementById('fl-pad').value}mm, FR: ${document.getElementById('fr-pad').value}mm, RL: ${document.getElementById('rl-pad').value}mm, RR: ${document.getElementById('rr-pad').value}mm</p>
-                <p>Fluid Level: ${document.getElementById('brake-fluid').value}, Color: ${document.getElementById('brake-fluid-color').value}</p>
-                
-                <h5>Suspension Summary:</h5>
-                <p>Shock/Strut Condition: FL: ${document.getElementById('fl-shock').value}, FR: ${document.getElementById('fr-shock').value}, RL: ${document.getElementById('rl-shock').value}, RR: ${document.getElementById('rr-shock').value}</p>
-                
-                <h5>Notes:</h5>
-                <p>Tires: ${document.getElementById('tire-notes').value}</p>
-                <p>Brakes: ${document.getElementById('brake-notes').value}</p>
-                <p>Suspension: ${document.getElementById('suspension-notes').value}</p>
-            `;
-            
-            document.getElementById('summary-content').innerHTML = report;
-        }
-
-        // Set today's date as default
-        document.getElementById('inspection-date').value = new Date().toISOString().split('T')[0];
-
-        // Auto-calculate tire age from DOT date
-        function calculateTireAge(dotDate) {
-            if (dotDate.length === 4) {
-                const week = parseInt(dotDate.substring(0, 2));
-                const year = parseInt('20' + dotDate.substring(2, 4));
-                const currentYear = new Date().getFullYear();
-                return currentYear - year;
+            // Validate inputs
+            if (!dotDate || Object.values(measurements).some(val => isNaN(val) || val < 1)) {
+                alert('Please fill in all fields with valid measurements!');
+                return;
             }
-            return 0;
-        }
 
-        // Add tire age warnings
-        ['fl-dot', 'fr-dot', 'rl-dot', 'rr-dot'].forEach(id => {
-            document.getElementById(id).addEventListener('blur', function() {
-                const age = calculateTireAge(this.value);
-                if (age > 6) {
-                    this.style.borderColor = '#dc3545';
-                    this.title = `Warning: Tire is ${age} years old. Consider replacement.`;
-                } else {
-                    this.style.borderColor = '#28a745';
-                    this.title = '';
-                }
-            });
-        });
+            const tireAge = calculateTireAge(dotDate);
+            const resultsDiv = document.getElementById('results');
+            const tireResultsDiv = document.getElementById('tireResults');
+            const recommendationDiv = document.getElementById('overallRecommendation');
 
-        // Add brake pad thickness warnings
-        ['fl-pad', 'fr-pad', 'rl-pad', 'rr-pad'].forEach(id => {
-            document.getElementById(id).addEventListener('input', function() {
-                const thickness = parseFloat(this.value);
-                if (thickness < 3) {
-                    this.style.borderColor = '#dc3545';
-                    this.title = 'Critical: Replace immediately';
-                } else if (thickness < 5) {
-                    this.style.borderColor = '#ffc107';
-                    this.title = 'Warning: Replace soon';
-                } else {
-                    this.style.borderColor = '#28a745';
-                    this.title = 'Good condition';
-                }
-            });
-        });
+            // Clear previous results
+            tireResultsDiv.innerHTML = '';
 
-        // Print report function
-        function printReport() {
-            window.print();
-        }
-
-        // Save data to local storage (for demo purposes)
-        function saveInspection() {
-            const data = {};
-            document.querySelectorAll('input, select, textarea').forEach(element => {
-                data[element.id] = element.value;
-            });
+            const tireNames = ['Front Left', 'Front Right', 'Rear Left', 'Rear Right'];
+            const measurementValues = [measurements.frontLeft, measurements.frontRight, measurements.rearLeft, measurements.rearRight];
             
-            // Note: In a real application, this would be saved to a database
-            console.log('Inspection data saved:', data);
-            alert('Inspection data saved successfully!');
+            let conditions = [];
+            
+            // Display individual tire results
+            measurementValues.forEach((depth, index) => {
+                const condition = getTireCondition(depth);
+                conditions.push(condition);
+                
+                const tireDiv = document.createElement('div');
+                tireDiv.className = `tire-result ${condition}`;
+                
+                let statusText = '';
+                if (condition === 'good') statusText = 'GOOD';
+                else if (condition === 'ok') statusText = 'OK';
+                else statusText = 'BAD - REPLACE';
+                
+                tireDiv.innerHTML = `
+                    <span>${tireNames[index]}: ${depth}/32"</span>
+                    <span>${statusText}</span>
+                `;
+                
+                tireResultsDiv.appendChild(tireDiv);
+            });
+
+            // Determine overall recommendation
+            let recommendation = '';
+            let recommendationClass = '';
+            
+            const badCount = conditions.filter(c => c === 'bad').length;
+            const okCount = conditions.filter(c => c === 'ok').length;
+            const goodCount = conditions.filter(c => c === 'good').length;
+
+            if (tireAge !== null && tireAge >= 6) {
+                recommendation = 'TIRES ARE OLD (6+ YEARS) - REPLACE FOR SAFETY';
+                recommendationClass = 'recommendation-replace';
+            } else if (badCount > 0) {
+                if (driveType === 'awd') {
+                    recommendation = 'REPLACE ALL 4 TIRES (AWD REQUIRES MATCHING TIRES)';
+                } else {
+                    recommendation = 'TIRES NEED TO BE REPLACED';
+                }
+                recommendationClass = 'recommendation-replace';
+            } else if (okCount > 0) {
+                recommendation = 'SUGGESTING NEW TIRES SOON';
+                recommendationClass = 'recommendation-suggest';
+            } else {
+                recommendation = 'TIRES ARE GOOD';
+                recommendationClass = 'recommendation-good';
+            }
+
+            // Add age information if available
+            if (tireAge !== null) {
+                const ageDiv = document.createElement('div');
+                ageDiv.className = 'tire-result';
+                ageDiv.style.background = tireAge >= 6 ? '#e74c3c' : tireAge >= 4 ? '#f39c12' : '#27ae60';
+                ageDiv.innerHTML = `
+                    <span>Tire Age: ${tireAge} years</span>
+                    <span>${tireAge >= 6 ? 'TOO OLD' : tireAge >= 4 ? 'AGING' : 'GOOD AGE'}</span>
+                `;
+                tireResultsDiv.appendChild(ageDiv);
+            }
+
+            recommendationDiv.className = `overall-recommendation ${recommendationClass}`;
+            recommendationDiv.textContent = recommendation;
+
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 </body>
