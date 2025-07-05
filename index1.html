@@ -559,123 +559,6 @@
             font-weight: bold;
         }
         
-        .ai-update-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-        
-        .ai-update-modal.active {
-            display: flex;
-        }
-        
-        .ai-update-content {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
-            border: 3px solid #60a5fa;
-            border-radius: 20px;
-            padding: 50px;
-            max-width: 800px;
-            width: 90%;
-            color: white;
-            text-align: center;
-            box-shadow: 
-                0 0 50px rgba(96, 165, 250, 0.5),
-                0 20px 60px rgba(0,0,0,0.8);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .ai-update-content::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 20px,
-                rgba(96, 165, 250, 0.1) 20px,
-                rgba(96, 165, 250, 0.1) 40px
-            );
-            animation: aiPattern 15s linear infinite;
-        }
-        
-        @keyframes aiPattern {
-            0% { transform: translateX(-100px) translateY(-100px); }
-            100% { transform: translateX(100px) translateY(100px); }
-        }
-        
-        .ai-header {
-            position: relative;
-            z-index: 1;
-            margin-bottom: 40px;
-        }
-        
-        .ai-icon {
-            font-size: 5em;
-            margin-bottom: 20px;
-            animation: aiPulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes aiPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        
-        .ai-title {
-            font-size: 2.5em;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        
-        .ai-subtitle {
-            font-size: 1.3em;
-            opacity: 0.9;
-            font-weight: bold;
-        }
-        
-        .ai-progress {
-            position: relative;
-            z-index: 1;
-            margin: 40px 0;
-        }
-        
-        .ai-status {
-            font-size: 1.2em;
-            margin-bottom: 20px;
-            min-height: 35px;
-            font-weight: bold;
-        }
-        
-        .ai-progress-bar {
-            background: rgba(0,0,0,0.3);
-            border-radius: 25px;
-            height: 20px;
-            overflow: hidden;
-            margin-bottom: 25px;
-            border: 2px solid rgba(96, 165, 250, 0.5);
-        }
-        
-        .ai-progress-fill {
-            background: linear-gradient(90deg, #60a5fa, #3b82f6, #1d4ed8);
-            height: 100%;
-            border-radius: 25px;
-            transition: width 0.5s ease;
-            box-shadow: 0 0 20px rgba(96, 165, 250, 0.7);
-        }
-        
         .no-results {
             text-align: center;
             color: #999;
@@ -728,19 +611,19 @@
         
         <div class="stats-bar">
             <div class="stat-item">
-                <div class="stat-number" id="totalVehicles">156</div>
+                <div class="stat-number" id="totalVehicles">3</div>
                 <div class="stat-label">Manual Procedures</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" id="totalMakes">32</div>
+                <div class="stat-number" id="totalMakes">3</div>
                 <div class="stat-label">Makes Covered</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" id="totalProcedures">89</div>
+                <div class="stat-number" id="totalProcedures">3</div>
                 <div class="stat-label">No-Scanner Methods</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" id="recentlyAdded">12</div>
+                <div class="stat-number" id="recentlyAdded">1</div>
                 <div class="stat-label">Recently Added</div>
             </div>
             <div class="stat-item">
@@ -800,31 +683,6 @@
         </div>
     </div>
     
-    <!-- AI Update Modal -->
-    <div class="ai-update-modal" id="aiUpdateModal">
-        <div class="ai-update-content">
-            <div class="ai-header">
-                <div class="ai-icon">🤖</div>
-                <div class="ai-title">AI MANUAL PROCEDURE SEARCH</div>
-                <div class="ai-subtitle">Searching for new manual TPMS relearn procedures</div>
-            </div>
-            
-            <div class="ai-progress">
-                <div class="ai-status" id="aiStatus">Initializing manual procedure search...</div>
-                <div class="ai-progress-bar">
-                    <div class="ai-progress-fill" id="aiProgressFill" style="width: 0%;"></div>
-                </div>
-            </div>
-            
-            <div class="ai-results" id="aiResults" style="display: none;"></div>
-            
-            <div class="ai-actions">
-                <button class="btn btn-primary" onclick="closeAiUpdate()" id="aiCloseBtn" style="display: none;">Close</button>
-                <button class="btn btn-danger" onclick="cancelAiUpdate()" id="aiCancelBtn">Cancel</button>
-            </div>
-        </div>
-    </div>
-    
     <!-- Relearn Modal -->
     <div class="relearn-modal" id="relearnModal">
         <div class="modal-content">
@@ -841,6 +699,73 @@
         let vehicleDatabase = [
             {
                 id: 1,
+                make: "Chevrolet",
+                model: "Silverado 1500",
+                yearStart: 2019,
+                yearEnd: 2023,
+                procedureType: "button",
+                resetLocation: "Driver information center",
+                steps: [
+                    {
+                        title: "Check Tire Pressures",
+                        description: "Inflate all tires to the exact pressure shown on the tire information label (usually on driver door jamb). Make sure spare tire is also at correct pressure if equipped with TPMS sensor.",
+                        warning: "Tire pressures must be EXACT - even 1-2 PSI difference will prevent successful relearn."
+                    },
+                    {
+                        title: "Turn Ignition On",
+                        description: "Turn ignition to ON/RUN position (engine off). Do not start the engine during this procedure.",
+                        note: "All dashboard lights should illuminate. TPMS light may be on."
+                    },
+                    {
+                        title: "Access Vehicle Settings",
+                        description: "Using the steering wheel controls, navigate to: SETTINGS → VEHICLE → TIRE PRESSURE MONITOR SYSTEM",
+                        note: "Use the up/down arrow buttons and OK/Enter button on steering wheel."
+                    },
+                    {
+                        title: "Start Relearn Process",
+                        description: "Select 'TIRE PRESSURE SENSOR MATCHING' and press OK. The system will display 'TIRE LEARNING ACTIVE'.",
+                        warning: "Do not exit this menu until the entire procedure is complete."
+                    },
+                    {
+                        title: "Driver Front Tire",
+                        description: "Starting with the driver front tire, decrease tire pressure by about 8-10 PSI until the horn sounds. The horn will honk once to confirm sensor activation.",
+                        note: "You may need to hold the tire valve open for 5-10 seconds to get enough pressure drop."
+                    },
+                    {
+                        title: "Passenger Front Tire", 
+                        description: "Move to passenger front tire. Decrease pressure until horn sounds once. This confirms the sensor is learned in the front right position.",
+                        warning: "Wait for horn confirmation before moving to next tire."
+                    },
+                    {
+                        title: "Passenger Rear Tire",
+                        description: "Move to passenger rear tire. Decrease pressure until horn sounds once. This learns the sensor in the rear right position.",
+                        note: "The horn sound indicates successful sensor communication."
+                    },
+                    {
+                        title: "Driver Rear Tire",
+                        description: "Complete the sequence with driver rear tire. Decrease pressure until horn sounds once. This learns the final sensor position.",
+                        warning: "Make sure to get horn confirmation on this final tire."
+                    },
+                    {
+                        title: "Complete Relearn",
+                        description: "After the final horn sound, the TPMS light should turn off and the display will show 'TIRE LEARNING COMPLETE'. Turn ignition off.",
+                        note: "If the light stays on, repeat the entire procedure."
+                    },
+                    {
+                        title: "Re-inflate Tires",
+                        description: "Re-inflate all tires to the correct pressure as shown on the tire placard. Check that all pressures are exactly correct.",
+                        warning: "Double-check all tire pressures with an accurate gauge after relearn."
+                    },
+                    {
+                        title: "Test Drive",
+                        description: "Start the engine and drive for 5-10 minutes above 25 mph. The TPMS system should now display individual tire pressures if equipped.",
+                        note: "The system may take a few minutes of driving to display pressures."
+                    }
+                ],
+                additionalNotes: "This procedure works for most 2019-2023 Silverado 1500 trucks. Some trim levels may have slightly different menu navigation. The horn confirmation is critical - if you don't hear it, the sensor wasn't activated properly."
+            },
+            {
+                id: 2,
                 make: "Ford",
                 model: "F-150",
                 yearStart: 2015,
@@ -856,3 +781,33 @@
                     {
                         title: "Ignition Sequence",
                         description: "Turn the ignition to the ON position (engine off). Press and release the brake pedal once.",
+                        note: "Dashboard lights should illuminate including TPMS warning light."
+                    },
+                    {
+                        title: "Activate Relearn Mode",
+                        description: "Turn ignition OFF then ON 3 times, ending in the ON position. Press and release brake pedal again. Turn ignition OFF.",
+                        warning: "Complete this sequence within 10 seconds or it will not work."
+                    },
+                    {
+                        title: "Confirm Relearn Active",
+                        description: "Horn will sound twice indicating the truck is in relearn mode. If no horn sound, repeat the ignition sequence.",
+                        note: "Two horn beeps confirms the system is ready for sensor learning."
+                    },
+                    {
+                        title: "Learn Driver Front Sensor",
+                        description: "Starting with driver front tire, decrease pressure until horn sounds once. Re-inflate to correct pressure immediately.",
+                        warning: "Must get horn confirmation before moving to next tire."
+                    },
+                    {
+                        title: "Learn Passenger Front Sensor",
+                        description: "Move to passenger front tire. Decrease pressure until horn sounds once. Re-inflate to correct pressure.",
+                        note: "Horn sound confirms sensor is learned in this position."
+                    },
+                    {
+                        title: "Learn Passenger Rear Sensor",
+                        description: "Move to passenger rear tire. Decrease pressure until horn sounds once. Re-inflate to correct pressure.",
+                        warning: "Continue sequence without delays between tires."
+                    },
+                    {
+                        title: "Learn Driver Rear Sensor",
+                        description: "Complete with driver rear tire.
