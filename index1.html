@@ -1221,8 +1221,241 @@
         }
         
         function showAddForm() {
-            console.log('Showing add form');
-            alert('🔧 ADD NEW MANUAL PROCEDURE\n\n✅ Feature ready!\n\nThis will add a new vehicle with manual TPMS relearn procedure to your database.\n\n• No scanner required\n• Manual procedures only\n• Professional step-by-step instructions\n\nClick OK to continue with the form...');
+            console.log('Showing add vehicle form');
+            
+            const grid = document.getElementById('vehicleGrid');
+            
+            // Create the add form HTML
+            const addFormHTML = `
+                <div class="vehicle-card" id="addVehicleForm" style="grid-column: 1 / -1; border: 3px solid #32CD32; background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #2a2a2a 100%);">
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <h2 style="color: #32CD32; font-size: 2em; text-transform: uppercase; font-weight: 900; text-shadow: 2px 2px 4px #000;">
+                            ➕ Add New Manual Procedure
+                        </h2>
+                        <p style="color: #f0f0f0; font-weight: bold;">Create a new manual TPMS relearn procedure (No scanner required)</p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 25px;">
+                        <div>
+                            <label style="color: #ff8c00; font-weight: 900; display: block; margin-bottom: 8px; text-transform: uppercase;">Vehicle Make *</label>
+                            <input type="text" id="newMake" placeholder="e.g., Chevrolet, Ford, Toyota" style="width: 100%; padding: 12px; background: #1a1a1a; color: #f0f0f0; border: 2px solid #555; border-radius: 8px; font-weight: bold;">
+                        </div>
+                        <div>
+                            <label style="color: #ff8c00; font-weight: 900; display: block; margin-bottom: 8px; text-transform: uppercase;">Vehicle Model *</label>
+                            <input type="text" id="newModel" placeholder="e.g., Silverado 1500, F-150" style="width: 100%; padding: 12px; background: #1a1a1a; color: #f0f0f0; border: 2px solid #555; border-radius: 8px; font-weight: bold;">
+                        </div>
+                        <div>
+                            <label style="color: #ff8c00; font-weight: 900; display: block; margin-bottom: 8px; text-transform: uppercase;">Year Start *</label>
+                            <input type="number" id="newYearStart" placeholder="2020" min="1990" max="2030" style="width: 100%; padding: 12px; background: #1a1a1a; color: #f0f0f0; border: 2px solid #555; border-radius: 8px; font-weight: bold;">
+                        </div>
+                        <div>
+                            <label style="color: #ff8c00; font-weight: 900; display: block; margin-bottom: 8px; text-transform: uppercase;">Year End *</label>
+                            <input type="number" id="newYearEnd" placeholder="2023" min="1990" max="2030" style="width: 100%; padding: 12px; background: #1a1a1a; color: #f0f0f0; border: 2px solid #555; border-radius: 8px; font-weight: bold;">
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 25px;">
+                        <div>
+                            <label style="color: #ff8c00; font-weight: 900; display: block; margin-bottom: 8px; text-transform: uppercase;">Procedure Type *</label>
+                            <select id="newProcedureType" style="width: 100%; padding: 12px; background: #1a1a1a; color: #f0f0f0; border: 2px solid #555; border-radius: 8px; font-weight: bold;">
+                                <option value="">Select Method</option>
+                                <option value="button">Button Reset</option>
+                                <option value="pressure">Pressure Method</option>
+                                <option value="drive">Drive Cycle</option>
+                                <option value="ignition">Ignition Sequence</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="color: #ff8c00; font-weight: 900; display: block; margin-bottom: 8px; text-transform: uppercase;">Reset Location</label>
+                            <input type="text" id="newResetLocation" placeholder="e.g., Driver info center, Reset button" style="width: 100%; padding: 12px; background: #1a1a1a; color: #f0f0f0; border: 2px solid #555; border-radius: 8px; font-weight: bold;">
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <label style="color: #ff8c00; font-weight: 900; display: block; margin-bottom: 8px; text-transform: uppercase;">Additional Notes</label>
+                        <textarea id="newAdditionalNotes" placeholder="Enter any special instructions, warnings, or tips for this vehicle..." style="width: 100%; height: 80px; padding: 12px; background: #1a1a1a; color: #f0f0f0; border: 2px solid #555; border-radius: 8px; font-weight: bold; resize: vertical;"></textarea>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <button class="btn btn-success" id="saveNewVehicle" style="margin-right: 15px; font-size: 1.2em; padding: 15px 30px;">
+                            💾 Save Manual Procedure
+                        </button>
+                        <button class="btn btn-secondary" id="cancelAddForm" style="font-size: 1.2em; padding: 15px 30px;">
+                            ❌ Cancel
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add the form to the top of the grid
+            grid.innerHTML = addFormHTML + grid.innerHTML;
+            
+            // Add event listeners to the form buttons
+            const saveBtn = document.getElementById('saveNewVehicle');
+            const cancelBtn = document.getElementById('cancelAddForm');
+            
+            if (saveBtn) {
+                saveBtn.addEventListener('click', saveNewVehicle);
+            }
+            
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', cancelAddForm);
+            }
+            
+            // Focus on the first input
+            const firstInput = document.getElementById('newMake');
+            if (firstInput) {
+                firstInput.focus();
+            }
+        }
+        
+        function saveNewVehicle() {
+            console.log('Saving new vehicle');
+            
+            // Get form values
+            const make = document.getElementById('newMake').value.trim();
+            const model = document.getElementById('newModel').value.trim();
+            const yearStart = parseInt(document.getElementById('newYearStart').value);
+            const yearEnd = parseInt(document.getElementById('newYearEnd').value);
+            const procedureType = document.getElementById('newProcedureType').value;
+            const resetLocation = document.getElementById('newResetLocation').value.trim();
+            const additionalNotes = document.getElementById('newAdditionalNotes').value.trim();
+            
+            // Validation
+            if (!make || !model || !yearStart || !yearEnd || !procedureType) {
+                alert('❌ MISSING INFORMATION\n\nPlease fill in all required fields marked with *\n\n• Vehicle Make\n• Vehicle Model\n• Year Start\n• Year End\n• Procedure Type');
+                return;
+            }
+            
+            if (yearStart > yearEnd) {
+                alert('❌ INVALID YEAR RANGE\n\nYear Start cannot be greater than Year End.\n\nPlease check your year entries.');
+                return;
+            }
+            
+            if (yearStart < 1990 || yearEnd > 2030) {
+                alert('❌ INVALID YEAR RANGE\n\nPlease enter years between 1990 and 2030.');
+                return;
+            }
+            
+            // Create default steps based on procedure type
+            let defaultSteps = [];
+            
+            switch(procedureType) {
+                case 'button':
+                    defaultSteps = [
+                        {
+                            title: "Check Tire Pressures",
+                            description: "Ensure all tires are inflated to the exact pressure shown on the vehicle's tire placard.",
+                            warning: "Pressures must be exact for successful relearn."
+                        },
+                        {
+                            title: "Locate Reset Button",
+                            description: "Find the TPMS reset button (usually near steering wheel or in glove box).",
+                            note: "Button may be labeled 'SET' or have a tire symbol."
+                        },
+                        {
+                            title: "Perform Reset",
+                            description: "Turn ignition ON (engine off), press and hold reset button until TPMS light blinks, then release.",
+                            warning: "Follow exact timing specified in owner's manual."
+                        },
+                        {
+                            title: "Drive Vehicle",
+                            description: "Drive for 10-20 minutes at speeds above 25 mph to complete the relearn process.",
+                            note: "TPMS light should turn off after successful relearn."
+                        }
+                    ];
+                    break;
+                case 'pressure':
+                    defaultSteps = [
+                        {
+                            title: "Enter Relearn Mode",
+                            description: "Follow specific ignition sequence to activate TPMS relearn mode.",
+                            warning: "Timing is critical - follow manufacturer's exact sequence."
+                        },
+                        {
+                            title: "Deflate Tires in Sequence",
+                            description: "Starting with driver front, deflate each tire until horn sounds, then move to next tire.",
+                            note: "Horn confirmation indicates sensor was successfully triggered."
+                        },
+                        {
+                            title: "Re-inflate All Tires",
+                            description: "After completing sequence, re-inflate all tires to correct pressure.",
+                            warning: "Verify all pressures are exact before finishing."
+                        }
+                    ];
+                    break;
+                case 'drive':
+                    defaultSteps = [
+                        {
+                            title: "Set Correct Pressures",
+                            description: "Inflate all tires to recommended pressure specifications.",
+                            warning: "System will not relearn with incorrect pressures."
+                        },
+                        {
+                            title: "Drive Cycle",
+                            description: "Drive vehicle for specified time and speed requirements to complete automatic relearn.",
+                            note: "Relearn occurs automatically during normal driving conditions."
+                        }
+                    ];
+                    break;
+                case 'ignition':
+                    defaultSteps = [
+                        {
+                            title: "Ignition Sequence",
+                            description: "Perform specific ignition ON/OFF sequence to activate relearn mode.",
+                            warning: "Must complete sequence within specified time limit."
+                        },
+                        {
+                            title: "Wait for Confirmation",
+                            description: "Look for dash light or horn confirmation that relearn mode is active.",
+                            note: "Confirmation signals vary by manufacturer."
+                        },
+                        {
+                            title: "Complete Process",
+                            description: "Follow any additional steps required to complete the relearn procedure.",
+                            warning: "Do not interrupt process once started."
+                        }
+                    ];
+                    break;
+                default:
+                    defaultSteps = [
+                        {
+                            title: "Manual Procedure",
+                            description: "Follow manufacturer-specific manual TPMS relearn procedure for this vehicle.",
+                            note: "Detailed steps need to be added based on service manual."
+                        }
+                    ];
+            }
+            
+            // Create new vehicle object
+            const newVehicle = {
+                id: Math.max(...vehicleDatabase.map(v => v.id)) + 1,
+                make: make,
+                model: model,
+                yearStart: yearStart,
+                yearEnd: yearEnd,
+                procedureType: procedureType,
+                resetLocation: resetLocation || `${procedureType.charAt(0).toUpperCase() + procedureType.slice(1)} method`,
+                steps: defaultSteps,
+                additionalNotes: additionalNotes || `Manual ${procedureType} procedure for ${make} ${model}. Detailed steps may need verification with service manual.`
+            };
+            
+            // Add to database
+            vehicleDatabase.push(newVehicle);
+            
+            // Refresh everything
+            populateFilters();
+            displayVehicles(vehicleDatabase);
+            updateStats();
+            
+            console.log('Vehicle added successfully:', newVehicle);
+            alert(`✅ VEHICLE ADDED SUCCESSFULLY!\n\n${make} ${model} (${yearStart}-${yearEnd})\n\n• Procedure Type: ${procedureType.charAt(0).toUpperCase() + procedureType.slice(1)}\n• Default steps created\n• Ready for use\n\nYou can now view the procedure and edit the steps if needed.`);
+        }
+        
+        function cancelAddForm() {
+            console.log('Cancelling add form');
+            // Remove the form and refresh display
+            displayVehicles(vehicleDatabase);
         }
         
         function editVehicle(vehicleId) {
