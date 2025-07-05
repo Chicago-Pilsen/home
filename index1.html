@@ -162,7 +162,7 @@
         }
 
         .bubble-btn {
-            background: #8b4513;
+            background: #3498db;
         }
 
         .camera-btn {
@@ -178,7 +178,7 @@
         }
 
         .bubble-btn:hover {
-            background: #a0522d;
+            background: #2980b9;
         }
 
         .camera-btn:hover {
@@ -191,8 +191,8 @@
         }
 
         .bubble-btn.active {
-            background: #ff6347;
-            box-shadow: 0 0 10px rgba(255, 99, 71, 0.5);
+            background: #5dade2;
+            box-shadow: 0 0 10px rgba(93, 173, 226, 0.5);
         }
 
         .camera-btn.active {
@@ -206,17 +206,46 @@
         }
 
         .photo-preview img {
-            max-width: 120px;
-            max-height: 80px;
+            max-width: 80px;
+            max-height: 60px;
             border-radius: 5px;
             border: 2px solid #ff6b35;
             object-fit: cover;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .photo-preview img:hover {
+            transform: scale(1.1);
+            border-color: #ff8c42;
         }
 
         .photo-preview .photo-info {
             font-size: 0.7em;
             color: #aaa;
             margin-top: 5px;
+        }
+
+        .photo-fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            cursor: pointer;
+        }
+
+        .photo-fullscreen img {
+            max-width: 95vw;
+            max-height: 95vh;
+            object-fit: contain;
+            border: 3px solid #ff6b35;
+            border-radius: 10px;
         }
 
         .hidden-file-input {
@@ -666,9 +695,9 @@
             const file = input.files[0];
             if (!file) return;
             
-            // Check file size (limit to 5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                alert('Photo size too large. Please choose a photo under 5MB.');
+            // Check file size (limit to 3MB per tire)
+            if (file.size > 3 * 1024 * 1024) {
+                alert('Photo size too large. Please choose a photo under 3MB.');
                 return;
             }
             
@@ -676,12 +705,12 @@
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
-                    // Resize image to optimal size (max 800x600)
+                    // Resize image to optimal size (max 600x400 for smaller files)
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
                     
-                    const maxWidth = 800;
-                    const maxHeight = 600;
+                    const maxWidth = 600;
+                    const maxHeight = 400;
                     let { width, height } = img;
                     
                     // Calculate new dimensions
@@ -700,9 +729,9 @@
                     canvas.width = width;
                     canvas.height = height;
                     
-                    // Draw and compress
+                    // Draw and compress more for smaller file size
                     ctx.drawImage(img, 0, 0, width, height);
-                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
                     
                     // Display preview
                     displayPhotoPreview(tireId, compressedDataUrl, file.name);
@@ -720,9 +749,30 @@
         function displayPhotoPreview(tireId, dataUrl, fileName) {
             const previewDiv = document.getElementById(tireId + '_photo_preview');
             previewDiv.innerHTML = `
-                <img src="${dataUrl}" alt="Tire damage photo">
+                <img src="${dataUrl}" alt="Tire damage photo" onclick="toggleFullscreen('${tireId}', '${dataUrl}')">
                 <div class="photo-info">Photo: ${fileName}</div>
             `;
+        }
+
+        function toggleFullscreen(tireId, dataUrl) {
+            const existingFullscreen = document.querySelector('.photo-fullscreen');
+            
+            if (existingFullscreen) {
+                // Remove fullscreen if it exists
+                existingFullscreen.remove();
+            } else {
+                // Create fullscreen overlay
+                const fullscreenDiv = document.createElement('div');
+                fullscreenDiv.className = 'photo-fullscreen';
+                fullscreenDiv.onclick = () => fullscreenDiv.remove();
+                
+                const fullscreenImg = document.createElement('img');
+                fullscreenImg.src = dataUrl;
+                fullscreenImg.alt = `${tireId} tire damage photo`;
+                
+                fullscreenDiv.appendChild(fullscreenImg);
+                document.body.appendChild(fullscreenDiv);
+            }
         }
 
         function checkAlignment(measurements, tireName) {
