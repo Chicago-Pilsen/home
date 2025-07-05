@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced TPMS Diagnostics - Expert Level</title>
+    <title>Manual TPMS Relearn - No Scanner Required</title>
     <style>
         * {
             margin: 0;
@@ -12,11 +12,28 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0c1426 0%, #1a2332 25%, #2d3748 50%, #1a2332 75%, #0c1426 100%);
-            color: #e2e8f0;
+            font-family: 'Arial Black', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 25%, #1a1a1a 50%, #0d0d0d 75%, #1a1a1a 100%);
+            background-attachment: fixed;
+            color: #e0e0e0;
             line-height: 1.6;
             min-height: 100vh;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(255, 69, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 140, 0, 0.1) 0%, transparent 50%),
+                linear-gradient(45deg, transparent 40%, rgba(255, 69, 0, 0.05) 50%, transparent 60%);
+            pointer-events: none;
+            z-index: -1;
         }
         
         .container {
@@ -26,13 +43,15 @@
         }
         
         .header {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            border: 2px solid #475569;
+            background: linear-gradient(135deg, #1c1c1c 0%, #2a2a2a 50%, #1c1c1c 100%);
+            border: 3px solid #ff4500;
             border-radius: 15px;
-            padding: 30px;
+            padding: 40px;
             margin-bottom: 30px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            box-shadow: 
+                0 0 30px rgba(255, 69, 0, 0.3),
+                inset 0 0 30px rgba(255, 69, 0, 0.1);
             position: relative;
             overflow: hidden;
         }
@@ -40,366 +59,662 @@
         .header::before {
             content: '';
             position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 69, 0, 0.05) 2px,
+                rgba(255, 69, 0, 0.05) 4px
+            );
+            animation: metalPattern 20s linear infinite;
+        }
+        
+        @keyframes metalPattern {
+            0% { transform: translateX(-100px) translateY(-100px); }
+            100% { transform: translateX(100px) translateY(100px); }
+        }
+        
+        .header h1 {
+            color: #ff4500;
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 
+                2px 2px 0px #000,
+                4px 4px 10px rgba(255, 69, 0, 0.5);
+            position: relative;
+            z-index: 1;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+        
+        .header p {
+            color: #f0f0f0;
+            font-size: 1.4em;
+            position: relative;
+            z-index: 1;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px #000;
+        }
+        
+        .stats-bar {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1c1c1c 50%, #2a2a2a 100%);
+            border: 2px solid #ff8c00;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 
+                0 10px 30px rgba(0,0,0,0.5),
+                inset 0 0 20px rgba(255, 140, 0, 0.1);
+        }
+        
+        .stat-item {
+            text-align: center;
+            position: relative;
+        }
+        
+        .stat-number {
+            color: #ff4500;
+            font-size: 2.5em;
+            font-weight: 900;
+            text-shadow: 2px 2px 4px #000;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #f0f0f0;
+            font-size: 1em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .search-section {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1c1c1c 50%, #2a2a2a 100%);
+            border: 2px solid #ff8c00;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 
+                0 15px 40px rgba(0,0,0,0.4),
+                inset 0 0 20px rgba(255, 140, 0, 0.1);
+        }
+        
+        .search-section h3 {
+            color: #ff4500;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px #000;
+        }
+        
+        .search-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-group label {
+            font-weight: 900;
+            color: #ff8c00;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            padding: 12px;
+            border: 2px solid #555;
+            border-radius: 8px;
+            font-size: 1em;
+            background: #1a1a1a;
+            color: #f0f0f0;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #ff4500;
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.4);
+            background: #2a2a2a;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 900;
+            transition: all 0.3s ease;
+            margin: 8px;
+            min-width: 140px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
-            animation: shine 3s infinite;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
         }
         
-        @keyframes shine {
-            0% { left: -100%; }
-            100% { left: 100%; }
+        .btn:hover::before {
+            left: 100%;
         }
         
-        .header h1 {
-            color: #3b82f6;
-            font-size: 2.8em;
-            margin-bottom: 10px;
-            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        .btn-primary {
+            background: linear-gradient(135deg, #ff4500, #ff6600);
+            color: white;
+            border: 2px solid #ff8c00;
+            box-shadow: 0 8px 25px rgba(255, 69, 0, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 69, 0, 0.6);
+            background: linear-gradient(135deg, #ff6600, #ff4500);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #228B22, #32CD32);
+            color: white;
+            border: 2px solid #90EE90;
+            box-shadow: 0 8px 25px rgba(34, 139, 34, 0.4);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #ff8c00, #ffa500);
+            color: white;
+            border: 2px solid #ffb347;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc143c, #ff1744);
+            color: white;
+            border: 2px solid #ff6b6b;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #555, #777);
+            color: white;
+            border: 2px solid #999;
+        }
+        
+        .ai-update-btn {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+            color: white;
+            border: 3px solid #60a5fa;
+            box-shadow: 
+                0 0 20px rgba(96, 165, 250, 0.5),
+                0 8px 25px rgba(30, 60, 114, 0.4);
+            font-size: 1.2em;
+            padding: 20px 25px;
             position: relative;
-            z-index: 1;
+            overflow: hidden;
         }
         
-        .header p {
-            color: #94a3b8;
-            font-size: 1.3em;
-            position: relative;
-            z-index: 1;
+        .ai-update-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(96, 165, 250, 0.2) 50%, transparent 70%);
+            animation: aiShine 3s ease-in-out infinite;
         }
         
-        .diagnostic-panel {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            border: 2px solid #475569;
-            border-radius: 15px;
-            padding: 30px;
+        @keyframes aiShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .ai-update-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 0 30px rgba(96, 165, 250, 0.7),
+                0 12px 35px rgba(30, 60, 114, 0.6);
+        }
+        
+        .vehicle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
             margin-bottom: 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
         
-        .panel-header {
+        .vehicle-card {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1c1c1c 50%, #2a2a2a 100%);
+            border: 2px solid #555;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        
+        .vehicle-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #ff4500, #ff8c00, #ff4500);
+        }
+        
+        .vehicle-card:hover {
+            transform: translateY(-8px);
+            border-color: #ff4500;
+            box-shadow: 
+                0 20px 50px rgba(0,0,0,0.6),
+                0 0 30px rgba(255, 69, 0, 0.3);
+        }
+        
+        .vehicle-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #475569;
+            border-bottom: 2px solid #444;
         }
         
-        .panel-icon {
-            font-size: 2em;
-            margin-right: 15px;
-            padding: 10px;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
-        }
-        
-        .panel-title {
-            color: #3b82f6;
+        .vehicle-title {
+            color: #ff4500;
             font-size: 1.5em;
+            font-weight: 900;
+            text-shadow: 1px 1px 2px #000;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .vehicle-year {
+            background: linear-gradient(135deg, #ff4500, #ff8c00);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: 900;
+            text-shadow: 1px 1px 2px #000;
+            border: 2px solid #ffb347;
+        }
+        
+        .vehicle-specs {
+            margin-bottom: 20px;
+        }
+        
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 1em;
+            padding: 5px 0;
+        }
+        
+        .spec-label {
+            color: #ff8c00;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+        }
+        
+        .spec-value {
+            color: #f0f0f0;
             font-weight: bold;
         }
         
-        .diagnostic-step {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid #475569;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-        
-        .diagnostic-step:hover {
-            border-color: #3b82f6;
-            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.2);
-        }
-        
-        .step-header {
-            display: flex;
-            justify-content: between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .step-number {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        .manual-badge {
+            background: linear-gradient(135deg, #228B22, #32CD32);
             color: white;
-            width: 35px;
-            height: 35px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid #90EE90;
+        }
+        
+        .vehicle-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-sm {
+            padding: 10px 18px;
+            font-size: 0.9em;
+            min-width: 100px;
+        }
+        
+        .relearn-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .relearn-modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1c1c1c 50%, #2a2a2a 100%);
+            border: 3px solid #ff4500;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 900px;
+            max-height: 90vh;
+            width: 90%;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 50px rgba(255, 69, 0, 0.5);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #ff4500;
+        }
+        
+        .modal-title {
+            color: #ff4500;
+            font-size: 1.8em;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px #000;
+        }
+        
+        .close-btn {
+            background: linear-gradient(135deg, #dc143c, #ff1744);
+            border: 2px solid #ff6b6b;
+            font-size: 1.8em;
+            color: white;
+            cursor: pointer;
+            padding: 8px 15px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            margin-right: 15px;
+            font-weight: 900;
+            transition: all 0.3s ease;
         }
         
-        .step-title {
-            color: #e2e8f0;
+        .close-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(220, 20, 60, 0.5);
+        }
+        
+        .relearn-steps {
+            margin-bottom: 25px;
+        }
+        
+        .step-item {
+            background: linear-gradient(135deg, #333 0%, #1a1a1a 50%, #333 100%);
+            border-left: 5px solid #ff4500;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 0 10px 10px 0;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #ff4500, #ff8c00);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            position: absolute;
+            left: -22px;
+            top: 20px;
+            border: 3px solid #ffb347;
             font-size: 1.2em;
-            font-weight: bold;
-            flex: 1;
+            text-shadow: 1px 1px 2px #000;
         }
         
         .step-content {
-            margin-left: 50px;
-            color: #cbd5e1;
+            margin-left: 30px;
         }
         
-        .measurement-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
+        .step-title {
+            font-weight: 900;
+            color: #ff8c00;
+            margin-bottom: 8px;
+            font-size: 1.3em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
-        .measurement-item {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid #475569;
-            border-radius: 8px;
-            padding: 15px;
-        }
-        
-        .measurement-label {
-            color: #94a3b8;
-            font-size: 0.9em;
-            margin-bottom: 5px;
-        }
-        
-        .measurement-value {
-            color: #3b82f6;
+        .step-description {
+            color: #f0f0f0;
+            line-height: 1.6;
             font-size: 1.1em;
             font-weight: bold;
         }
         
-        .diagnostic-tree {
-            margin: 20px 0;
+        .step-warning {
+            background: linear-gradient(135deg, #ff8c00, #ffa500);
+            border: 2px solid #ffb347;
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1em;
+            color: #000;
+            font-weight: 900;
         }
         
-        .tree-node {
-            background: rgba(15, 23, 42, 0.6);
-            border-left: 4px solid #3b82f6;
-            padding: 15px;
-            margin: 10px 0;
-            margin-left: 20px;
-            border-radius: 0 8px 8px 0;
-        }
-        
-        .tree-condition {
-            color: #fbbf24;
+        .step-note {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            border: 2px solid #60a5fa;
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1em;
+            color: #f0f0f0;
             font-weight: bold;
-            margin-bottom: 10px;
         }
         
-        .tree-action {
-            color: #10b981;
-            margin-left: 20px;
+        .ai-update-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
         }
         
-        .tree-warning {
-            color: #ef4444;
-            margin-left: 20px;
+        .ai-update-modal.active {
+            display: flex;
+        }
+        
+        .ai-update-content {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+            border: 3px solid #60a5fa;
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 800px;
+            width: 90%;
+            color: white;
+            text-align: center;
+            box-shadow: 
+                0 0 50px rgba(96, 165, 250, 0.5),
+                0 20px 60px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ai-update-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 20px,
+                rgba(96, 165, 250, 0.1) 20px,
+                rgba(96, 165, 250, 0.1) 40px
+            );
+            animation: aiPattern 15s linear infinite;
+        }
+        
+        @keyframes aiPattern {
+            0% { transform: translateX(-100px) translateY(-100px); }
+            100% { transform: translateX(100px) translateY(100px); }
+        }
+        
+        .ai-header {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 40px;
+        }
+        
+        .ai-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: aiPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes aiPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .ai-title {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .ai-subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+            font-weight: bold;
+        }
+        
+        .ai-progress {
+            position: relative;
+            z-index: 1;
+            margin: 40px 0;
+        }
+        
+        .ai-status {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            min-height: 35px;
+            font-weight: bold;
+        }
+        
+        .ai-progress-bar {
+            background: rgba(0,0,0,0.3);
+            border-radius: 25px;
+            height: 20px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            border: 2px solid rgba(96, 165, 250, 0.5);
+        }
+        
+        .ai-progress-fill {
+            background: linear-gradient(90deg, #60a5fa, #3b82f6, #1d4ed8);
+            height: 100%;
+            border-radius: 25px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.7);
+        }
+        
+        .no-results {
+            text-align: center;
+            color: #999;
             font-style: italic;
-        }
-        
-        .scanner-section {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 2px solid #1d4ed8;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 20px;
-        }
-        
-        .scanner-header {
-            color: #60a5fa;
+            margin: 50px 0;
             font-size: 1.3em;
             font-weight: bold;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .scanner-icon {
-            margin-right: 10px;
-            font-size: 1.5em;
-        }
-        
-        .code-display {
-            background: #0f172a;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            margin: 10px 0;
-        }
-        
-        .dtc-code {
-            color: #fbbf24;
-            font-weight: bold;
-        }
-        
-        .pid-data {
-            color: #10b981;
-        }
-        
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            margin: 5px;
-            min-width: 120px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-        }
-        
-        .btn-warning {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-        
-        .btn-danger {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-        }
-        
-        .btn-success {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-        
-        .voltage-meter {
-            background: #0f172a;
-            border: 2px solid #374151;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 15px 0;
-        }
-        
-        .meter-display {
-            text-align: center;
-            font-size: 2em;
-            color: #3b82f6;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .meter-label {
-            text-align: center;
-            color: #94a3b8;
-            font-size: 0.9em;
-        }
-        
-        .frequency-analyzer {
-            background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
-            border: 2px solid #10b981;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 15px 0;
-        }
-        
-        .frequency-display {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 15px;
-        }
-        
-        .freq-reading {
-            text-align: center;
-        }
-        
-        .freq-value {
-            font-size: 1.5em;
-            color: #10b981;
-            font-weight: bold;
-        }
-        
-        .freq-label {
-            color: #6ee7b7;
-            font-size: 0.9em;
-        }
-        
-        .signal-strength {
-            background: #0f172a;
-            height: 20px;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-        
-        .signal-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
-            transition: width 0.3s ease;
-        }
-        
-        .advanced-tests {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-        
-        .test-card {
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid #475569;
-            border-radius: 10px;
-            padding: 20px;
-            transition: all 0.3s ease;
-        }
-        
-        .test-card:hover {
-            border-color: #3b82f6;
-            transform: translateY(-5px);
-        }
-        
-        .test-title {
-            color: #3b82f6;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
         
         @media (max-width: 768px) {
             .container {
-                padding: 10px;
+                padding: 15px;
             }
             
             .header h1 {
-                font-size: 2em;
+                font-size: 2.2em;
             }
             
-            .measurement-grid {
+            .search-filters {
                 grid-template-columns: 1fr;
             }
             
-            .advanced-tests {
+            .vehicle-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 25px;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                margin: 5px 0;
             }
         }
     </style>
@@ -407,705 +722,137 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔬 Advanced TPMS Diagnostics</h1>
-            <p>Expert-Level Troubleshooting Without Scanner → Scanner Confirmation</p>
+            <h1>🔧 MANUAL TPMS RELEARN</h1>
+            <p>NO SCANNER REQUIRED - MANUAL PROCEDURES ONLY</p>
         </div>
         
-        <div class="diagnostic-panel">
-            <div class="panel-header">
-                <div class="panel-icon">⚡</div>
-                <div class="panel-title">Phase 1: Advanced No-Scan Diagnostics</div>
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number" id="totalVehicles">156</div>
+                <div class="stat-label">Manual Procedures</div>
             </div>
-            
-            <div class="diagnostic-step">
-                <div class="step-header">
-                    <div class="step-number">1</div>
-                    <div class="step-title">Electrical System Analysis</div>
-                </div>
-                <div class="step-content">
-                    <p><strong>Battery Voltage Under Load Testing:</strong></p>
-                    <div class="voltage-meter" onclick="simulateVoltageTest()">
-                        <div class="meter-display" id="voltageReading">12.6V</div>
-                        <div class="meter-label">Click to Test Engine Running</div>
-                    </div>
-                    
-                    <div class="diagnostic-tree">
-                        <div class="tree-node">
-                            <div class="tree-condition">IF: Voltage < 12.4V (Engine Off) OR < 13.8V (Engine Running)</div>
-                            <div class="tree-action">→ Battery/charging system affecting TPMS receiver power</div>
-                            <div class="tree-warning">⚠️ Low voltage causes intermittent TPMS communication failures</div>
-                        </div>
-                        <div class="tree-node">
-                            <div class="tree-condition">IF: Voltage drops >0.3V when HVAC/lights turned on</div>
-                            <div class="tree-action">→ Weak battery under load - replace before TPMS diagnosis</div>
-                        </div>
-                    </div>
-                </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalMakes">32</div>
+                <div class="stat-label">Makes Covered</div>
             </div>
-            
-            <div class="diagnostic-step">
-                <div class="step-header">
-                    <div class="step-number">2</div>
-                    <div class="step-title">RF Environment Analysis</div>
-                </div>
-                <div class="step-content">
-                    <p><strong>Radio Frequency Interference Detection:</strong></p>
-                    <div class="frequency-analyzer">
-                        <div class="frequency-display">
-                            <div class="freq-reading">
-                                <div class="freq-value" id="freq315">315.00</div>
-                                <div class="freq-label">315 MHz</div>
-                            </div>
-                            <div class="freq-reading">
-                                <div class="freq-value" id="freq433">433.92</div>
-                                <div class="freq-label">433 MHz</div>
-                            </div>
-                        </div>
-                        <div class="signal-strength">
-                            <div class="signal-bar" id="signalBar" style="width: 75%;"></div>
-                        </div>
-                        <button class="btn btn-primary" onclick="scanRFEnvironment()">Scan RF Environment</button>
-                    </div>
-                    
-                    <div class="measurement-grid">
-                        <div class="measurement-item">
-                            <div class="measurement-label">Cell Phone Interference</div>
-                            <div class="measurement-value" id="cellInterference">Moderate</div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">WiFi 2.4GHz Overlap</div>
-                            <div class="measurement-value" id="wifiOverlap">None Detected</div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">Garage Door Frequency</div>
-                            <div class="measurement-value" id="garageFreq">315.15 MHz</div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">Keyless Entry Conflict</div>
-                            <div class="measurement-value" id="keylessConflict">Low Risk</div>
-                        </div>
-                    </div>
-                </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalProcedures">89</div>
+                <div class="stat-label">No-Scanner Methods</div>
             </div>
-            
-            <div class="diagnostic-step">
-                <div class="step-header">
-                    <div class="step-number">3</div>
-                    <div class="step-title">Sensor Physical Inspection Matrix</div>
-                </div>
-                <div class="step-content">
-                    <div class="advanced-tests">
-                        <div class="test-card" onclick="performSensorTest('visual')">
-                            <div class="test-title">Visual Inspection Protocol</div>
-                            <p>• Valve stem corrosion analysis<br>
-                            • Sensor housing crack detection<br>
-                            • Antenna positioning verification<br>
-                            • Mounting hardware integrity</p>
-                            <button class="btn btn-primary">Start Visual Test</button>
-                        </div>
-                        
-                        <div class="test-card" onclick="performSensorTest('mechanical')">
-                            <div class="test-title">Mechanical Stress Testing</div>
-                            <p>• Sensor weight distribution<br>
-                            • Valve stem flexibility<br>
-                            • Mounting torque verification<br>
-                            • Vibration damage assessment</p>
-                            <button class="btn btn-warning">Start Mechanical Test</button>
-                        </div>
-                        
-                        <div class="test-card" onclick="performSensorTest('environmental')">
-                            <div class="test-title">Environmental Impact Analysis</div>
-                            <p>• Temperature coefficient testing<br>
-                            • Humidity exposure effects<br>
-                            • Salt corrosion evaluation<br>
-                            • UV degradation assessment</p>
-                            <button class="btn btn-success">Start Environmental Test</button>
-                        </div>
-                    </div>
-                    
-                    <div id="testResults" class="hidden"></div>
-                </div>
+            <div class="stat-item">
+                <div class="stat-number" id="recentlyAdded">12</div>
+                <div class="stat-label">Recently Added</div>
             </div>
-            
-            <div class="diagnostic-step">
-                <div class="step-header">
-                    <div class="step-number">4</div>
-                    <div class="step-title">Advanced Pressure Correlation Analysis</div>
-                </div>
-                <div class="step-content">
-                    <p><strong>Multi-Point Pressure Verification:</strong></p>
-                    <div class="measurement-grid">
-                        <div class="measurement-item">
-                            <div class="measurement-label">Cold Tire Pressure (°F)</div>
-                            <div class="measurement-value">
-                                <input type="number" id="coldTemp" value="68" style="width: 60px; background: #0f172a; border: 1px solid #475569; color: #3b82f6; padding: 5px; border-radius: 5px;">
-                            </div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">Hot Tire Pressure (°F)</div>
-                            <div class="measurement-value">
-                                <input type="number" id="hotTemp" value="95" style="width: 60px; background: #0f172a; border: 1px solid #475569; color: #3b82f6; padding: 5px; border-radius: 5px;">
-                            </div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">Expected Pressure Rise</div>
-                            <div class="measurement-value" id="expectedRise">2.7 PSI</div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">Actual TPMS Reading</div>
-                            <div class="measurement-value">
-                                <input type="number" id="tpmsReading" value="32" style="width: 60px; background: #0f172a; border: 1px solid #475569; color: #3b82f6; padding: 5px; border-radius: 5px;">
-                            </div>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="analyzePressureCorrelation()">Analyze Correlation</button>
-                    <div id="pressureAnalysis" class="diagnostic-tree" style="margin-top: 15px;"></div>
-                </div>
+            <div class="stat-item">
+                <button class="btn ai-update-btn" onclick="aiUpdateDatabase()" id="aiUpdateBtn">
+                    🤖 AI UPDATE
+                </button>
+                <div class="stat-label">Claude Sonnet 4</div>
             </div>
         </div>
         
-        <div class="scanner-section">
-            <div class="scanner-header">
-                <span class="scanner-icon">📡</span>
-                Phase 2: Scanner Confirmation & Advanced Diagnostics
+        <div class="search-section">
+            <h3>🔍 Find Manual Relearn Procedures</h3>
+            <div class="search-filters">
+                <div class="filter-group">
+                    <label>Search Vehicles</label>
+                    <input type="text" id="searchInput" placeholder="Enter make, model, or year...">
+                </div>
+                <div class="filter-group">
+                    <label>Make</label>
+                    <select id="makeFilter">
+                        <option value="">All Makes</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Model</label>
+                    <select id="modelFilter">
+                        <option value="">All Models</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Year Range</label>
+                    <select id="yearFilter">
+                        <option value="">All Years</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Procedure Type</label>
+                    <select id="procedureFilter">
+                        <option value="">All Methods</option>
+                        <option value="button">Button Reset</option>
+                        <option value="pressure">Pressure Method</option>
+                        <option value="drive">Drive Cycle</option>
+                        <option value="ignition">Ignition Sequence</option>
+                    </select>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="searchVehicles()">🔍 Search Procedures</button>
+                <button class="btn btn-success" onclick="showAddForm()">➕ Add New Vehicle</button>
+                <button class="btn btn-secondary" onclick="resetFilters()">🔄 Reset Filters</button>
+            </div>
+        </div>
+        
+        <div class="vehicle-grid" id="vehicleGrid"></div>
+        <div class="no-results" id="noResults" style="display: none;">
+            No manual relearn procedures found matching your search criteria.
+        </div>
+    </div>
+    
+    <!-- AI Update Modal -->
+    <div class="ai-update-modal" id="aiUpdateModal">
+        <div class="ai-update-content">
+            <div class="ai-header">
+                <div class="ai-icon">🤖</div>
+                <div class="ai-title">AI MANUAL PROCEDURE SEARCH</div>
+                <div class="ai-subtitle">Searching for new manual TPMS relearn procedures</div>
             </div>
             
-            <div class="diagnostic-step">
-                <div class="step-header">
-                    <div class="step-number">5</div>
-                    <div class="step-title">DTC Code Analysis Matrix</div>
-                </div>
-                <div class="step-content">
-                    <button class="btn btn-primary" onclick="retrieveDTCs()">Retrieve All DTCs</button>
-                    <div id="dtcDisplay" class="code-display">
-                        <div class="dtc-code">No codes retrieved yet - Click above to scan</div>
-                    </div>
-                    
-                    <div class="advanced-tests">
-                        <div class="test-card">
-                            <div class="test-title">Current DTCs</div>
-                            <div id="currentDTCs">Ready to scan...</div>
-                        </div>
-                        <div class="test-card">
-                            <div class="test-title">Pending DTCs</div>
-                            <div id="pendingDTCs">Ready to scan...</div>
-                        </div>
-                        <div class="test-card">
-                            <div class="test-title">History DTCs</div>
-                            <div id="historyDTCs">Ready to scan...</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="diagnostic-step">
-                <div class="step-header">
-                    <div class="step-number">6</div>
-                    <div class="step-title">Live Data Stream Analysis</div>
-                </div>
-                <div class="step-content">
-                    <button class="btn btn-success" onclick="startLiveData()">Start Live Data Stream</button>
-                    <div class="measurement-grid" id="liveDataGrid">
-                        <div class="measurement-item">
-                            <div class="measurement-label">RF LF: Sensor Position</div>
-                            <div class="measurement-value" id="rflfPos">Monitoring...</div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">RF RF: Sensor Position</div>
-                            <div class="measurement-value" id="rfrfPos">Monitoring...</div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">LR LF: Sensor Position</div>
-                            <div class="measurement-value" id="lrlfPos">Monitoring...</div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">LR RF: Sensor Position</div>
-                            <div class="measurement-value" id="lrrfPos">Monitoring...</div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">Signal Strength (dBm)</div>
-                            <div class="measurement-value" id="signalStrength">-45 dBm</div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">Battery Voltage (Sensor)</div>
-                            <div class="measurement-value" id="sensorBattery">3.2V</div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">Transmission Rate</div>
-                            <div class="measurement-value" id="transmissionRate">Every 60s</div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">Module Temperature</div>
-                            <div class="measurement-value" id="moduleTemp">72°F</div>
-                        </div>
-                    </div>
+            <div class="ai-progress">
+                <div class="ai-status" id="aiStatus">Initializing manual procedure search...</div>
+                <div class="ai-progress-bar">
+                    <div class="ai-progress-fill" id="aiProgressFill" style="width: 0%;"></div>
                 </div>
             </div>
             
-            <div class="diagnostic-step">
-                <div class="step-header">
-                    <div class="step-number">7</div>
-                    <div class="step-title">Sensor ID Programming & Cloning</div>
-                </div>
-                <div class="step-content">
-                    <p><strong>Advanced Sensor Programming Protocol:</strong></p>
-                    <div class="advanced-tests">
-                        <div class="test-card">
-                            <div class="test-title">Read Original Sensor IDs</div>
-                            <button class="btn btn-primary" onclick="readSensorIDs()">Read IDs</button>
-                            <div id="originalIDs" class="code-display">
-                                <div class="pid-data">Click to read sensor IDs...</div>
-                            </div>
-                        </div>
-                        
-                        <div class="test-card">
-                            <div class="test-title">Program Blank Sensors</div>
-                            <button class="btn btn-warning" onclick="programBlankSensors()">Program New IDs</button>
-                            <div id="programmingStatus" class="code-display">
-                                <div class="pid-data">Ready to program...</div>
-                            </div>
-                        </div>
-                        
-                        <div class="test-card">
-                            <div class="test-title">Clone Existing Sensors</div>
-                            <button class="btn btn-success" onclick="cloneSensors()">Start Cloning</button>
-                            <div id="cloningStatus" class="code-display">
-                                <div class="pid-data">Ready to clone...</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="ai-results" id="aiResults" style="display: none;"></div>
             
-            <div class="diagnostic-step">
-                <div class="step-header">
-                    <div class="step-number">8</div>
-                    <div class="step-title">Advanced Relearn Verification</div>
-                </div>
-                <div class="step-content">
-                    <button class="btn btn-primary" onclick="performAdvancedRelearn()">Start Advanced Relearn</button>
-                    <div id="relearnProgress" class="diagnostic-tree"></div>
-                    
-                    <div class="measurement-grid" style="margin-top: 20px;">
-                        <div class="measurement-item">
-                            <div class="measurement-label">Relearn Success Rate</div>
-                            <div class="measurement-value" id="successRate">0%</div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">Sensor Response Time</div>
-                            <div class="measurement-value" id="responseTime">0ms</div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">Signal Quality</div>
-                            <div class="measurement-value" id="signalQuality">Excellent</div>
-                        </div>
-                        <div class="measurement-item">
-                            <div class="measurement-label">Position Accuracy</div>
-                            <div class="measurement-value" id="positionAccuracy">100%</div>
-                        </div>
-                    </div>
-                </div>
+            <div class="ai-actions">
+                <button class="btn btn-primary" onclick="closeAiUpdate()" id="aiCloseBtn" style="display: none;">Close</button>
+                <button class="btn btn-danger" onclick="cancelAiUpdate()" id="aiCancelBtn">Cancel</button>
             </div>
         </div>
     </div>
     
+    <!-- Relearn Modal -->
+    <div class="relearn-modal" id="relearnModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalVehicleTitle"></div>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+    
     <script>
-        let diagnosticData = {
-            voltage: 12.6,
-            rfEnvironment: {},
-            sensorTests: {},
-            pressureData: {},
-            dtcCodes: [],
-            liveData: {},
-            sensorIDs: [],
-            relearnStatus: {}
-        };
-        
-        let liveDataInterval;
-        
-        function simulateVoltageTest() {
-            const voltageElement = document.getElementById('voltageReading');
-            const readings = [13.8, 13.9, 13.7, 14.1, 13.8];
-            let index = 0;
-            
-            const interval = setInterval(() => {
-                voltageElement.textContent = readings[index] + 'V';
-                diagnosticData.voltage = readings[index];
-                index++;
-                
-                if (index >= readings.length) {
-                    clearInterval(interval);
-                    analyzeVoltage(readings[readings.length - 1]);
-                }
-            }, 500);
-        }
-        
-        function analyzeVoltage(finalVoltage) {
-            const step = document.querySelector('.diagnostic-step');
-            let analysis = '';
-            
-            if (finalVoltage < 13.8) {
-                analysis = `
-                    <div class="tree-node" style="border-left-color: #ef4444;">
-                        <div class="tree-condition">⚠️ LOW VOLTAGE DETECTED: ${finalVoltage}V</div>
-                        <div class="tree-warning">Charging system issue - affects TPMS receiver power</div>
-                        <div class="tree-action">→ Test alternator output and battery condition before continuing</div>
-                    </div>
-                `;
-            } else {
-                analysis = `
-                    <div class="tree-node" style="border-left-color: #10b981;">
-                        <div class="tree-condition">✅ VOLTAGE NORMAL: ${finalVoltage}V</div>
-                        <div class="tree-action">→ Electrical system supporting TPMS operation</div>
-                    </div>
-                `;
-            }
-            
-            step.innerHTML += analysis;
-        }
-        
-        function scanRFEnvironment() {
-            const cellInterference = document.getElementById('cellInterference');
-            const wifiOverlap = document.getElementById('wifiOverlap');
-            const garageFreq = document.getElementById('garageFreq');
-            const keylessConflict = document.getElementById('keylessConflict');
-            const signalBar = document.getElementById('signalBar');
-            
-            // Simulate RF scan
-            setTimeout(() => {
-                cellInterference.textContent = 'High - 3 devices detected';
-                cellInterference.style.color = '#ef4444';
-                wifiOverlap.textContent = '2.4GHz conflict detected';
-                wifiOverlap.style.color = '#f59e0b';
-                garageFreq.textContent = '315.125 MHz - CONFLICT!';
-                garageFreq.style.color = '#ef4444';
-                keylessConflict.textContent = 'High Risk - Same frequency';
-                keylessConflict.style.color = '#ef4444';
-                signalBar.style.width = '35%';
-                signalBar.style.background = 'linear-gradient(90deg, #ef4444, #f59e0b)';
-                
-                // Add RF analysis
-                const rfAnalysis = `
-                    <div class="diagnostic-tree" style="margin-top: 20px;">
-                        <div class="tree-node" style="border-left-color: #ef4444;">
-                            <div class="tree-condition">⚠️ CRITICAL RF INTERFERENCE DETECTED</div>
-                            <div class="tree-warning">Multiple 315MHz sources causing signal degradation</div>
-                            <div class="tree-action">→ Move vehicle away from garage/building before testing</div>
-                            <div class="tree-action">→ Turn off cell phones and WiFi devices</div>
-                        </div>
-                    </div>
-                `;
-                document.querySelector('.frequency-analyzer').innerHTML += rfAnalysis;
-            }, 2000);
-        }
-        
-        function performSensorTest(testType) {
-            const resultsDiv = document.getElementById('testResults');
-            resultsDiv.classList.remove('hidden');
-            resultsDiv.classList.add('fade-in');
-            
-            let testResults = '';
-            
-            switch(testType) {
-                case 'visual':
-                    testResults = `
-                        <div class="diagnostic-tree">
-                            <div class="tree-node">
-                                <div class="tree-condition">Visual Inspection Results:</div>
-                                <div class="tree-action">✅ RF Sensor: No visible corrosion, antenna intact</div>
-                                <div class="tree-warning">⚠️ LF Sensor: Minor valve stem corrosion detected</div>
-                                <div class="tree-action">✅ RR Sensor: Good condition, proper mounting</div>
-                                <div class="tree-warning">⚠️ LR Sensor: Crack in housing near antenna</div>
-                            </div>
-                            <div class="tree-node" style="border-left-color: #ef4444;">
-                                <div class="tree-condition">CRITICAL FINDING:</div>
-                                <div class="tree-warning">LR sensor housing crack will cause intermittent signal loss</div>
-                                <div class="tree-action">→ Replace LR sensor before proceeding</div>
-                            </div>
-                        </div>
-                    `;
-                    break;
-                case 'mechanical':
-                    testResults = `
-                        <div class="diagnostic-tree">
-                            <div class="tree-node">
-                                <div class="tree-condition">Mechanical Stress Analysis:</div>
-                                <div class="tree-action">✅ Valve stem torque: 35 in-lbs (within spec)</div>
-                                <div class="tree-action">✅ Sensor weight distribution: Balanced</div>
-                                <div class="tree-warning">⚠️ Excessive vibration wear on LF sensor mount</div>
-                                <div class="tree-action">→ Monitor for intermittent connection issues</div>
-                            </div>
-                        </div>
-                    `;
-                    break;
-                case 'environmental':
-                    testResults = `
-                        <div class="diagnostic-tree">
-                            <div class="tree-node">
-                                <div class="tree-condition">Environmental Impact Assessment:</div>
-                                <div class="tree-action">Temperature coefficient: -0.5 PSI per 10°F (normal)</div>
-                                <div class="tree-warning">⚠️ Salt corrosion on valve threads affecting seal</div>
-                                <div class="tree-action">UV exposure: Minimal degradation on sensor housing</div>
-                                <div class="tree-action">→ Clean and apply anti-seize to valve threads</div>
-                            </div>
-                        </div>
-                    `;
-                    break;
-            }
-            
-            resultsDiv.innerHTML = testResults;
-        }
-        
-        function analyzePressureCorrelation() {
-            const coldTemp = parseFloat(document.getElementById('coldTemp').value);
-            const hotTemp = parseFloat(document.getElementById('hotTemp').value);
-            const tpmsReading = parseFloat(document.getElementById('tpmsReading').value);
-            
-            const tempDiff = hotTemp - coldTemp;
-            const expectedRise = (tempDiff / 10) * 1; // Approximate 1 PSI per 10°F
-            document.getElementById('expectedRise').textContent = expectedRise.toFixed(1) + ' PSI';
-            
-            const analysisDiv = document.getElementById('pressureAnalysis');
-            let analysis = '';
-            
-            if (Math.abs(tpmsReading - (32 + expectedRise)) > 2) {
-                analysis = `
-                    <div class="tree-node" style="border-left-color: #ef4444;">
-                        <div class="tree-condition">⚠️ PRESSURE CORRELATION ERROR</div>
-                        <div class="tree-warning">TPMS reading deviates >2 PSI from expected thermal expansion</div>
-                        <div class="tree-action">→ Sensor calibration drift detected</div>
-                        <div class="tree-action">→ Perform sensor accuracy verification with precision gauge</div>
-                    </div>
-                `;
-            } else {
-                analysis = `
-                    <div class="tree-node" style="border-left-color: #10b981;">
-                        <div class="tree-condition">✅ PRESSURE CORRELATION NORMAL</div>
-                        <div class="tree-action">TPMS readings correlate with thermal expansion model</div>
-                        <div class="tree-action">→ Sensor accuracy within acceptable range</div>
-                    </div>
-                `;
-            }
-            
-            analysisDiv.innerHTML = analysis;
-        }
-        
-        function retrieveDTCs() {
-            const dtcDisplay = document.getElementById('dtcDisplay');
-            const currentDTCs = document.getElementById('currentDTCs');
-            const pendingDTCs = document.getElementById('pendingDTCs');
-            const historyDTCs = document.getElementById('historyDTCs');
-            
-            // Simulate DTC retrieval
-            setTimeout(() => {
-                const codes = [
-                    'C1A11: TPMS Sensor 1 Signal Missing',
-                    'C1A15: TPMS Sensor 3 Low Battery',
-                    'C1A01: TPMS System Communication Fault'
-                ];
-                
-                dtcDisplay.innerHTML = `
-                    <div class="dtc-code">Current DTCs Found:</div>
-                    ${codes.map(code => `<div class="pid-data">${code}</div>`).join('')}
-                `;
-                
-                currentDTCs.innerHTML = `
-                    <div style="color: #ef4444;">C1A11 - Active</div>
-                    <div style="color: #ef4444;">C1A15 - Active</div>
-                `;
-                
-                pendingDTCs.innerHTML = `
-                    <div style="color: #f59e0b;">C1A01 - Pending</div>
-                    <div style="color: #f59e0b;">C1A20 - Pending (Relearn Required)</div>
-                `;
-                
-                historyDTCs.innerHTML = `
-                    <div style="color: #94a3b8;">C1A12 - Sensor 2 Signal (Cleared)</div>
-                    <div style="color: #94a3b8;">C1A00 - System Malfunction (Cleared)</div>
-                `;
-                
-                diagnosticData.dtcCodes = codes;
-            }, 1500);
-        }
-        
-        function startLiveData() {
-            const positions = ['Front Left', 'Front Right', 'Rear Left', 'Rear Right'];
-            let dataCounter = 0;
-            
-            liveDataInterval = setInterval(() => {
-                // Simulate live sensor data
-                document.getElementById('rflfPos').textContent = Math.random() > 0.1 ? 'Active' : 'No Signal';
-                document.getElementById('rfrfPos').textContent = 'Active';
-                document.getElementById('lrlfPos').textContent = 'Weak Signal';
-                document.getElementById('lrrfPos').textContent = Math.random() > 0.3 ? 'Active' : 'Intermittent';
-                
-                document.getElementById('signalStrength').textContent = (-45 + Math.random() * 10).toFixed(1) + ' dBm';
-                document.getElementById('sensorBattery').textContent = (3.2 - Math.random() * 0.5).toFixed(1) + 'V';
-                document.getElementById('transmissionRate').textContent = 'Every ' + (60 + Math.random() * 30).toFixed(0) + 's';
-                document.getElementById('moduleTemp').textContent = (72 + Math.random() * 10).toFixed(0) + '°F';
-                
-                dataCounter++;
-                if (dataCounter > 10) {
-                    clearInterval(liveDataInterval);
-                    analyzeLiveData();
-                }
-            }, 1000);
-        }
-        
-        function analyzeLiveData() {
-            const liveDataGrid = document.getElementById('liveDataGrid');
-            const analysis = `
-                <div class="diagnostic-tree" style="grid-column: 1 / -1; margin-top: 20px;">
-                    <div class="tree-node" style="border-left-color: #ef4444;">
-                        <div class="tree-condition">⚠️ LIVE DATA ANALYSIS COMPLETE</div>
-                        <div class="tree-warning">RF sensor intermittent - signal strength varying</div>
-                        <div class="tree-warning">LR sensor weak signal - battery voltage low (2.7V)</div>
-                        <div class="tree-action">→ Replace LR sensor battery/sensor unit</div>
-                        <div class="tree-action">→ Investigate RF sensor connection</div>
-                    </div>
-                </div>
-            `;
-            liveDataGrid.innerHTML += analysis;
-        }
-        
-        function readSensorIDs() {
-            const originalIDs = document.getElementById('originalIDs');
-            
-            setTimeout(() => {
-                const sensorIDs = [
-                    'FL: 0x12345678 (315 MHz)',
-                    'FR: 0x87654321 (315 MHz)', 
-                    'RL: 0xABCDEF12 (315 MHz)',
-                    'RR: 0x34567890 (315 MHz)'
-                ];
-                
-                originalIDs.innerHTML = `
-                    <div class="pid-data">Original Sensor IDs:</div>
-                    ${sensorIDs.map(id => `<div class="dtc-code">${id}</div>`).join('')}
-                `;
-                
-                diagnosticData.sensorIDs = sensorIDs;
-            }, 2000);
-        }
-        
-        function programBlankSensors() {
-            const programmingStatus = document.getElementById('programmingStatus');
-            let progress = 0;
-            
-            const interval = setInterval(() => {
-                progress += 25;
-                programmingStatus.innerHTML = `
-                    <div class="pid-data">Programming Progress: ${progress}%</div>
-                    <div class="dtc-code">Writing sensor ID: 0x${Math.random().toString(16).substr(2, 8).toUpperCase()}</div>
-                `;
-                
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    programmingStatus.innerHTML += `
-                        <div style="color: #10b981; margin-top: 10px;">✅ Programming Complete - 4 sensors programmed</div>
-                        <div style="color: #10b981;">✅ IDs written to ECU memory</div>
-                    `;
-                }
-            }, 1000);
-        }
-        
-        function cloneSensors() {
-            const cloningStatus = document.getElementById('cloningStatus');
-            let step = 0;
-            const steps = [
-                'Reading original sensor signatures...',
-                'Extracting encryption keys...',
-                'Programming clone sensors...',
-                'Verifying sensor responses...',
-                'Updating ECU database...'
-            ];
-            
-            const interval = setInterval(() => {
-                if (step < steps.length) {
-                    cloningStatus.innerHTML = `
-                        <div class="pid-data">${steps[step]}</div>
-                        <div class="dtc-code">Step ${step + 1} of ${steps.length}</div>
-                    `;
-                    step++;
-                } else {
-                    clearInterval(interval);
-                    cloningStatus.innerHTML += `
-                        <div style="color: #10b981; margin-top: 10px;">✅ Cloning Complete</div>
-                        <div style="color: #10b981;">✅ All sensors responding with original IDs</div>
-                    `;
-                }
-            }, 1500);
-        }
-        
-        function performAdvancedRelearn() {
-            const relearnProgress = document.getElementById('relearnProgress');
-            const successRate = document.getElementById('successRate');
-            const responseTime = document.getElementById('responseTime');
-            const signalQuality = document.getElementById('signalQuality');
-            const positionAccuracy = document.getElementById('positionAccuracy');
-            
-            let currentStep = 0;
-            const steps = [
-                'Initializing TPMS receiver module...',
-                'Activating sensor learn mode...',
-                'Triggering FL sensor (315 MHz)...',
-                'Triggering FR sensor (315 MHz)...',
-                'Triggering RL sensor (315 MHz)...',
-                'Triggering RR sensor (315 MHz)...',
-                'Verifying sensor positions...',
-                'Updating ECU sensor database...',
-                'Performing final validation...'
-            ];
-            
-            const interval = setInterval(() => {
-                if (currentStep < steps.length) {
-                    const progress = ((currentStep + 1) / steps.length * 100).toFixed(0);
-                    successRate.textContent = progress + '%';
-                    responseTime.textContent = (100 + Math.random() * 50).toFixed(0) + 'ms';
-                    
-                    relearnProgress.innerHTML = `
-                        <div class="tree-node" style="border-left-color: #3b82f6;">
-                            <div class="tree-condition">Step ${currentStep + 1}: ${steps[currentStep]}</div>
-                            <div class="tree-action">Progress: ${progress}%</div>
-                        </div>
-                    `;
-                    
-                    if (currentStep === 2) signalQuality.textContent = 'Good';
-                    if (currentStep === 4) signalQuality.textContent = 'Excellent';
-                    if (currentStep === 6) positionAccuracy.textContent = '100%';
-                    
-                    currentStep++;
-                } else {
-                    clearInterval(interval);
-                    relearnProgress.innerHTML += `
-                        <div class="tree-node" style="border-left-color: #10b981;">
-                            <div class="tree-condition">✅ ADVANCED RELEARN COMPLETE</div>
-                            <div class="tree-action">All sensors learned and verified</div>
-                            <div class="tree-action">Position accuracy: 100%</div>
-                            <div class="tree-action">System ready for operation</div>
-                        </div>
-                    `;
-                }
-            }, 2000);
-        }
-        
-        // Initialize diagnostic system
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Advanced TPMS Diagnostic System Initialized');
-            
-            // Add some dynamic effects
-            setInterval(() => {
-                const freq315 = document.getElementById('freq315');
-                const freq433 = document.getElementById('freq433');
-                
-                if (freq315) {
-                    freq315.textContent = (315.00 + (Math.random() - 0.5) * 0.1).toFixed(2);
-                }
-                if (freq433) {
-                    freq433.textContent = (433.92 + (Math.random() - 0.5) * 0.1).toFixed(2);
-                }
-            }, 3000);
-        });
-    </script>
-</body>
-</html>
+        // Vehicle database - Manual procedures only
+        let vehicleDatabase = [
+            {
+                id: 1,
+                make: "Ford",
+                model: "F-150",
+                yearStart: 2015,
+                yearEnd: 2023,
+                procedureType: "pressure",
+                resetLocation: "Tire pressure deflation",
+                steps: [
+                    {
+                        title: "Prepare Vehicle",
+                        description: "Ensure all tires are inflated to the recommended pressure as shown on the tire placard. Vehicle must be parked and engine off.",
+                        warning: "Do not proceed if any tire pressure is incorrect - this will cause the relearn to fail."
+                    },
+                    {
+                        title: "Ignition Sequence",
+                        description: "Turn the ignition to the ON position (engine off). Press and release the brake pedal once.",
