@@ -1,4 +1,4 @@
-        
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -19,9 +19,11 @@
             overflow-x: hidden;
             position: fixed;
         }
-.hidden-file-input {
+
+        .hidden-file-input {
             display: none;
-        }<!DOCTYPE html>
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #0f1419 0%, #1a202c 50%, #2d3748 100%);
@@ -143,6 +145,99 @@
 
         .form-input::placeholder {
             color: #718096;
+        }
+
+        .plate-lookup-group {
+            display: flex;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .plate-input-wrapper {
+            flex: 1;
+        }
+
+        .lookup-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lookup-btn:hover {
+            background: linear-gradient(135deg, #63b3ed 0%, #4299e1 100%);
+            transform: translateY(-1px);
+        }
+
+        .lookup-btn:disabled {
+            background: #4a5568;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .lookup-status {
+            margin-top: 8px;
+            font-size: 0.75rem;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .lookup-success {
+            background: rgba(56, 161, 105, 0.2);
+            color: #68d391;
+            border: 1px solid rgba(56, 161, 105, 0.3);
+        }
+
+        .lookup-error {
+            background: rgba(229, 62, 62, 0.2);
+            color: #fc8181;
+            border: 1px solid rgba(229, 62, 62, 0.3);
+        }
+
+        .lookup-info {
+            background: rgba(66, 153, 225, 0.2);
+            color: #90cdf4;
+            border: 1px solid rgba(66, 153, 225, 0.3);
+        }
+
+        .vehicle-info-display {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+
+        .vehicle-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.875rem;
+        }
+
+        .vehicle-detail:last-child {
+            margin-bottom: 0;
+        }
+
+        .vehicle-detail-label {
+            color: #a0aec0;
+            font-weight: 500;
+        }
+
+        .vehicle-detail-value {
+            color: #e2e8f0;
+            font-weight: 600;
         }
 
         .tire-grid {
@@ -634,6 +729,16 @@
             .container {
                 padding: 16px;
             }
+
+            .plate-lookup-group {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .lookup-btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -642,6 +747,211 @@
         <div class="header">
             <div class="logo">TireInspector Pro</div>
             <div class="tagline">Professional Tire Analysis System</div>
+        </div>
+
+        <div class="main-grid">
+            <div class="card">
+                <div class="card-header">
+                    <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <h2 class="card-title">Vehicle Information</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="plateNumber">License Plate Number</label>
+                    <div class="plate-lookup-group">
+                        <div class="plate-input-wrapper">
+                            <input type="text" id="plateNumber" class="form-input" placeholder="e.g., ABC1234" style="text-transform: uppercase;">
+                        </div>
+                        <button type="button" class="lookup-btn" id="lookupBtn" onclick="lookupVehicle()">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            Lookup
+                        </button>
+                    </div>
+                    <div id="lookupStatus" class="lookup-status" style="display: none;"></div>
+                </div>
+
+                <div id="vehicleInfoDisplay" class="vehicle-info-display">
+                    <div class="vehicle-detail">
+                        <span class="vehicle-detail-label">Year:</span>
+                        <span class="vehicle-detail-value" id="vehicleYear">-</span>
+                    </div>
+                    <div class="vehicle-detail">
+                        <span class="vehicle-detail-label">Make:</span>
+                        <span class="vehicle-detail-value" id="vehicleMake">-</span>
+                    </div>
+                    <div class="vehicle-detail">
+                        <span class="vehicle-detail-label">Model:</span>
+                        <span class="vehicle-detail-value" id="vehicleModel">-</span>
+                    </div>
+                    <div class="vehicle-detail">
+                        <span class="vehicle-detail-label">Engine:</span>
+                        <span class="vehicle-detail-value" id="vehicleEngine">-</span>
+                    </div>
+                    <div class="vehicle-detail">
+                        <span class="vehicle-detail-label">Drivetrain:</span>
+                        <span class="vehicle-detail-value" id="vehicleDrivetrain">-</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="dotDate">DOT Manufacturing Date</label>
+                    <input type="text" id="dotDate" class="form-input" placeholder="e.g., 2823 (week 28 of 2023)">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="vehicleMileage">Current Vehicle Mileage</label>
+                    <input type="number" id="vehicleMileage" class="form-input" placeholder="Enter current mileage" min="0">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="driveType">Drivetrain Configuration</label>
+                    <select id="driveType" class="form-select">
+                        <option value="fwd">Front-Wheel Drive (FWD)</option>
+                        <option value="rwd">Rear-Wheel Drive (RWD)</option>
+                        <option value="awd">All-Wheel Drive (AWD)</option>
+                        <option value="4wd">Four-Wheel Drive (4WD)</option>
+                    </select>
+                </div>
+                <div id="maintenanceAlert" class="maintenance-alert" style="display: none;"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                    <h2 class="card-title">Tread Depth Measurements</h2>
+                </div>
+                <div class="tire-grid">
+                    <div class="tire-card">
+                        <h3 class="tire-title">Front Left</h3>
+                        <div class="measurements-grid">
+                            <div class="measurement-input">
+                                <div class="measurement-label">Inner</div>
+                                <input type="number" id="fl_left" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Center</div>
+                                <input type="number" id="fl_crown" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Outer</div>
+                                <input type="number" id="fl_right" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button type="button" class="action-btn dry-rot-btn" id="fl_dryrot" onclick="toggleDryRot('fl_dryrot')">
+                                🔴 Dry Rot
+                            </button>
+                            <button type="button" class="action-btn bubble-btn" id="fl_bubble" onclick="toggleBubble('fl_bubble')">
+                                🫧 Bubble
+                            </button>
+                            <button type="button" class="action-btn camera-btn" id="fl_camera" onclick="takePhoto('fl')">
+                                📷 Photo
+                            </button>
+                        </div>
+                        <input type="file" id="fl_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('fl', this)">
+                        <div id="fl_photo_preview" class="photo-preview"></div>
+                    </div>
+                    
+                    <div class="tire-card">
+                        <h3 class="tire-title">Front Right</h3>
+                        <div class="measurements-grid">
+                            <div class="measurement-input">
+                                <div class="measurement-label">Inner</div>
+                                <input type="number" id="fr_left" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Center</div>
+                                <input type="number" id="fr_crown" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Outer</div>
+                                <input type="number" id="fr_right" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button type="button" class="action-btn dry-rot-btn" id="fr_dryrot" onclick="toggleDryRot('fr_dryrot')">
+                                🔴 Dry Rot
+                            </button>
+                            <button type="button" class="action-btn bubble-btn" id="fr_bubble" onclick="toggleBubble('fr_bubble')">
+                                🫧 Bubble
+                            </button>
+                            <button type="button" class="action-btn camera-btn" id="fr_camera" onclick="takePhoto('fr')">
+                                📷 Photo
+                            </button>
+                        </div>
+                        <input type="file" id="fr_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('fr', this)">
+                        <div id="fr_photo_preview" class="photo-preview"></div>
+                    </div>
+                    
+                    <div class="tire-card">
+                        <h3 class="tire-title">Rear Left</h3>
+                        <div class="measurements-grid">
+                            <div class="measurement-input">
+                                <div class="measurement-label">Inner</div>
+                                <input type="number" id="rl_left" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Center</div>
+                                <input type="number" id="rl_crown" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Outer</div>
+                                <input type="number" id="rl_right" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button type="button" class="action-btn dry-rot-btn" id="rl_dryrot" onclick="toggleDryRot('rl_dryrot')">
+                                🔴 Dry Rot
+                            </button>
+                            <button type="button" class="action-btn bubble-btn" id="rl_bubble" onclick="toggleBubble('rl_bubble')">
+                                🫧 Bubble
+                            </button>
+                            <button type="button" class="action-btn camera-btn" id="rl_camera" onclick="takePhoto('rl')">
+                                📷 Photo
+                            </button>
+                        </div>
+                        <input type="file" id="rl_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('rl', this)">
+                        <div id="rl_photo_preview" class="photo-preview"></div>
+                    </div>
+                    
+                    <div class="tire-card">
+                        <h3 class="tire-title">Rear Right</h3>
+                        <div class="measurements-grid">
+                            <div class="measurement-input">
+                                <div class="measurement-label">Inner</div>
+                                <input type="number" id="rr_left" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Center</div>
+                                <input type="number" id="rr_crown" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Outer</div>
+                                <input type="number" id="rr_right" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button type="button" class="action-btn dry-rot-btn" id="rr_dryrot" onclick="toggleDryRot('rr_dryrot')">
+                                🔴 Dry Rot
+                            </button>
+                            <button type="button" class="action-btn bubble-btn" id="rr_bubble" onclick="toggleBubble('rr_bubble')">
+                                🫧 Bubble
+                            </button>
+                            <button type="button" class="action-btn camera-btn" id="rr_camera" onclick="takePhoto('rr')">
+                                📷 Photo
+                            </button>
+                        </div>
+                        <input type="file" id="rr_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('rr', this)">
+                        <div id="rr_photo_preview" class="photo-preview"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="control-buttons">
             <button class="primary-btn inspect-btn" onclick="inspectTires()">
                 <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -670,6 +980,140 @@
     </div>
 
     <script>
+        // Vehicle lookup functionality
+        async function lookupVehicle() {
+            const plateNumber = document.getElementById('plateNumber').value.trim().toUpperCase();
+            const lookupBtn = document.getElementById('lookupBtn');
+            const lookupStatus = document.getElementById('lookupStatus');
+            const vehicleDisplay = document.getElementById('vehicleInfoDisplay');
+
+            if (!plateNumber) {
+                showLookupStatus('Please enter a license plate number', 'error');
+                return;
+            }
+
+            // Validate plate format (basic US format)
+            const plateRegex = /^[A-Z0-9]{2,8}$/;
+            if (!plateRegex.test(plateNumber)) {
+                showLookupStatus('Invalid plate format', 'error');
+                return;
+            }
+
+            lookupBtn.disabled = true;
+            lookupBtn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="8,12 12,16 16,12"></polyline></svg> Looking up...';
+            
+            try {
+                // This is a mock lookup - in real implementation, you'd call a vehicle data API
+                // Popular APIs include: NHTSA VIN API, Carfax, AutoCheck, etc.
+                const vehicleData = await mockVehicleLookup(plateNumber);
+                
+                if (vehicleData) {
+                    displayVehicleInfo(vehicleData);
+                    showLookupStatus(`✅ Vehicle found: ${vehicleData.year} ${vehicleData.make} ${vehicleData.model}`, 'success');
+                    
+                    // Auto-populate drivetrain if available
+                    if (vehicleData.drivetrain) {
+                        const driveTypeSelect = document.getElementById('driveType');
+                        const driveTypeMap = {
+                            'FWD': 'fwd',
+                            'RWD': 'rwd', 
+                            'AWD': 'awd',
+                            '4WD': '4wd'
+                        };
+                        
+                        const mappedType = driveTypeMap[vehicleData.drivetrain];
+                        if (mappedType) {
+                            driveTypeSelect.value = mappedType;
+                        }
+                    }
+                } else {
+                    showLookupStatus('❌ Vehicle not found in database', 'error');
+                }
+            } catch (error) {
+                console.error('Lookup error:', error);
+                showLookupStatus('⚠️ Lookup service unavailable - please enter manually', 'info');
+            } finally {
+                lookupBtn.disabled = false;
+                lookupBtn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg> Lookup';
+            }
+        }
+
+        function showLookupStatus(message, type) {
+            const lookupStatus = document.getElementById('lookupStatus');
+            lookupStatus.textContent = message;
+            lookupStatus.className = `lookup-status lookup-${type}`;
+            lookupStatus.style.display = 'block';
+            
+            // Auto-hide success messages after 5 seconds
+            if (type === 'success') {
+                setTimeout(() => {
+                    lookupStatus.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        function displayVehicleInfo(vehicleData) {
+            document.getElementById('vehicleYear').textContent = vehicleData.year || '-';
+            document.getElementById('vehicleMake').textContent = vehicleData.make || '-';
+            document.getElementById('vehicleModel').textContent = vehicleData.model || '-';
+            document.getElementById('vehicleEngine').textContent = vehicleData.engine || '-';
+            document.getElementById('vehicleDrivetrain').textContent = vehicleData.drivetrain || '-';
+            
+            document.getElementById('vehicleInfoDisplay').style.display = 'block';
+        }
+
+        // Mock vehicle lookup function - replace with real API call
+        async function mockVehicleLookup(plateNumber) {
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Mock database of vehicles (in real app, this would be an API call)
+            const mockDatabase = {
+                'ABC1234': {
+                    year: '2022',
+                    make: 'Toyota',
+                    model: 'Camry',
+                    engine: '2.5L 4-Cyl',
+                    drivetrain: 'FWD'
+                },
+                'XYZ5678': {
+                    year: '2021',
+                    make: 'Ford',
+                    model: 'F-150',
+                    engine: '3.5L V6 EcoBoost',
+                    drivetrain: '4WD'
+                },
+                'DEF9012': {
+                    year: '2023',
+                    make: 'Subaru',
+                    model: 'Outback',
+                    engine: '2.5L 4-Cyl',
+                    drivetrain: 'AWD'
+                },
+                'GHI3456': {
+                    year: '2020',
+                    make: 'BMW',
+                    model: '3 Series',
+                    engine: '2.0L 4-Cyl Turbo',
+                    drivetrain: 'RWD'
+                }
+            };
+            
+            return mockDatabase[plateNumber] || null;
+        }
+
+        // Auto-format plate number as user types
+        document.getElementById('plateNumber').addEventListener('input', function(e) {
+            this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        });
+
+        // Allow Enter key to trigger lookup
+        document.getElementById('plateNumber').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                lookupVehicle();
+            }
+        });
+
         function calculateTireAge(dotDate) {
             if (!dotDate || dotDate.length !== 4) return null;
             
@@ -1238,166 +1682,3 @@
     </script>
 </body>
 </html>
-        
-        <div class="main-grid">
-            <div class="card">
-                <div class="card-header">
-                    <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    <h2 class="card-title">Vehicle Information</h2>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="dotDate">DOT Manufacturing Date</label>
-                    <input type="text" id="dotDate" class="form-input" placeholder="e.g., 2823 (week 28 of 2023)">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="vehicleMileage">Current Vehicle Mileage</label>
-                    <input type="number" id="vehicleMileage" class="form-input" placeholder="Enter current mileage" min="0">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="driveType">Drivetrain Configuration</label>
-                    <select id="driveType" class="form-select">
-                        <option value="fwd">Front-Wheel Drive (FWD)</option>
-                        <option value="rwd">Rear-Wheel Drive (RWD)</option>
-                        <option value="awd">All-Wheel Drive (AWD)</option>
-                        <option value="4wd">Four-Wheel Drive (4WD)</option>
-                    </select>
-                </div>
-                <div id="maintenanceAlert" class="maintenance-alert" style="display: none;"></div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                    </svg>
-                    <h2 class="card-title">Tread Depth Measurements</h2>
-                </div>
-                <div class="tire-grid">
-                    <div class="tire-card">
-                        <h3 class="tire-title">Front Left</h3>
-                        <div class="measurements-grid">
-                            <div class="measurement-input">
-                                <div class="measurement-label">Inner</div>
-                                <input type="number" id="fl_left" class="measurement-field" placeholder="32nds" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <div class="measurement-label">Center</div>
-                                <input type="number" id="fl_crown" class="measurement-field" placeholder="32nds" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <div class="measurement-label">Outer</div>
-                                <input type="number" id="fl_right" class="measurement-field" placeholder="32nds" min="1" max="12">
-                            </div>
-                        </div>
-                        <div class="action-buttons">
-                            <button type="button" class="action-btn dry-rot-btn" id="fl_dryrot" onclick="toggleDryRot('fl_dryrot')">
-                                🔴 Dry Rot
-                            </button>
-                            <button type="button" class="action-btn bubble-btn" id="fl_bubble" onclick="toggleBubble('fl_bubble')">
-                                🫧 Bubble
-                            </button>
-                            <button type="button" class="action-btn camera-btn" id="fl_camera" onclick="takePhoto('fl')">
-                                📷 Photo
-                            </button>
-                        </div>
-                        <input type="file" id="fl_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('fl', this)">
-                        <div id="fl_photo_preview" class="photo-preview"></div>
-                    </div>
-                    
-                    <div class="tire-card">
-                        <h3 class="tire-title">Front Right</h3>
-                        <div class="measurements-grid">
-                            <div class="measurement-input">
-                                <div class="measurement-label">Inner</div>
-                                <input type="number" id="fr_left" class="measurement-field" placeholder="32nds" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <div class="measurement-label">Center</div>
-                                <input type="number" id="fr_crown" class="measurement-field" placeholder="32nds" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <div class="measurement-label">Outer</div>
-                                <input type="number" id="fr_right" class="measurement-field" placeholder="32nds" min="1" max="12">
-                            </div>
-                        </div>
-                        <div class="action-buttons">
-                            <button type="button" class="action-btn dry-rot-btn" id="fr_dryrot" onclick="toggleDryRot('fr_dryrot')">
-                                🔴 Dry Rot
-                            </button>
-                            <button type="button" class="action-btn bubble-btn" id="fr_bubble" onclick="toggleBubble('fr_bubble')">
-                                🫧 Bubble
-                            </button>
-                            <button type="button" class="action-btn camera-btn" id="fr_camera" onclick="takePhoto('fr')">
-                                📷 Photo
-                            </button>
-                        </div>
-                        <input type="file" id="fr_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('fr', this)">
-                        <div id="fr_photo_preview" class="photo-preview"></div>
-                    </div>
-                    
-                    <div class="tire-card">
-                        <h3 class="tire-title">Rear Left</h3>
-                        <div class="measurements-grid">
-                            <div class="measurement-input">
-                                <div class="measurement-label">Inner</div>
-                                <input type="number" id="rl_left" class="measurement-field" placeholder="32nds" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <div class="measurement-label">Center</div>
-                                <input type="number" id="rl_crown" class="measurement-field" placeholder="32nds" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <div class="measurement-label">Outer</div>
-                                <input type="number" id="rl_right" class="measurement-field" placeholder="32nds" min="1" max="12">
-                            </div>
-                        </div>
-                        <div class="action-buttons">
-                            <button type="button" class="action-btn dry-rot-btn" id="rl_dryrot" onclick="toggleDryRot('rl_dryrot')">
-                                🔴 Dry Rot
-                            </button>
-                            <button type="button" class="action-btn bubble-btn" id="rl_bubble" onclick="toggleBubble('rl_bubble')">
-                                🫧 Bubble
-                            </button>
-                            <button type="button" class="action-btn camera-btn" id="rl_camera" onclick="takePhoto('rl')">
-                                📷 Photo
-                            </button>
-                        </div>
-                        <input type="file" id="rl_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('rl', this)">
-                        <div id="rl_photo_preview" class="photo-preview"></div>
-                    </div>
-                    
-                    <div class="tire-card">
-                        <h3 class="tire-title">Rear Right</h3>
-                        <div class="measurements-grid">
-                            <div class="measurement-input">
-                                <div class="measurement-label">Inner</div>
-                                <input type="number" id="rr_left" class="measurement-field" placeholder="32nds" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <div class="measurement-label">Center</div>
-                                <input type="number" id="rr_crown" class="measurement-field" placeholder="32nds" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <div class="measurement-label">Outer</div>
-                                <input type="number" id="rr_right" class="measurement-field" placeholder="32nds" min="1" max="12">
-                            </div>
-                        </div>
-                        <div class="action-buttons">
-                            <button type="button" class="action-btn dry-rot-btn" id="rr_dryrot" onclick="toggleDryRot('rr_dryrot')">
-                                🔴 Dry Rot
-                            </button>
-                            <button type="button" class="action-btn bubble-btn" id="rr_bubble" onclick="toggleBubble('rr_bubble')">
-                                🫧 Bubble
-                            </button>
-                            <button type="button" class="action-btn camera-btn" id="rr_camera" onclick="takePhoto('rr')">
-                                📷 Photo
-                            </button>
-                        </div>
-                        <input type="file" id="rr_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('rr', this)">
-                        <div id="rr_photo_preview" class="photo-preview"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
