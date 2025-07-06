@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tire Inspector Pro</title>
+    <title>TireInspector Pro | Professional Tire Analysis System</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -19,12 +21,15 @@
         }
 
         body {
-            font-family: 'Arial Black', Arial, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a202c 50%, #2d3748 100%);
             color: #ffffff;
             height: 100vh;
             overflow-y: auto;
             overflow-x: hidden;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
@@ -32,210 +37,284 @@
             width: 100%;
             height: 100vh;
             margin: 0;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            box-shadow: none;
-            border: none;
-            border-radius: 0;
+            background: rgba(15, 20, 25, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 24px;
             overflow-y: auto;
             overflow-x: hidden;
         }
 
-        h1 {
+        .header {
             text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: #ff6b35;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            margin-bottom: 32px;
+            padding: 24px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .inspection-form {
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 50%, #2b77cb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .tagline {
+            font-size: 0.875rem;
+            color: #a0aec0;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .main-grid {
             display: grid;
             grid-template-columns: 1fr 2fr;
-            gap: 30px;
-            margin-bottom: 30px;
+            gap: 32px;
+            margin-bottom: 32px;
         }
 
-        .form-section {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 25px;
-            border-radius: 10px;
-            border: 1px solid #444;
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
-        .form-section h2 {
-            color: #ff6b35;
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            color: #4299e1;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+        }
+
+        .form-group {
             margin-bottom: 20px;
-            font-size: 1.4em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        label {
+        .form-label {
             display: block;
             margin-bottom: 8px;
-            font-weight: bold;
-            color: #cccccc;
-            text-transform: uppercase;
-            font-size: 0.9em;
+            font-weight: 500;
+            color: #e2e8f0;
+            font-size: 0.875rem;
         }
 
-        input, select {
+        .form-input, .form-select {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #555;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
-            background: #222;
+            background: rgba(255, 255, 255, 0.05);
             color: #ffffff;
-            font-size: 1em;
-            font-weight: bold;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
 
-        input:focus, select:focus {
+        .form-input:focus, .form-select:focus {
             outline: none;
-            border-color: #ff6b35;
-            box-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+            background: rgba(255, 255, 255, 0.08);
         }
 
-        .tire-measurements {
+        .form-input::placeholder {
+            color: #718096;
+        }
+
+        .tire-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
         }
 
-        .tire-container {
-            background: rgba(255, 255, 255, 0.05);
+        .tire-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
             padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #333;
-            min-height: 280px;
+            min-height: 320px;
+            transition: all 0.3s ease;
         }
 
-        .tire-container h3 {
-            color: #ff6b35;
-            margin-bottom: 15px;
-            font-size: 1.2em;
+        .tire-card:hover {
+            border-color: rgba(66, 153, 225, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tire-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #4299e1;
             text-align: center;
-            text-transform: uppercase;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .tire-measurements-grid {
+        .measurements-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
         .measurement-input {
             text-align: center;
         }
 
-        .measurement-input label {
-            font-size: 0.8em;
-            color: #aaa;
-            margin-bottom: 5px;
+        .measurement-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #a0aec0;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        .measurement-input input {
+        .measurement-field {
+            width: 100%;
             padding: 8px;
-            font-size: 0.9em;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-size: 0.875rem;
+            font-weight: 600;
             text-align: center;
+            transition: all 0.2s ease;
         }
 
-        .dry-rot-container {
-            text-align: center;
-            margin-top: 15px;
-            padding: 5px;
+        .measurement-field:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.1);
+        }
+
+        .action-buttons {
             display: flex;
             gap: 8px;
             justify-content: center;
             flex-wrap: wrap;
+            margin-bottom: 16px;
         }
 
-        .dry-rot-btn, .bubble-btn, .camera-btn {
-            background: #8b0000;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 0.75em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
+        .action-btn {
             flex: 1;
             min-width: 80px;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
         }
 
-        .bubble-btn {
-            background: #3498db;
-        }
-
-        .camera-btn {
-            background: #2c3e50;
-        }
-
-        .dry-rot-btn:hover, .bubble-btn:hover, .camera-btn:hover {
-            transform: scale(1.05);
+        .dry-rot-btn {
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+            color: white;
+            box-shadow: 0 4px 6px rgba(229, 62, 62, 0.2);
         }
 
         .dry-rot-btn:hover {
-            background: #a50000;
-        }
-
-        .bubble-btn:hover {
-            background: #2980b9;
-        }
-
-        .camera-btn:hover {
-            background: #34495e;
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px rgba(229, 62, 62, 0.3);
         }
 
         .dry-rot-btn.active {
-            background: #ff0000;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            background: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
+            box-shadow: 0 0 20px rgba(229, 62, 62, 0.4);
+        }
+
+        .bubble-btn {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            box-shadow: 0 4px 6px rgba(66, 153, 225, 0.2);
+        }
+
+        .bubble-btn:hover {
+            background: linear-gradient(135deg, #63b3ed 0%, #4299e1 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px rgba(66, 153, 225, 0.3);
         }
 
         .bubble-btn.active {
-            background: #5dade2;
-            box-shadow: 0 0 10px rgba(93, 173, 226, 0.5);
+            background: linear-gradient(135deg, #90cdf4 0%, #63b3ed 100%);
+            box-shadow: 0 0 20px rgba(66, 153, 225, 0.4);
+        }
+
+        .camera-btn {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+            color: white;
+            box-shadow: 0 4px 6px rgba(113, 128, 150, 0.2);
+        }
+
+        .camera-btn:hover {
+            background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px rgba(113, 128, 150, 0.3);
         }
 
         .camera-btn.active {
-            background: #3498db;
-            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+            background: linear-gradient(135deg, #38b2ac 0%, #319795 100%);
+            box-shadow: 0 0 20px rgba(56, 178, 172, 0.4);
         }
 
         .photo-preview {
-            margin-top: 10px;
+            margin-top: 12px;
             text-align: center;
         }
 
         .photo-preview img {
             max-width: 80px;
             max-height: 60px;
-            border-radius: 5px;
-            border: 2px solid #ff6b35;
+            border-radius: 6px;
+            border: 2px solid #4299e1;
             object-fit: cover;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         .photo-preview img:hover {
             transform: scale(1.1);
-            border-color: #ff8c42;
+            border-color: #63b3ed;
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
         }
 
-        .photo-preview .photo-info {
-            font-size: 0.7em;
-            color: #aaa;
-            margin-top: 5px;
+        .photo-info {
+            font-size: 0.625rem;
+            color: #a0aec0;
+            margin-top: 4px;
+            font-weight: 500;
         }
 
         .photo-fullscreen {
@@ -250,196 +329,213 @@
             align-items: center;
             z-index: 9999;
             cursor: pointer;
+            backdrop-filter: blur(10px);
         }
 
         .photo-fullscreen img {
             max-width: 95vw;
             max-height: 95vh;
             object-fit: contain;
-            border: 3px solid #ff6b35;
-            border-radius: 10px;
+            border: 3px solid #4299e1;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
         }
 
-        .hidden-file-input {
-            display: none;
-        }
-
-        .buttons-container {
+        .control-buttons {
             display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 16px;
+            margin-bottom: 32px;
         }
 
-        .btn {
+        .primary-btn {
             flex: 1;
-            padding: 18px;
+            padding: 16px 24px;
             border: none;
-            border-radius: 10px;
-            font-size: 1.3em;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .inspect-btn {
-            background: linear-gradient(45deg, #ff6b35, #ff8c42);
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
             color: white;
-            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+            box-shadow: 0 10px 15px rgba(66, 153, 225, 0.3);
         }
 
         .inspect-btn:hover {
+            background: linear-gradient(135deg, #63b3ed 0%, #4299e1 100%);
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6);
+            box-shadow: 0 15px 25px rgba(66, 153, 225, 0.4);
         }
 
         .print-btn {
-            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
             color: white;
-            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+            box-shadow: 0 10px 15px rgba(56, 161, 105, 0.3);
             display: none;
         }
 
         .print-btn:hover {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.6);
+            box-shadow: 0 15px 25px rgba(56, 161, 105, 0.4);
         }
 
         .results {
-            margin-top: 30px;
-            padding: 25px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            border: 2px solid #444;
+            margin-top: 32px;
             display: none;
         }
 
-        .results h2 {
-            color: #ff6b35;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-            text-transform: uppercase;
+        .results-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .results-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.01em;
         }
 
         .tire-result {
-            margin-bottom: 15px;
-            padding: 15px;
-            border-radius: 8px;
-            font-weight: bold;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
         }
 
-        .tire-result h4 {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-            text-transform: uppercase;
+        .tire-result-header {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #4299e1;
         }
 
         .measurement-results {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 10px;
-            font-size: 0.9em;
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
         .measurement-result {
-            padding: 8px;
-            border-radius: 5px;
+            padding: 8px 12px;
+            border-radius: 6px;
             text-align: center;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 0.875rem;
         }
 
         .measurement-result.good {
-            background: #27ae60;
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
             color: white;
         }
 
         .measurement-result.ok {
-            background: #f39c12;
+            background: linear-gradient(135deg, #d69e2e 0%, #b7791f 100%);
             color: white;
         }
 
         .measurement-result.bad {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
             color: white;
         }
 
         .tire-status {
             text-align: center;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: bold;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
             text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .tire-status.good {
-            background: #27ae60;
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
             color: white;
         }
 
         .tire-status.ok {
-            background: #f39c12;
+            background: linear-gradient(135deg, #d69e2e 0%, #b7791f 100%);
             color: white;
         }
 
         .tire-status.bad {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
             color: white;
         }
 
         .alignment-warning {
-            background: #e67e22;
+            background: linear-gradient(135deg, #dd6b20 0%, #c05621 100%);
             color: white;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
             text-align: center;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 0.875rem;
         }
 
         .alignment-critical {
-            background: #c0392b;
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
             color: white;
-            padding: 12px;
-            border-radius: 5px;
-            margin-top: 10px;
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 12px;
             text-align: center;
-            font-weight: bold;
-            border: 2px solid #e74c3c;
+            font-weight: 600;
+            border: 2px solid #fc8181;
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(229, 62, 62, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
         }
 
         .overall-recommendation {
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 1.2em;
+            margin-top: 24px;
+            padding: 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.125rem;
             text-align: center;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.05em;
         }
 
         .recommendation-good {
-            background: #27ae60;
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
             color: white;
         }
 
         .recommendation-suggest {
-            background: #f39c12;
+            background: linear-gradient(135deg, #d69e2e 0%, #b7791f 100%);
             color: white;
         }
 
         .recommendation-replace {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
             color: white;
+        }
+
+        .hidden-file-input {
+            display: none;
         }
 
         @media print {
@@ -455,11 +551,11 @@
                 box-shadow: none;
             }
             
-            .buttons-container {
+            .control-buttons {
                 display: none;
             }
             
-            .form-section {
+            .card {
                 background: #f5f5f5;
                 border: 1px solid #000;
             }
@@ -471,184 +567,56 @@
         }
 
         @media (max-width: 768px) {
-            .inspection-form {
+            .main-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
+                gap: 24px;
             }
             
-            .tire-measurements {
+            .tire-grid {
                 grid-template-columns: 1fr;
             }
             
-            .buttons-container {
+            .control-buttons {
                 flex-direction: column;
             }
             
-            h1 {
-                font-size: 2em;
+            .logo {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 16px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔧 Tire Inspector Pro 🔧</h1>
-        
-        <div class="inspection-form">
-            <div class="form-section">
-                <h2>Vehicle Information</h2>
-                <div class="input-group">
-                    <label for="dotDate">DOT Date (Week/Year - e.g., 2823 for week 28 of 2023)</label>
-                    <input type="text" id="dotDate" placeholder="Enter DOT date">
-                </div>
-                <div class="input-group">
-                    <label for="driveType">Drive Type</label>
-                    <select id="driveType">
-                        <option value="fwd">Front-Wheel Drive (FWD)</option>
-                        <option value="rwd">Rear-Wheel Drive (RWD)</option>
-                        <option value="awd">All-Wheel Drive (AWD)</option>
-                        <option value="4wd">Four-Wheel Drive (4WD)</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-section">
-                <h2>Tire Measurements (32nds of an inch)</h2>
-                <div class="tire-measurements">
-                    <div class="tire-container">
-                        <h3>Front Left</h3>
-                        <div class="tire-measurements-grid">
-                            <div class="measurement-input">
-                                <label>Inner</label>
-                                <input type="number" id="fl_left" placeholder="Depth" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <label>Center</label>
-                                <input type="number" id="fl_crown" placeholder="Depth" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <label>Outer</label>
-                                <input type="number" id="fl_right" placeholder="Depth" min="1" max="12">
-                            </div>
-                        </div>
-                        <div class="dry-rot-container">
-                            <button type="button" class="dry-rot-btn" id="fl_dryrot" onclick="toggleDryRot('fl_dryrot')">
-                                🔴 Dry Rot
-                            </button>
-                            <button type="button" class="bubble-btn" id="fl_bubble" onclick="toggleBubble('fl_bubble')">
-                                🫧 Bubble
-                            </button>
-                            <button type="button" class="camera-btn" id="fl_camera" onclick="takePhoto('fl')">
-                                📷 Photo
-                            </button>
-                        </div>
-                        <input type="file" id="fl_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('fl', this)">
-                        <div id="fl_photo_preview" class="photo-preview"></div>
-                    </div>
-                    
-                    <div class="tire-container">
-                        <h3>Front Right</h3>
-                        <div class="tire-measurements-grid">
-                            <div class="measurement-input">
-                                <label>Inner</label>
-                                <input type="number" id="fr_left" placeholder="Depth" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <label>Center</label>
-                                <input type="number" id="fr_crown" placeholder="Depth" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <label>Outer</label>
-                                <input type="number" id="fr_right" placeholder="Depth" min="1" max="12">
-                            </div>
-                        </div>
-                        <div class="dry-rot-container">
-                            <button type="button" class="dry-rot-btn" id="fr_dryrot" onclick="toggleDryRot('fr_dryrot')">
-                                🔴 Dry Rot
-                            </button>
-                            <button type="button" class="bubble-btn" id="fr_bubble" onclick="toggleBubble('fr_bubble')">
-                                🫧 Bubble
-                            </button>
-                            <button type="button" class="camera-btn" id="fr_camera" onclick="takePhoto('fr')">
-                                📷 Photo
-                            </button>
-                        </div>
-                        <input type="file" id="fr_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('fr', this)">
-                        <div id="fr_photo_preview" class="photo-preview"></div>
-                    </div>
-                    
-                    <div class="tire-container">
-                        <h3>Rear Left</h3>
-                        <div class="tire-measurements-grid">
-                            <div class="measurement-input">
-                                <label>Inner</label>
-                                <input type="number" id="rl_left" placeholder="Depth" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <label>Center</label>
-                                <input type="number" id="rl_crown" placeholder="Depth" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <label>Outer</label>
-                                <input type="number" id="rl_right" placeholder="Depth" min="1" max="12">
-                            </div>
-                        </div>
-                        <div class="dry-rot-container">
-                            <button type="button" class="dry-rot-btn" id="rl_dryrot" onclick="toggleDryRot('rl_dryrot')">
-                                🔴 Dry Rot
-                            </button>
-                            <button type="button" class="bubble-btn" id="rl_bubble" onclick="toggleBubble('rl_bubble')">
-                                🫧 Bubble
-                            </button>
-                            <button type="button" class="camera-btn" id="rl_camera" onclick="takePhoto('rl')">
-                                📷 Photo
-                            </button>
-                        </div>
-                        <input type="file" id="rl_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('rl', this)">
-                        <div id="rl_photo_preview" class="photo-preview"></div>
-                    </div>
-                    
-                    <div class="tire-container">
-                        <h3>Rear Right</h3>
-                        <div class="tire-measurements-grid">
-                            <div class="measurement-input">
-                                <label>Inner</label>
-                                <input type="number" id="rr_left" placeholder="Depth" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <label>Center</label>
-                                <input type="number" id="rr_crown" placeholder="Depth" min="1" max="12">
-                            </div>
-                            <div class="measurement-input">
-                                <label>Outer</label>
-                                <input type="number" id="rr_right" placeholder="Depth" min="1" max="12">
-                            </div>
-                        </div>
-                        <div class="dry-rot-container">
-                            <button type="button" class="dry-rot-btn" id="rr_dryrot" onclick="toggleDryRot('rr_dryrot')">
-                                🔴 Dry Rot
-                            </button>
-                            <button type="button" class="bubble-btn" id="rr_bubble" onclick="toggleBubble('rr_bubble')">
-                                🫧 Bubble
-                            </button>
-                            <button type="button" class="camera-btn" id="rr_camera" onclick="takePhoto('rr')">
-                                📷 Photo
-                            </button>
-                        </div>
-                        <input type="file" id="rr_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('rr', this)">
-                        <div id="rr_photo_preview" class="photo-preview"></div>
-                    </div>
-                </div>
-            </div>
+        <div class="header">
+            <div class="logo">TireInspector Pro</div>
+            <div class="tagline">Professional Tire Analysis System</div>
+        <div class="control-buttons">
+            <button class="primary-btn inspect-btn" onclick="inspectTires()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                Analyze Tires
+            </button>
+            <button class="primary-btn print-btn" id="printBtn" onclick="printResults()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                </svg>
+                Print Report
+            </button>
         </div>
 
-        <div class="buttons-container">
-            <button class="btn inspect-btn" onclick="inspectTires()">🔍 INSPECT TIRES 🔍</button>
-            <button class="btn print-btn" id="printBtn" onclick="printResults()">🖨️ PRINT RESULTS 🖨️</button>
-        </div>
-
-        <div id="results" class="results">
-            <h2>Inspection Results</h2>
+        <div id="results" class="results card">
+            <div class="results-header">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h2 class="results-title">Inspection Results</h2>
+            </div>
             <div id="tireResults"></div>
             <div id="overallRecommendation" class="overall-recommendation"></div>
         </div>
@@ -681,9 +649,9 @@
             button.classList.toggle('active');
             
             if (button.classList.contains('active')) {
-                button.textContent = '🔴 DRY ROT DETECTED';
+                button.innerHTML = '🔴 <span>Detected</span>';
             } else {
-                button.textContent = '🔴 Dry Rot';
+                button.innerHTML = '🔴 <span>Dry Rot</span>';
             }
         }
 
@@ -692,9 +660,9 @@
             button.classList.toggle('active');
             
             if (button.classList.contains('active')) {
-                button.textContent = '🫧 BUBBLE DETECTED';
+                button.innerHTML = '🫧 <span>Detected</span>';
             } else {
-                button.textContent = '🫧 Bubble';
+                button.innerHTML = '🫧 <span>Bubble</span>';
             }
         }
 
@@ -751,7 +719,7 @@
                     // Activate camera button
                     const cameraBtn = document.getElementById(tireId + '_camera');
                     cameraBtn.classList.add('active');
-                    cameraBtn.textContent = '📷 PHOTO TAKEN';
+                    cameraBtn.innerHTML = '📷 <span>Captured</span>';
                 };
                 img.src = e.target.result;
             };
@@ -762,7 +730,7 @@
             const previewDiv = document.getElementById(tireId + '_photo_preview');
             previewDiv.innerHTML = `
                 <img src="${dataUrl}" alt="Tire damage photo" onclick="toggleFullscreen('${tireId}', '${dataUrl}')">
-                <div class="photo-info">Photo: ${fileName}</div>
+                <div class="photo-info">${fileName}</div>
             `;
         }
 
@@ -834,11 +802,6 @@
                 issue: alignmentIssue,
                 highlyRecommend: isHighlyRecommended
             };
-        }
-
-        function autoDetectDryRot(measurements) {
-            // Auto-detection removed - manual visual inspection required
-            return false;
         }
 
         function printResults() {
@@ -950,11 +913,11 @@
                 } else if (hasBubble) {
                     statusText = 'BUBBLE DETECTED - REPLACE IMMEDIATELY';
                 } else if (condition === 'good') {
-                    statusText = 'GOOD';
+                    statusText = 'EXCELLENT CONDITION';
                 } else if (condition === 'ok') {
-                    statusText = 'OK - MONITOR';
+                    statusText = 'MONITOR CLOSELY';
                 } else {
-                    statusText = 'BAD - REPLACE';
+                    statusText = 'REPLACEMENT REQUIRED';
                 }
                 
                 // Add photo indicator if photo was taken
@@ -963,7 +926,7 @@
                 }
                 
                 tireDiv.innerHTML = `
-                    <h4>${tireNames[index]}</h4>
+                    <h4 class="tire-result-header">${tireNames[index]}</h4>
                     <div class="measurement-results">
                         <div class="measurement-result ${getTireCondition(tire.left)}">
                             Inner: ${tire.left}/32"
@@ -978,7 +941,7 @@
                     <div class="tire-status ${condition}">
                         ${statusText}
                     </div>
-                    ${alignment.overall ? `<div class="alignment-warning ${alignment.highlyRecommend ? 'alignment-critical' : ''}">⚠️ ${alignment.issue} ⚠️</div>` : ''}
+                    ${alignment.overall ? `<div class="alignment-warning ${alignment.highlyRecommend ? 'alignment-critical' : ''}">⚠️ ${alignment.issue}</div>` : ''}
                 `;
                 
                 tireResultsDiv.appendChild(tireDiv);
@@ -989,49 +952,49 @@
             let recommendationClass = '';
             
             if (tireAge !== null && tireAge >= 6) {
-                recommendation = 'TIRES ARE OLD (6+ YEARS) - REPLACE FOR SAFETY';
+                recommendation = 'TIRES EXCEED RECOMMENDED AGE - IMMEDIATE REPLACEMENT REQUIRED';
                 recommendationClass = 'recommendation-replace';
             } else if (dryRotCount > 0 || bubbleCount > 0) {
                 if (driveType === 'awd' || driveType === '4wd') {
                     if (dryRotCount > 0 && bubbleCount > 0) {
-                        recommendation = 'DRY ROT & BUBBLE DETECTED - REPLACE ALL 4 TIRES (AWD/4WD REQUIRES MATCHING TIRES)';
+                        recommendation = 'CRITICAL DAMAGE DETECTED - REPLACE ALL 4 TIRES (AWD/4WD REQUIREMENT)';
                     } else if (dryRotCount > 0) {
-                        recommendation = 'DRY ROT DETECTED - REPLACE ALL 4 TIRES (AWD/4WD REQUIRES MATCHING TIRES)';
+                        recommendation = 'DRY ROT DETECTED - REPLACE ALL 4 TIRES (AWD/4WD REQUIREMENT)';
                     } else {
-                        recommendation = 'BUBBLE DETECTED - HIGHLY RECOMMEND ALL 4 TIRES (AWD/4WD REQUIRES MATCHING TIRES)';
+                        recommendation = 'STRUCTURAL DAMAGE - HIGHLY RECOMMEND ALL 4 TIRES (AWD/4WD)';
                     }
                 } else {
                     if (dryRotCount > 0 && bubbleCount > 0) {
-                        recommendation = 'DRY ROT & BUBBLE DETECTED - TIRES NEED IMMEDIATE REPLACEMENT';
+                        recommendation = 'MULTIPLE CRITICAL ISSUES - IMMEDIATE TIRE REPLACEMENT';
                     } else if (dryRotCount > 0) {
                         if (dryRotCount === 1) {
-                            recommendation = 'DRY ROT DETECTED - TIRE NEEDS IMMEDIATE REPLACEMENT';
+                            recommendation = 'DRY ROT DETECTED - IMMEDIATE TIRE REPLACEMENT REQUIRED';
                         } else {
-                            recommendation = 'DRY ROT DETECTED - TIRES NEED IMMEDIATE REPLACEMENT';
+                            recommendation = 'MULTIPLE DRY ROT ISSUES - IMMEDIATE REPLACEMENT REQUIRED';
                         }
                     } else {
                         if (bubbleCount === 1) {
-                            recommendation = 'BUBBLE DETECTED - HIGHLY RECOMMEND TIRE REPLACEMENT';
+                            recommendation = 'STRUCTURAL DAMAGE - HIGHLY RECOMMEND TIRE REPLACEMENT';
                         } else {
-                            recommendation = 'BUBBLES DETECTED - HIGHLY RECOMMEND TIRE REPLACEMENT';
+                            recommendation = 'MULTIPLE STRUCTURAL ISSUES - TIRE REPLACEMENT RECOMMENDED';
                         }
                     }
                 }
                 recommendationClass = 'recommendation-replace';
             } else if (badTireCount > 0) {
                 if (driveType === 'awd' || driveType === '4wd') {
-                    recommendation = 'REPLACE ALL 4 TIRES (AWD/4WD REQUIRES MATCHING TIRES)';
+                    recommendation = 'REPLACE ALL 4 TIRES (AWD/4WD MATCHING REQUIREMENT)';
                 } else if (badTireCount === 1) {
-                    recommendation = 'TIRE NEEDS TO BE REPLACED';
+                    recommendation = 'SINGLE TIRE REPLACEMENT REQUIRED';
                 } else {
-                    recommendation = 'TIRES NEED TO BE REPLACED';
+                    recommendation = 'MULTIPLE TIRE REPLACEMENT REQUIRED';
                 }
                 recommendationClass = 'recommendation-replace';
             } else if (overallConditions.includes('ok')) {
-                recommendation = 'SUGGESTING NEW TIRES SOON';
+                recommendation = 'SCHEDULE TIRE REPLACEMENT SOON';
                 recommendationClass = 'recommendation-suggest';
             } else {
-                recommendation = 'TIRES ARE GOOD';
+                recommendation = 'ALL TIRES IN EXCELLENT CONDITION';
                 recommendationClass = 'recommendation-good';
             }
 
@@ -1039,11 +1002,11 @@
             if (tireAge !== null) {
                 const ageDiv = document.createElement('div');
                 ageDiv.className = 'tire-result';
-                ageDiv.style.background = tireAge >= 6 ? '#e74c3c' : tireAge >= 4 ? '#f39c12' : '#27ae60';
+                ageDiv.style.background = tireAge >= 6 ? 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)' : tireAge >= 4 ? 'linear-gradient(135deg, #d69e2e 0%, #b7791f 100%)' : 'linear-gradient(135deg, #38a169 0%, #2f855a 100%)';
                 ageDiv.innerHTML = `
-                    <h4>Tire Age Analysis</h4>
+                    <h4 class="tire-result-header">Tire Age Analysis</h4>
                     <div class="tire-status" style="background: transparent; color: white;">
-                        Age: ${tireAge} years - ${tireAge >= 6 ? 'TOO OLD' : tireAge >= 4 ? 'AGING' : 'GOOD AGE'}
+                        Manufacturing Age: ${tireAge} years - ${tireAge >= 6 ? 'EXCEEDS RECOMMENDED AGE' : tireAge >= 4 ? 'APPROACHING AGE LIMIT' : 'WITHIN ACCEPTABLE RANGE'}
                     </div>
                 `;
                 tireResultsDiv.appendChild(ageDiv);
@@ -1054,19 +1017,19 @@
                 const alignmentDiv = document.createElement('div');
                 alignmentDiv.className = 'tire-result';
                 if (criticalAlignmentNeeded) {
-                    alignmentDiv.style.background = '#c0392b';
+                    alignmentDiv.style.background = 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
                     alignmentDiv.innerHTML = `
-                        <h4>🚨 CRITICAL ALIGNMENT WARNING 🚨</h4>
+                        <h4 class="tire-result-header">🚨 CRITICAL ALIGNMENT WARNING</h4>
                         <div class="tire-status" style="background: transparent; color: white;">
-                            Measurements off by exactly 2/32" detected - HIGHLY RECOMMEND ALIGNMENT IMMEDIATELY
+                            Severe wear pattern detected - IMMEDIATE ALIGNMENT SERVICE REQUIRED
                         </div>
                     `;
                 } else {
-                    alignmentDiv.style.background = '#e67e22';
+                    alignmentDiv.style.background = 'linear-gradient(135deg, #dd6b20 0%, #c05621 100%)';
                     alignmentDiv.innerHTML = `
-                        <h4>⚠️ Alignment Warning ⚠️</h4>
+                        <h4 class="tire-result-header">⚠️ Alignment Service Recommended</h4>
                         <div class="tire-status" style="background: transparent; color: white;">
-                            Uneven wear detected - Vehicle alignment should be checked
+                            Uneven wear detected - Schedule alignment inspection
                         </div>
                     `;
                 }
@@ -1083,3 +1046,161 @@
     </script>
 </body>
 </html>
+        
+        <div class="main-grid">
+            <div class="card">
+                <div class="card-header">
+                    <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <h2 class="card-title">Vehicle Information</h2>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="dotDate">DOT Manufacturing Date</label>
+                    <input type="text" id="dotDate" class="form-input" placeholder="e.g., 2823 (week 28 of 2023)">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="driveType">Drivetrain Configuration</label>
+                    <select id="driveType" class="form-select">
+                        <option value="fwd">Front-Wheel Drive (FWD)</option>
+                        <option value="rwd">Rear-Wheel Drive (RWD)</option>
+                        <option value="awd">All-Wheel Drive (AWD)</option>
+                        <option value="4wd">Four-Wheel Drive (4WD)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                    <h2 class="card-title">Tread Depth Measurements</h2>
+                </div>
+                <div class="tire-grid">
+                    <div class="tire-card">
+                        <h3 class="tire-title">Front Left</h3>
+                        <div class="measurements-grid">
+                            <div class="measurement-input">
+                                <div class="measurement-label">Inner</div>
+                                <input type="number" id="fl_left" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Center</div>
+                                <input type="number" id="fl_crown" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Outer</div>
+                                <input type="number" id="fl_right" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button type="button" class="action-btn dry-rot-btn" id="fl_dryrot" onclick="toggleDryRot('fl_dryrot')">
+                                🔴 Dry Rot
+                            </button>
+                            <button type="button" class="action-btn bubble-btn" id="fl_bubble" onclick="toggleBubble('fl_bubble')">
+                                🫧 Bubble
+                            </button>
+                            <button type="button" class="action-btn camera-btn" id="fl_camera" onclick="takePhoto('fl')">
+                                📷 Photo
+                            </button>
+                        </div>
+                        <input type="file" id="fl_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('fl', this)">
+                        <div id="fl_photo_preview" class="photo-preview"></div>
+                    </div>
+                    
+                    <div class="tire-card">
+                        <h3 class="tire-title">Front Right</h3>
+                        <div class="measurements-grid">
+                            <div class="measurement-input">
+                                <div class="measurement-label">Inner</div>
+                                <input type="number" id="fr_left" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Center</div>
+                                <input type="number" id="fr_crown" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Outer</div>
+                                <input type="number" id="fr_right" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button type="button" class="action-btn dry-rot-btn" id="fr_dryrot" onclick="toggleDryRot('fr_dryrot')">
+                                🔴 Dry Rot
+                            </button>
+                            <button type="button" class="action-btn bubble-btn" id="fr_bubble" onclick="toggleBubble('fr_bubble')">
+                                🫧 Bubble
+                            </button>
+                            <button type="button" class="action-btn camera-btn" id="fr_camera" onclick="takePhoto('fr')">
+                                📷 Photo
+                            </button>
+                        </div>
+                        <input type="file" id="fr_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('fr', this)">
+                        <div id="fr_photo_preview" class="photo-preview"></div>
+                    </div>
+                    
+                    <div class="tire-card">
+                        <h3 class="tire-title">Rear Left</h3>
+                        <div class="measurements-grid">
+                            <div class="measurement-input">
+                                <div class="measurement-label">Inner</div>
+                                <input type="number" id="rl_left" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Center</div>
+                                <input type="number" id="rl_crown" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Outer</div>
+                                <input type="number" id="rl_right" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button type="button" class="action-btn dry-rot-btn" id="rl_dryrot" onclick="toggleDryRot('rl_dryrot')">
+                                🔴 Dry Rot
+                            </button>
+                            <button type="button" class="action-btn bubble-btn" id="rl_bubble" onclick="toggleBubble('rl_bubble')">
+                                🫧 Bubble
+                            </button>
+                            <button type="button" class="action-btn camera-btn" id="rl_camera" onclick="takePhoto('rl')">
+                                📷 Photo
+                            </button>
+                        </div>
+                        <input type="file" id="rl_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('rl', this)">
+                        <div id="rl_photo_preview" class="photo-preview"></div>
+                    </div>
+                    
+                    <div class="tire-card">
+                        <h3 class="tire-title">Rear Right</h3>
+                        <div class="measurements-grid">
+                            <div class="measurement-input">
+                                <div class="measurement-label">Inner</div>
+                                <input type="number" id="rr_left" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Center</div>
+                                <input type="number" id="rr_crown" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                            <div class="measurement-input">
+                                <div class="measurement-label">Outer</div>
+                                <input type="number" id="rr_right" class="measurement-field" placeholder="32nds" min="1" max="12">
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button type="button" class="action-btn dry-rot-btn" id="rr_dryrot" onclick="toggleDryRot('rr_dryrot')">
+                                🔴 Dry Rot
+                            </button>
+                            <button type="button" class="action-btn bubble-btn" id="rr_bubble" onclick="toggleBubble('rr_bubble')">
+                                🫧 Bubble
+                            </button>
+                            <button type="button" class="action-btn camera-btn" id="rr_camera" onclick="takePhoto('rr')">
+                                📷 Photo
+                            </button>
+                        </div>
+                        <input type="file" id="rr_photo_input" class="hidden-file-input" accept="image/*" capture="environment" onchange="handlePhotoUpload('rr', this)">
+                        <div id="rr_photo_preview" class="photo-preview"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
