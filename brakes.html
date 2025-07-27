@@ -3,436 +3,585 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brake System Parts Matching Game</title>
+    <title>Tire Condition Analyzer</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+        * {
             margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #7f8c8d;
-            margin-bottom: 20px;
-        }
-        .player-info {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-        .player {
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-align: center;
-            width: 45%;
-        }
-        .current-player {
-            border: 3px solid #e74c3c;
-            background-color: #fef5f3;
-        }
-        .game-board {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
-            margin: 20px 0;
-        }
-        .card {
-            aspect-ratio: 2/3;
-            background-color: #34495e;
-            border-radius: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            color: white;
-            transition: transform 0.3s, background-color 0.3s;
-            transform-style: preserve-3d;
-            position: relative;
-        }
-        .card:hover {
-            transform: scale(1.02);
-        }
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border-radius: 5px;
-            padding: 5px;
+            padding: 0;
             box-sizing: border-box;
         }
-        .card-front {
-            background-color: #34495e;
-            transform: rotateY(180deg);
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
-        .component {
-            background-color: #e74c3c;
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
         }
-        .function {
-            background-color: #9b59b6;
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
         }
-        .card-back {
-            background-color: #34495e;
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .upload-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .upload-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .upload-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .upload-card h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 200px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
-        .card-back .icon {
-            font-size: 24px;
-            margin-bottom: 5px;
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: rgba(102, 126, 234, 0.05);
         }
-        .card-type {
-            font-size: 10px;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            font-weight: bold;
+
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: rgba(102, 126, 234, 0.1);
+            transform: scale(1.02);
         }
-        .card-content {
-            font-size: 14px;
-            text-align: center;
+
+        .upload-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 15px;
         }
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
+
+        .upload-text {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
         }
-        button {
-            background-color: #e74c3c;
+
+        .file-input {
+            display: none;
+        }
+
+        .camera-btn, .upload-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 12px 25px;
+            border-radius: 25px;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            font-size: 1rem;
+            margin: 5px;
+            transition: all 0.3s ease;
         }
-        button:hover {
-            background-color: #c0392b;
+
+        .camera-btn:hover, .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
-        .game-message {
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .analysis-result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
-            margin: 10px 0;
-            min-height: 24px;
             font-weight: bold;
+            font-size: 1.2rem;
         }
-        .rules {
+
+        .result-good {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .result-okay {
+            background: linear-gradient(45deg, #FF9800, #F57C00);
+            color: white;
+        }
+
+        .result-bad {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+            color: white;
+        }
+
+        .controls {
+            text-align: center;
             margin-top: 30px;
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
         }
-        .rules h2 {
-            color: #2c3e50;
+
+        .reset-btn {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
         }
-        .rules ul {
-            margin-left: 20px;
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
         }
-        .rules li {
-            margin-bottom: 8px;
+
+        .video-container {
+            position: relative;
+            margin: 15px 0;
         }
+
+        .camera-video {
+            width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+        }
+
+        .capture-btn {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            border: 3px solid #667eea;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .capture-btn:hover {
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
         @media (max-width: 768px) {
-            .game-board {
-                grid-template-columns: repeat(4, 1fr);
+            .upload-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 20px;
             }
         }
-        @media (max-width: 480px) {
-            .game-board {
-                grid-template-columns: repeat(3, 1fr);
-            }
+
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🛑 Brake System Parts Match Game 🛑</h1>
-        <p class="subtitle">Test your auto mechanic knowledge with this 2-player memory game!</p>
-        
-        <div class="player-info">
-            <div id="player1" class="player current-player">
-                <h3>Player 1</h3>
-                <p>Score: <span id="score1">0</span></p>
+        <div class="header">
+            <h1>🚗 Tire Condition Analyzer</h1>
+            <p>Upload or capture images of your tire tread and DOT code for instant analysis</p>
+        </div>
+
+        <div class="upload-section">
+            <!-- Tire Tread Section -->
+            <div class="upload-card">
+                <h3>📏 Tire Tread Analysis</h3>
+                <div class="upload-area" id="treadUploadArea">
+                    <div class="upload-icon">📸</div>
+                    <div class="upload-text">Drop tire tread image here or click to browse</div>
+                    <button class="camera-btn" onclick="startCamera('tread')">📷 Use Camera</button>
+                    <button class="upload-btn" onclick="document.getElementById('treadFileInput').click()">📁 Upload File</button>
+                    <input type="file" id="treadFileInput" class="file-input" accept="image/*">
+                </div>
+                <div id="treadPreview"></div>
+                <div id="treadAnalysis"></div>
             </div>
-            <div id="player2" class="player">
-                <h3>Player 2</h3>
-                <p>Score: <span id="score2">0</span></p>
+
+            <!-- DOT Code Section -->
+            <div class="upload-card">
+                <h3>🔢 DOT Code Analysis</h3>
+                <div class="upload-area" id="dotUploadArea">
+                    <div class="upload-icon">📸</div>
+                    <div class="upload-text">Drop DOT code image here or click to browse</div>
+                    <button class="camera-btn" onclick="startCamera('dot')">📷 Use Camera</button>
+                    <button class="upload-btn" onclick="document.getElementById('dotFileInput').click()">📁 Upload File</button>
+                    <input type="file" id="dotFileInput" class="file-input" accept="image/*">
+                </div>
+                <div id="dotPreview"></div>
+                <div id="dotAnalysis"></div>
             </div>
         </div>
-        
-        <div class="game-message" id="gameMessage"></div>
-        
-        <div class="game-board" id="gameBoard"></div>
-        
+
         <div class="controls">
-            <button id="newGameBtn">New Game</button>
-            <button id="rulesBtn">Show Rules</button>
-        </div>
-        
-        <div class="rules" id="rules" style="display: none;">
-            <h2>How to Play</h2>
-            <ul>
-                <li>Players take turns flipping over two cards at a time.</li>
-                <li>If the cards match (a component with its correct function), the player keeps the pair and gets another turn.</li>
-                <li>If they don't match, the cards are turned face down again and it's the other player's turn.</li>
-                <li>The game ends when all pairs have been matched.</li>
-                <li>The player with the most pairs wins!</li>
-            </ul>
-            <h2>Card Pairs</h2>
-            <ul>
-                <li><strong>Brake Pads</strong> - Creates friction against rotor to slow the wheel</li>
-                <li><strong>Brake Rotor</strong> - Metal disc that brake pads clamp against to stop wheel rotation</li>
-                <li><strong>Brake Caliper</strong> - Houses the brake pads and pistons, applies pressure to pads</li>
-                <li><strong>Master Cylinder</strong> - Converts pedal pressure into hydraulic pressure</li>
-                <li><strong>Brake Lines</strong> - Transfers brake fluid from master cylinder to calipers/wheel cylinders</li>
-                <li><strong>Brake Fluid</strong> - Hydraulic fluid that transfers force from pedal to brakes</li>
-                <li><strong>ABS Module</strong> - Prevents wheel lock-up by pulsing brake pressure during hard braking</li>
-                <li><strong>Wheel Cylinder</strong> - Pushes brake shoes against drum in drum brake systems</li>
-                <li><strong>Brake Shoes</strong> - Creates friction against drum to slow wheel in drum brake systems</li>
-                <li><strong>Brake Drum</strong> - Metal cylinder that brake shoes press against in drum brake systems</li>
-                <li><strong>Parking Brake Cable</strong> - Mechanical cable that activates parking brake independent of hydraulics</li>
-                <li><strong>Brake Booster</strong> - Vacuum-assisted device that multiplies pedal force for easier braking</li>
-            </ul>
+            <button class="reset-btn" onclick="resetAll()">🗑️ Reset All Images</button>
         </div>
     </div>
 
     <script>
-        // Card data
-        const cardPairs = [
-            { type: 'component', content: 'Brake Pads', match: 0 },
-            { type: 'function', content: 'Creates friction against rotor to slow the wheel', match: 0 },
-            { type: 'component', content: 'Brake Rotor', match: 1 },
-            { type: 'function', content: 'Metal disc that brake pads clamp against to stop wheel rotation', match: 1 },
-            { type: 'component', content: 'Brake Caliper', match: 2 },
-            { type: 'function', content: 'Houses the brake pads and pistons, applies pressure to pads', match: 2 },
-            { type: 'component', content: 'Master Cylinder', match: 3 },
-            { type: 'function', content: 'Converts pedal pressure into hydraulic pressure', match: 3 },
-            { type: 'component', content: 'Brake Lines', match: 4 },
-            { type: 'function', content: 'Transfers brake fluid from master cylinder to calipers/wheel cylinders', match: 4 },
-            { type: 'component', content: 'Brake Fluid', match: 5 },
-            { type: 'function', content: 'Hydraulic fluid that transfers force from pedal to brakes', match: 5 },
-            { type: 'component', content: 'ABS Module', match: 6 },
-            { type: 'function', content: 'Prevents wheel lock-up by pulsing brake pressure during hard braking', match: 6 },
-            { type: 'component', content: 'Wheel Cylinder', match: 7 },
-            { type: 'function', content: 'Pushes brake shoes against drum in drum brake systems', match: 7 },
-            { type: 'component', content: 'Brake Shoes', match: 8 },
-            { type: 'function', content: 'Creates friction against drum to slow wheel in drum brake systems', match: 8 },
-            { type: 'component', content: 'Brake Drum', match: 9 },
-            { type: 'function', content: 'Metal cylinder that brake shoes press against in drum brake systems', match: 9 },
-            { type: 'component', content: 'Parking Brake Cable', match: 10 },
-            { type: 'function', content: 'Mechanical cable that activates parking brake independent of hydraulics', match: 10 },
-            { type: 'component', content: 'Brake Booster', match: 11 },
-            { type: 'function', content: 'Vacuum-assisted device that multiplies pedal force for easier braking', match: 11 },
-        ];
+        let imageCount = 0;
+        let treadImage = null;
+        let dotImage = null;
+        let currentCamera = null;
+        let currentStream = null;
 
-        // Game state
-        let currentPlayer = 1;
-        let scores = { 1: 0, 2: 0 };
-        let flippedCards = [];
-        let canFlip = true;
-        let matchedPairs = 0;
+        // Clear images on page load/refresh
+        window.addEventListener('beforeunload', () => {
+            resetAll();
+        });
 
-        // DOM elements
-        const gameBoard = document.getElementById('gameBoard');
-        const player1Div = document.getElementById('player1');
-        const player2Div = document.getElementById('player2');
-        const score1Span = document.getElementById('score1');
-        const score2Span = document.getElementById('score2');
-        const gameMessage = document.getElementById('gameMessage');
-        const newGameBtn = document.getElementById('newGameBtn');
-        const rulesBtn = document.getElementById('rulesBtn');
-        const rulesDiv = document.getElementById('rules');
+        // Initialize drag and drop
+        function initializeDragDrop() {
+            const treadArea = document.getElementById('treadUploadArea');
+            const dotArea = document.getElementById('dotUploadArea');
 
-        // Initialize game
-        function initGame() {
-            // Reset game state
-            currentPlayer = 1;
-            scores = { 1: 0, 2: 0 };
-            flippedCards = [];
-            canFlip = true;
-            matchedPairs = 0;
-            
-            // Update UI
-            updatePlayerTurn();
-            score1Span.textContent = '0';
-            score2Span.textContent = '0';
-            gameMessage.textContent = '';
-            
-            // Clear game board
-            gameBoard.innerHTML = '';
-            
-            // Shuffle cards
-            const shuffledCards = [...cardPairs].sort(() => Math.random() - 0.5);
-            
-            // Create cards
-            shuffledCards.forEach((card, index) => {
-                const cardElement = document.createElement('div');
-                cardElement.className = 'card';
-                cardElement.dataset.index = index;
-                
-                // Create card front (the visible part when flipped)
-                const cardFront = document.createElement('div');
-                cardFront.className = `card-front ${card.type}`;
-                
-                const cardType = document.createElement('div');
-                cardType.className = 'card-type';
-                cardType.textContent = card.type.toUpperCase();
-                
-                const cardContent = document.createElement('div');
-                cardContent.className = 'card-content';
-                cardContent.textContent = card.content;
-                
-                cardFront.appendChild(cardType);
-                cardFront.appendChild(cardContent);
-                
-                // Create card back (shown when face down)
-                const cardBack = document.createElement('div');
-                cardBack.className = 'card-back';
-                
-                const cardIcon = document.createElement('div');
-                cardIcon.className = 'icon';
-                cardIcon.textContent = '🛑';
-                
-                const cardText = document.createElement('div');
-                cardText.textContent = 'BRAKES';
-                
-                cardBack.appendChild(cardIcon);
-                cardBack.appendChild(cardText);
-                
-                // Add front and back to card
-                cardElement.appendChild(cardFront);
-                cardElement.appendChild(cardBack);
-                
-                // Add click event
-                cardElement.addEventListener('click', () => flipCard(cardElement, card, index));
-                
-                // Add to game board
-                gameBoard.appendChild(cardElement);
+            [treadArea, dotArea].forEach(area => {
+                area.addEventListener('dragover', handleDragOver);
+                area.addEventListener('dragleave', handleDragLeave);
+                area.addEventListener('drop', handleDrop);
             });
         }
 
-        // Flip card function
-        function flipCard(cardElement, card, index) {
-            // Prevent flipping if: 
-            // 1. Card is already flipped
-            // 2. We already have 2 cards flipped
-            // 3. The game is currently checking for a match
-            if (cardElement.classList.contains('flipped') || flippedCards.length >= 2 || !canFlip) {
-                return;
-            }
-            
-            // Flip the card
-            cardElement.classList.add('flipped');
-            
-            // Add to flipped cards
-            flippedCards.push({ element: cardElement, card: card, index: index });
-            
-            // If we've flipped 2 cards, check for a match
-            if (flippedCards.length === 2) {
-                canFlip = false;
-                checkForMatch();
-            }
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
         }
 
-        // Check for match function
-        function checkForMatch() {
-            const card1 = flippedCards[0];
-            const card2 = flippedCards[1];
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
             
-            // Set a timeout to show both cards briefly
-            setTimeout(() => {
-                // Check if the cards match
-                if (card1.card.match === card2.card.match && card1.card.type !== card2.card.type) {
-                    // It's a match!
-                    gameMessage.textContent = `Player ${currentPlayer} found a match!`;
-                    
-                    // Increase score
-                    scores[currentPlayer]++;
-                    if (currentPlayer === 1) {
-                        score1Span.textContent = scores[1];
-                    } else {
-                        score2Span.textContent = scores[2];
-                    }
-                    
-                    // Keep cards flipped but disable them
-                    card1.element.style.opacity = '0.7';
-                    card2.element.style.opacity = '0.7';
-                    
-                    // Count matches
-                    matchedPairs++;
-                    
-                    // Check if game is over
-                    if (matchedPairs === cardPairs.length / 2) {
-                        // Game over
-                        if (scores[1] > scores[2]) {
-                            gameMessage.textContent = 'Game over! Player 1 wins!';
-                        } else if (scores[2] > scores[1]) {
-                            gameMessage.textContent = 'Game over! Player 2 wins!';
-                        } else {
-                            gameMessage.textContent = "Game over! It's a tie!";
-                        }
-                    }
-                    
-                    // Same player gets another turn
-                } else {
-                    // Not a match, flip cards back
-                    card1.element.classList.remove('flipped');
-                    card2.element.classList.remove('flipped');
-                    
-                    // Change player
-                    currentPlayer = currentPlayer === 1 ? 2 : 1;
-                    updatePlayerTurn();
-                    gameMessage.textContent = `Player ${currentPlayer}'s turn`;
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('image/')) {
+                    const type = e.currentTarget.id === 'treadUploadArea' ? 'tread' : 'dot';
+                    processImage(file, type);
                 }
-                
-                // Reset flipped cards
-                flippedCards = [];
-                canFlip = true;
-            }, 1000);
-        }
-
-        // Update player turn UI
-        function updatePlayerTurn() {
-            if (currentPlayer === 1) {
-                player1Div.classList.add('current-player');
-                player2Div.classList.remove('current-player');
-            } else {
-                player2Div.classList.add('current-player');
-                player1Div.classList.remove('current-player');
             }
         }
 
-        // Event listeners
-        newGameBtn.addEventListener('click', initGame);
-        
-        rulesBtn.addEventListener('click', () => {
-            rulesDiv.style.display = rulesDiv.style.display === 'none' ? 'block' : 'none';
-            rulesBtn.textContent = rulesDiv.style.display === 'none' ? 'Show Rules' : 'Hide Rules';
+        // File input handlers
+        document.getElementById('treadFileInput').addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                processImage(e.target.files[0], 'tread');
+            }
         });
 
-        // Start the game
-        initGame();
+        document.getElementById('dotFileInput').addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                processImage(e.target.files[0], 'dot');
+            }
+        });
+
+        function processImage(file, type) {
+            if (imageCount >= 2 && !getExistingImage(type)) {
+                alert('Maximum 2 images allowed. Please reset to add new images.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                displayImage(e.target.result, type);
+                analyzeImage(e.target.result, type);
+                updateImageCount(type, true);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function displayImage(imageSrc, type) {
+            const previewDiv = document.getElementById(type + 'Preview');
+            previewDiv.innerHTML = `<img src="${imageSrc}" alt="${type} image" class="image-preview">`;
+        }
+
+        function analyzeImage(imageSrc, type) {
+            const analysisDiv = document.getElementById(type + 'Analysis');
+            
+            // Show progress bar
+            analysisDiv.innerHTML = `
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <p>Analyzing ${type} image...</p>
+            `;
+
+            const progressBar = analysisDiv.querySelector('.progress-fill');
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 30;
+                if (progress > 100) progress = 100;
+                progressBar.style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                    setTimeout(() => {
+                        const result = simulateAnalysis(type);
+                        displayResult(result, type);
+                    }, 500);
+                }
+            }, 200);
+        }
+
+        function simulateAnalysis(type) {
+            // Simulate AI analysis with random but weighted results
+            const outcomes = ['Good', 'Okay', 'Bad'];
+            const weights = type === 'tread' ? [0.4, 0.4, 0.2] : [0.5, 0.3, 0.2];
+            
+            const random = Math.random();
+            let cumulative = 0;
+            
+            for (let i = 0; i < outcomes.length; i++) {
+                cumulative += weights[i];
+                if (random <= cumulative) {
+                    return {
+                        condition: outcomes[i],
+                        confidence: Math.floor(Math.random() * 20) + 80,
+                        details: getAnalysisDetails(outcomes[i], type)
+                    };
+                }
+            }
+            
+            return { condition: 'Okay', confidence: 85, details: 'Standard condition detected' };
+        }
+
+        function getAnalysisDetails(condition, type) {
+            const details = {
+                tread: {
+                    Good: 'Tread depth appears adequate (>4/32"). No visible wear indicators.',
+                    Okay: 'Tread depth is getting low (2-4/32"). Consider replacement soon.',
+                    Bad: 'Tread depth is critically low (<2/32"). Replace immediately.'
+                },
+                dot: {
+                    Good: 'DOT code is clear and readable. Tire appears to be within safe age range.',
+                    Okay: 'DOT code readable but tire may be approaching replacement age.',
+                    Bad: 'DOT code indicates tire is old or damaged. Replace immediately.'
+                }
+            };
+            
+            return details[type][condition];
+        }
+
+        function displayResult(result, type) {
+            const analysisDiv = document.getElementById(type + 'Analysis');
+            const resultClass = `result-${result.condition.toLowerCase()}`;
+            
+            analysisDiv.innerHTML = `
+                <div class="analysis-result ${resultClass}">
+                    <div style="font-size: 1.5rem; margin-bottom: 10px;">
+                        ${getConditionIcon(result.condition)} ${result.condition.toUpperCase()}
+                    </div>
+                    <div style="font-size: 0.9rem; opacity: 0.9;">
+                        Confidence: ${result.confidence}%
+                    </div>
+                    <div style="font-size: 0.9rem; margin-top: 10px; font-weight: normal;">
+                        ${result.details}
+                    </div>
+                </div>
+            `;
+        }
+
+        function getConditionIcon(condition) {
+            const icons = {
+                Good: '✅',
+                Okay: '⚠️',
+                Bad: '❌'
+            };
+            return icons[condition] || '❓';
+        }
+
+        function startCamera(type) {
+            if (imageCount >= 2 && !getExistingImage(type)) {
+                alert('Maximum 2 images allowed. Please reset to add new images.');
+                return;
+            }
+
+            currentCamera = type;
+            
+            navigator.mediaDevices.getUserMedia({ 
+                video: { 
+                    facingMode: 'environment',
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                } 
+            })
+            .then(stream => {
+                currentStream = stream;
+                const previewDiv = document.getElementById(type + 'Preview');
+                previewDiv.innerHTML = `
+                    <div class="video-container">
+                        <video class="camera-video" autoplay muted></video>
+                        <button class="capture-btn" onclick="capturePhoto()">📷</button>
+                    </div>
+                `;
+                
+                const video = previewDiv.querySelector('video');
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error('Error accessing camera:', err);
+                alert('Could not access camera. Please use file upload instead.');
+            });
+        }
+
+        function capturePhoto() {
+            const video = document.querySelector(`#${currentCamera}Preview video`);
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0);
+            
+            const imageSrc = canvas.toDataURL('image/jpeg', 0.8);
+            
+            // Stop camera stream
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                currentStream = null;
+            }
+            
+            displayImage(imageSrc, currentCamera);
+            analyzeImage(imageSrc, currentCamera);
+            updateImageCount(currentCamera, true);
+        }
+
+        function updateImageCount(type, increment) {
+            const existing = getExistingImage(type);
+            
+            if (increment && !existing) {
+                imageCount++;
+                setExistingImage(type, true);
+            } else if (!increment && existing) {
+                imageCount--;
+                setExistingImage(type, false);
+            }
+        }
+
+        function getExistingImage(type) {
+            return type === 'tread' ? treadImage : dotImage;
+        }
+
+        function setExistingImage(type, value) {
+            if (type === 'tread') {
+                treadImage = value;
+            } else {
+                dotImage = value;
+            }
+        }
+
+        function resetAll() {
+            // Stop any active camera streams
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                currentStream = null;
+            }
+            
+            // Clear previews and analyses
+            document.getElementById('treadPreview').innerHTML = '';
+            document.getElementById('dotPreview').innerHTML = '';
+            document.getElementById('treadAnalysis').innerHTML = '';
+            document.getElementById('dotAnalysis').innerHTML = '';
+            
+            // Reset file inputs
+            document.getElementById('treadFileInput').value = '';
+            document.getElementById('dotFileInput').value = '';
+            
+            // Reset counters
+            imageCount = 0;
+            treadImage = null;
+            dotImage = null;
+            currentCamera = null;
+        }
+
+        // Initialize the application
+        initializeDragDrop();
+        
+        // Auto-reset on page visibility change (when closing/refreshing)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                resetAll();
+            }
+        });
     </script>
 </body>
 </html>
