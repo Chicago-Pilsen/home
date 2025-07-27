@@ -1,18 +1,280 @@
-<html>
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Tangerine">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOT Code Translator</title>
     <style>
-      body {
-        font-family: 'Tangerine', serif;
-        font-size: 68px;
-          text-shadow: 4px 4px 4px #aaa;
-
-      }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .input-section {
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        input[type="text"] {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.2em;
+            text-align: center;
+            transition: all 0.3s ease;
+            width: 150px;
+            font-weight: bold;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .result {
+            background: #f8f9ff;
+            border: 2px solid #e8ecff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .result-text {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .error {
+            color: #e74c3c;
+        }
+        
+        .success {
+            color: #27ae60;
+        }
+        
+        .format-info {
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .format-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .format-info p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        
+        .example {
+            background: rgba(39, 174, 96, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: monospace;
+        }
     </style>
-  </head>
-  <body><center><div>Fernando Mendoza</div>
-</center>
-  </body>
+</head>
+<body>
+    <div class="container">
+        <h1>DOT Code Translator</h1>
+        <p class="subtitle">Convert DOT codes to date ranges</p>
+        
+        <div class="input-section">
+            <div class="input-group">
+                <input type="text" id="dotInput" placeholder="0224" maxlength="4">
+                <button onclick="translateDOT()">Translate</button>
+            </div>
+        </div>
+        
+        <div class="result" id="result">
+            <div class="result-text">Enter a 4-digit DOT code to see the date range</div>
+        </div>
+        
+        <div class="format-info">
+            <h3>DOT Code Format:</h3>
+            <p><strong>WWYY</strong> - Where:</p>
+            <p>• <strong>WW</strong> = Week of the year (01-52)</p>
+            <p>• <strong>YY</strong> = Last two digits of the year</p>
+            
+            <div class="example">
+                <strong>Example:</strong><br>
+                0224 = Week 2 of 2024<br>
+                Result: January 8-14, 2024
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function translateDOT() {
+            const input = document.getElementById('dotInput').value;
+            const result = document.getElementById('result');
+            
+            // Clear previous results
+            result.className = 'result';
+            
+            // Validate input
+            if (!input || input.length !== 4) {
+                showError('Please enter a 4-digit DOT code (e.g., 0224)');
+                return;
+            }
+            
+            if (!/^\d{4}$/.test(input)) {
+                showError('DOT code must contain only numbers');
+                return;
+            }
+            
+            const week = parseInt(input.substring(0, 2));
+            const year = parseInt('20' + input.substring(2, 4));
+            
+            // Validate week
+            if (week < 1 || week > 52) {
+                showError('Week must be between 01 and 52');
+                return;
+            }
+            
+            // Validate year (reasonable range)
+            if (year < 2000 || year > 2099) {
+                showError('Year must be between 00 and 99 (representing 2000-2099)');
+                return;
+            }
+            
+            try {
+                const dateRange = getWeekDateRange(week, year);
+                showSuccess(dateRange);
+            } catch (error) {
+                showError('Error calculating date range: ' + error.message);
+            }
+        }
+        
+        function getWeekDateRange(week, year) {
+            // January 1st of the given year
+            const jan1 = new Date(year, 0, 1);
+            
+            // Find the first Monday of the year (start of week 1)
+            const jan1Day = jan1.getDay(); // 0 = Sunday, 1 = Monday, etc.
+            const daysToFirstMonday = jan1Day === 0 ? 1 : (8 - jan1Day);
+            const firstMonday = new Date(year, 0, 1 + daysToFirstMonday);
+            
+            // Calculate the start of the requested week
+            const weekStart = new Date(firstMonday);
+            weekStart.setDate(firstMonday.getDate() + (week - 1) * 7);
+            
+            // Calculate the end of the week (Sunday)
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
+            
+            // Format the dates
+            const startFormatted = formatDate(weekStart);
+            const endFormatted = formatDate(weekEnd);
+            
+            return `${startFormatted} - ${endFormatted}`;
+        }
+        
+        function formatDate(date) {
+            const months = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            
+            return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+        }
+        
+        function showError(message) {
+            const result = document.getElementById('result');
+            result.innerHTML = `<div class="result-text error">${message}</div>`;
+        }
+        
+        function showSuccess(message) {
+            const result = document.getElementById('result');
+            result.innerHTML = `<div class="result-text success">${message}</div>`;
+        }
+        
+        // Allow Enter key to trigger translation
+        document.getElementById('dotInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                translateDOT();
+            }
+        });
+        
+        // Auto-format input as user types
+        document.getElementById('dotInput').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            if (value.length > 4) {
+                value = value.substring(0, 4);
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
 </html>
