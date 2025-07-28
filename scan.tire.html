@@ -112,7 +112,7 @@
         }
 
         .tread-gauge {
-            background: linear-gradient(to right, #e53e3e 0%, #e53e3e 20%, #ed8936 20%, #ed8936 40%, #ecc94b 40%, #ecc94b 60%, #48bb78 60%, #48bb78 80%, #38a169 80%, #38a169 100%);
+            background: linear-gradient(to right, #dc2626 0%, #dc2626 33%, #fbbf24 33%, #fbbf24 66%, #16a34a 66%, #16a34a 100%);
             height: 40px;
             border-radius: 20px;
             margin: 30px 0;
@@ -168,26 +168,18 @@
             }
         }
 
-        /* Color zones based on tread depth */
+        /* Standard 3-color system: Red, Yellow, Green */
         .critical {
-            background: linear-gradient(135deg, #e53e3e, #c53030);
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
         }
 
-        .replace-soon {
-            background: linear-gradient(135deg, #ed8936, #dd6b20);
+        .caution {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1f2937;
         }
 
-        .monitor {
-            background: linear-gradient(135deg, #ecc94b, #d69e2e);
-            color: #2d3748;
-        }
-
-        .good {
-            background: linear-gradient(135deg, #48bb78, #38a169);
-        }
-
-        .excellent {
-            background: linear-gradient(135deg, #38a169, #2f855a);
+        .safe {
+            background: linear-gradient(135deg, #16a34a, #15803d);
         }
 
         .result-title {
@@ -270,11 +262,9 @@
             font-weight: bold;
         }
 
-        .zone-critical { background: linear-gradient(135deg, #e53e3e, #c53030); }
-        .zone-replace { background: linear-gradient(135deg, #ed8936, #dd6b20); }
-        .zone-monitor { background: linear-gradient(135deg, #ecc94b, #d69e2e); color: #2d3748; }
-        .zone-good { background: linear-gradient(135deg, #48bb78, #38a169); }
-        .zone-excellent { background: linear-gradient(135deg, #38a169, #2f855a); }
+        .zone-critical { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+        .zone-caution { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1f2937; }
+        .zone-safe { background: linear-gradient(135deg, #16a34a, #15803d); }
 
         @media (max-width: 768px) {
             .header h1 {
@@ -322,28 +312,20 @@
                 <div id="gaugeMarker" class="gauge-marker"></div>
             </div>
             <div class="gauge-labels">
-                <span style="color: #e53e3e;">0mm CRITICAL</span>
-                <span style="color: #ed8936;">2mm REPLACE</span>
-                <span style="color: #ecc94b;">4mm MONITOR</span>
-                <span style="color: #48bb78;">6mm GOOD</span>
-                <span style="color: #38a169;">8mm+ EXCELLENT</span>
+                <span style="color: #dc2626;">0-2mm RED</span>
+                <span style="color: #fbbf24;">2-4mm YELLOW</span>
+                <span style="color: #16a34a;">4mm+ GREEN</span>
             </div>
 
             <div class="depth-zones">
                 <div class="depth-zone zone-critical">
-                    <strong>0-1.6mm</strong><br>CRITICAL
+                    <strong>0-2mm</strong><br>🔴 RED ZONE
                 </div>
-                <div class="depth-zone zone-replace">
-                    <strong>1.6-3mm</strong><br>REPLACE SOON
+                <div class="depth-zone zone-caution">
+                    <strong>2-4mm</strong><br>🟡 YELLOW ZONE
                 </div>
-                <div class="depth-zone zone-monitor">
-                    <strong>3-4mm</strong><br>MONITOR
-                </div>
-                <div class="depth-zone zone-good">
-                    <strong>4-6mm</strong><br>GOOD
-                </div>
-                <div class="depth-zone zone-excellent">
-                    <strong>6mm+</strong><br>EXCELLENT
+                <div class="depth-zone zone-safe">
+                    <strong>4mm+</strong><br>🟢 GREEN ZONE
                 </div>
             </div>
 
@@ -403,8 +385,8 @@
             const gauge = document.querySelector('.tread-gauge');
             const gaugeWidth = gauge.offsetWidth;
             
-            // Calculate position (0-10mm range)
-            let position = (depth / 10) * 100;
+            // Calculate position based on 6mm max for visual gauge
+            let position = (depth / 6) * 100;
             if (position > 100) position = 100;
             
             marker.style.left = `${position}%`;
@@ -414,65 +396,44 @@
         function getTreadAnalysis(depth) {
             let condition, className, title, description, safetyInfo, recommendations;
 
-            if (depth <= 1.6) {
+            if (depth <= 2.0) {
+                // RED ZONE
                 condition = 'critical';
                 className = 'critical';
-                title = '🚨 CRITICAL - REPLACE IMMEDIATELY';
-                description = `At ${depth}mm, your tires are at or below the legal minimum tread depth. This is extremely dangerous and illegal in most countries.`;
-                safetyInfo = 'STOP DRIVING IMMEDIATELY. Tires provide virtually no grip in wet conditions. Risk of hydroplaning and accidents is extremely high.';
+                title = '🔴 RED ZONE - REPLACE IMMEDIATELY';
+                description = `At ${depth}mm, your tires are in the RED ZONE. This is dangerous and may be illegal.`;
+                safetyInfo = 'CRITICAL: Poor grip in wet conditions. High risk of hydroplaning and loss of control.';
                 recommendations = [
-                    '🛑 DO NOT DRIVE - Replace tires immediately',
+                    '🛑 Replace tires immediately',
                     '📞 Contact tire shop today',
-                    '⚠️ Driving is illegal and dangerous',
-                    '🚗 Use alternative transportation until replaced'
-                ];
-            } else if (depth <= 3.0) {
-                condition = 'replace-soon';
-                className = 'replace-soon';
-                title = '⚠️ REPLACE SOON';
-                description = `At ${depth}mm, your tires are worn and should be replaced soon. Wet weather performance is significantly reduced.`;
-                safetyInfo = 'Stopping distances increase dramatically in wet conditions. Risk of losing control in heavy rain or snow.';
-                recommendations = [
-                    '📅 Schedule tire replacement within 2-4 weeks',
-                    '🌧️ Avoid driving in heavy rain if possible',
-                    '🐌 Reduce speed in wet conditions',
-                    '👀 Monitor tread depth weekly'
+                    '⚠️ Avoid wet weather driving',
+                    '🚗 Use extreme caution until replaced'
                 ];
             } else if (depth <= 4.0) {
-                condition = 'monitor';
-                className = 'monitor';
-                title = '👀 MONITOR CLOSELY';
-                description = `At ${depth}mm, your tires are getting worn. Start planning for replacement and monitor closely.`;
-                safetyInfo = 'Wet weather performance is starting to decline. Some loss of grip in heavy rain conditions.';
+                // YELLOW ZONE
+                condition = 'caution';
+                className = 'caution';
+                title = '🟡 YELLOW ZONE - CAUTION';
+                description = `At ${depth}mm, your tires are in the YELLOW ZONE. Plan for replacement soon.`;
+                safetyInfo = 'CAUTION: Reduced wet weather performance. Stopping distances may be increased.';
                 recommendations = [
-                    '📊 Check tread depth monthly',
-                    '📅 Plan tire replacement in 2-6 months',
-                    '🌦️ Exercise caution in wet weather',
-                    '🔍 Look for uneven wear patterns'
-                ];
-            } else if (depth <= 6.0) {
-                condition = 'good';
-                className = 'good';
-                title = '✅ GOOD CONDITION';
-                description = `At ${depth}mm, your tires are in good condition with adequate tread depth for safe driving.`;
-                safetyInfo = 'Good grip in most conditions. Continue regular maintenance and monitoring.';
-                recommendations = [
-                    '📅 Check tread depth every 3 months',
-                    '🔧 Maintain proper tire pressure',
-                    '🔄 Rotate tires regularly',
-                    '⚖️ Check wheel alignment annually'
+                    '📅 Plan tire replacement soon',
+                    '🌧️ Drive carefully in wet conditions',
+                    '🐌 Reduce speed in poor weather',
+                    '👀 Monitor tread depth regularly'
                 ];
             } else {
-                condition = 'excellent';
-                className = 'excellent';
-                title = '🌟 EXCELLENT CONDITION';
-                description = `At ${depth}mm, your tires are in excellent condition with plenty of tread depth remaining.`;
-                safetyInfo = 'Excellent grip in all weather conditions. Maximum safety and performance.';
+                // GREEN ZONE
+                condition = 'safe';
+                className = 'safe';
+                title = '🟢 GREEN ZONE - SAFE';
+                description = `At ${depth}mm, your tires are in the GREEN ZONE. Safe for continued use.`;
+                safetyInfo = 'SAFE: Good grip in most weather conditions. Continue regular maintenance.';
                 recommendations = [
-                    '✨ Continue current maintenance routine',
-                    '🔍 Regular visual inspections',
-                    '📊 Monitor for even wear patterns',
-                    '🛡️ Maintain proper tire pressure for longevity'
+                    '✅ Continue normal driving',
+                    '🔧 Maintain proper tire pressure',
+                    '🔄 Rotate tires regularly',
+                    '📊 Check depth every few months'
                 ];
             }
 
