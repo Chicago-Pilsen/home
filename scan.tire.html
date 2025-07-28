@@ -266,7 +266,165 @@
         .zone-caution { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1f2937; }
         .zone-safe { background: linear-gradient(135deg, #16a34a, #15803d); }
 
-        @media (max-width: 768px) {
+        .visual-inspection-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .visual-inspection-section h3 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .inspection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .inspection-category {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #4299e1;
+        }
+
+        .inspection-category h4 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+            border: 1px solid #e2e8f0;
+        }
+
+        .checkbox-item:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e0;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkmark {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cbd5e0;
+            border-radius: 4px;
+            position: relative;
+            flex-shrink: 0;
+            margin-top: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-item input[type="checkbox"]:checked + .checkmark {
+            background: #e53e3e;
+            border-color: #e53e3e;
+        }
+
+        .checkbox-item input[type="checkbox"]:checked + .checkmark::after {
+            content: "✓";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .issue-info {
+            flex: 1;
+        }
+
+        .issue-info strong {
+            display: block;
+            color: #2d3748;
+            margin-bottom: 2px;
+            font-size: 0.95rem;
+        }
+
+        .issue-info small {
+            color: #718096;
+            font-size: 0.85rem;
+            line-height: 1.3;
+        }
+
+        .inspection-actions {
+            text-align: center;
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .clear-btn {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(113, 128, 150, 0.4);
+        }
+
+        .clear-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(113, 128, 150, 0.6);
+        }
+
+        .visual-issues-summary {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .critical-visual-issues {
+            background: #fed7d7;
+            color: #742a2a;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #e53e3e;
+        }
+
+        .visual-recommendations {
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            color: #22543d;
+        }
             .header h1 {
                 font-size: 2.2rem;
             }
@@ -329,6 +487,146 @@
                 </div>
             </div>
 
+            <div class="visual-inspection-section">
+                <h3>👁️ Visual Inspection Checklist</h3>
+                <p style="color: #666; margin-bottom: 20px; text-align: center;">Check your tire for these common issues</p>
+                
+                <div class="inspection-grid">
+                    <div class="inspection-category">
+                        <h4>🔍 Sidewall Issues</h4>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="sidewall-cracks" name="visual-issues">
+                                <span class="checkmark"></span>
+                                <div class="issue-info">
+                                    <strong>Sidewall Cracks/Dry Rot</strong>
+                                    <small>Small cracks or weathering on tire sides</small>
+                                </div>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="bulges" name="visual-issues">
+                                <span class="checkmark"></span>
+                                <div class="issue-info">
+                                    <strong>Bulges or Blisters</strong>
+                                    <small>Bumps protruding from sidewall - DANGEROUS</small>
+                                </div>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="sidewall-cuts" name="visual-issues">
+                                <span class="checkmark"></span>
+                                <div class="issue-info">
+                                    <strong>Deep Cuts or Gouges</strong>
+                                    <small>Damage that exposes internal structure</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="inspection-category">
+                        <h4>🛞 Tread Issues</h4>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="uneven-wear" name="visual-issues">
+                                <span class="checkmark"></span>
+                                <div class="issue-info">
+                                    <strong>Uneven Wear Patterns</strong>
+                                    <small>One side more worn than the other</small>
+                                </div>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="tread-separation" name="visual-issues">
+                                <span class="checkmark"></span>
+                                <div class="issue-info">
+                                    <strong>Tread Separation</strong>
+                                    <small>Tread lifting or separating from tire body</small>
+                                </div>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="center-wear" name="visual-issues">
+                                <span class="checkmark"></span>
+                                <div class="issue-info">
+                                    <strong>Center Wear Only</strong>
+                                    <small>More wear in center (overinflation)</small>
+                                </div>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="edge-wear" name="visual-issues">
+                                <span class="checkmark"></span>
+                                <div class="issue-info">
+                                    <strong>Edge Wear Only</strong>
+                                    <small>More wear on edges (underinflation)</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="inspection-category">
+                        <h4>🔧 Damage & Objects</h4>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="punctures" name="visual-issues">
+                                <span class="checkmark"></span>
+                                <div class="issue-info">
+                                    <strong>Punctures or Holes</strong>
+                                    <small>Nails, screws, or other penetrating damage</small>
+                                </div>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="embedded-objects" name="visual-issues">
+                                <span class="checkmark"></span>
+                                <div class="issue-info">
+                                    <strong>Embedded Objects</strong>
+                                    <small>Stones, nails, or debris stuck in tread</small>
+                                </div>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="valve-damage" name="visual-issues">
+                                <span class="checkmark"></span>
+                                <div class="issue-info">
+                                    <strong>Valve Stem Damage</strong>
+                                    <small>Cracked, bent, or damaged valve stems</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="inspection-category">
+                        <h4>🚗 Performance Issues</h4>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="vibration" name="visual-issues">
+                                <span class="checkmark"></span>
+                                <div class="issue-info">
+                                    <strong>Excessive Vibration</strong>
+                                    <small>Unusual shaking while driving</small>
+                                </div>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="noise" name="visual-issues">
+                                <span class="checkmark"></span>
+                                <div class="issue-info">
+                                    <strong>Unusual Road Noise</strong>
+                                    <small>Increased or irregular tire noise</small>
+                                </div>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="pulling" name="visual-issues">
+                                <span class="checkmark"></span>
+                                <div class="issue-info">
+                                    <strong>Vehicle Pulling</strong>
+                                    <small>Car pulls to one side when driving straight</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inspection-actions">
+                    <button onclick="analyzeTread()" class="measure-btn">🔍 Complete Tire Analysis</button>
+                    <button onclick="clearInspection()" class="clear-btn">🗑️ Clear All</button>
+                </div>
+            </div>
+
             <div id="results" class="results"></div>
         </div>
 
@@ -370,14 +668,59 @@
                 return;
             }
 
+            // Get visual inspection issues
+            const visualIssues = getVisualIssues();
+
             // Update gauge marker position
             updateGaugeMarker(depth);
             
-            // Analyze based on standard tread depth ranges
-            const analysis = getTreadAnalysis(depth);
+            // Analyze based on standard tread depth ranges and visual issues
+            const analysis = getTreadAnalysis(depth, visualIssues);
             
             // Display results
             displayResults(analysis);
+        }
+
+        function getVisualIssues() {
+            const checkedBoxes = document.querySelectorAll('input[name="visual-issues"]:checked');
+            return Array.from(checkedBoxes).map(checkbox => ({
+                id: checkbox.id,
+                severity: getIssueSeverity(checkbox.id)
+            }));
+        }
+
+        function getIssueSeverity(issueId) {
+            const criticalIssues = ['bulges', 'tread-separation', 'sidewall-cuts'];
+            const majorIssues = ['punctures', 'sidewall-cracks', 'vibration'];
+            const minorIssues = ['uneven-wear', 'center-wear', 'edge-wear', 'embedded-objects', 'valve-damage', 'noise', 'pulling'];
+            
+            if (criticalIssues.includes(issueId)) return 'critical';
+            if (majorIssues.includes(issueId)) return 'major';
+            return 'minor';
+        }
+
+        function getIssueDescription(issueId) {
+            const descriptions = {
+                'sidewall-cracks': 'Sidewall cracking indicates tire aging and potential failure',
+                'bulges': 'Bulges are extremely dangerous - internal structure is damaged',
+                'sidewall-cuts': 'Deep cuts can lead to sudden tire failure',
+                'uneven-wear': 'Uneven wear suggests alignment, pressure, or suspension issues',
+                'tread-separation': 'Tread separation is extremely dangerous - immediate replacement needed',
+                'center-wear': 'Center wear indicates overinflation - check tire pressure',
+                'edge-wear': 'Edge wear indicates underinflation - check tire pressure',
+                'punctures': 'Punctures may be repairable if in tread area and small',
+                'embedded-objects': 'Remove embedded objects and inspect for damage',
+                'valve-damage': 'Damaged valve stems can cause air loss',
+                'vibration': 'Vibration may indicate internal damage or imbalance',
+                'noise': 'Unusual noise may indicate irregular wear or damage',
+                'pulling': 'Vehicle pulling suggests tire pressure or alignment issues'
+            };
+            return descriptions[issueId] || 'Issue detected';
+        }
+
+        function clearInspection() {
+            const checkboxes = document.querySelectorAll('input[name="visual-issues"]');
+            checkboxes.forEach(checkbox => checkbox.checked = false);
         }
 
         function updateGaugeMarker(depth) {
@@ -393,34 +736,51 @@
             marker.style.opacity = '1';
         }
 
-        function getTreadAnalysis(depth) {
+        function getTreadAnalysis(depth, visualIssues = []) {
             let condition, className, title, description, safetyInfo, recommendations;
+            
+            // Check for critical visual issues first
+            const criticalVisualIssues = visualIssues.filter(issue => issue.severity === 'critical');
+            const majorVisualIssues = visualIssues.filter(issue => issue.severity === 'major');
+            const minorVisualIssues = visualIssues.filter(issue => issue.severity === 'minor');
 
-            if (depth <= 2.0) {
-                // RED ZONE
+            if (criticalVisualIssues.length > 0 || depth <= 2.0) {
+                // RED ZONE or Critical Visual Issues
                 condition = 'critical';
                 className = 'critical';
                 title = '🔴 RED ZONE - REPLACE IMMEDIATELY';
-                description = `At ${depth}mm, your tires are in the RED ZONE. This is dangerous and may be illegal.`;
-                safetyInfo = 'CRITICAL: Poor grip in wet conditions. High risk of hydroplaning and loss of control.';
+                
+                if (criticalVisualIssues.length > 0) {
+                    description = `CRITICAL VISUAL ISSUES DETECTED! Your tires have dangerous structural problems that require immediate replacement.`;
+                } else {
+                    description = `At ${depth}mm, your tires are in the RED ZONE. This is dangerous and may be illegal.`;
+                }
+                
+                safetyInfo = 'CRITICAL: Do not drive on these tires. High risk of tire failure and accidents.';
                 recommendations = [
-                    '🛑 Replace tires immediately',
-                    '📞 Contact tire shop today',
-                    '⚠️ Avoid wet weather driving',
-                    '🚗 Use extreme caution until replaced'
+                    '🛑 STOP DRIVING - Replace tires immediately',
+                    '📞 Contact tire shop or roadside assistance',
+                    '⚠️ Driving is extremely dangerous',
+                    '🚗 Use alternative transportation'
                 ];
-            } else if (depth <= 4.0) {
-                // YELLOW ZONE
+            } else if (majorVisualIssues.length > 0 || depth <= 4.0) {
+                // YELLOW ZONE or Major Visual Issues
                 condition = 'caution';
                 className = 'caution';
                 title = '🟡 YELLOW ZONE - CAUTION';
-                description = `At ${depth}mm, your tires are in the YELLOW ZONE. Plan for replacement soon.`;
-                safetyInfo = 'CAUTION: Reduced wet weather performance. Stopping distances may be increased.';
+                
+                if (majorVisualIssues.length > 0 && depth > 4.0) {
+                    description = `Visual issues detected that require attention. Plan for professional inspection and possible replacement.`;
+                } else {
+                    description = `At ${depth}mm, your tires are in the YELLOW ZONE. Plan for replacement soon.`;
+                }
+                
+                safetyInfo = 'CAUTION: Reduced performance and safety. Professional inspection recommended.';
                 recommendations = [
-                    '📅 Plan tire replacement soon',
+                    '📅 Schedule professional tire inspection',
                     '🌧️ Drive carefully in wet conditions',
                     '🐌 Reduce speed in poor weather',
-                    '👀 Monitor tread depth regularly'
+                    '👀 Monitor condition closely'
                 ];
             } else {
                 // GREEN ZONE
@@ -428,7 +788,12 @@
                 className = 'safe';
                 title = '🟢 GREEN ZONE - SAFE';
                 description = `At ${depth}mm, your tires are in the GREEN ZONE. Safe for continued use.`;
-                safetyInfo = 'SAFE: Good grip in most weather conditions. Continue regular maintenance.';
+                
+                if (minorVisualIssues.length > 0) {
+                    description += ` Minor issues detected - monitor and maintain properly.`;
+                }
+                
+                safetyInfo = 'SAFE: Good condition for normal driving. Continue regular maintenance.';
                 recommendations = [
                     '✅ Continue normal driving',
                     '🔧 Maintain proper tire pressure',
@@ -444,30 +809,74 @@
                 title,
                 description,
                 safetyInfo,
-                recommendations
+                recommendations,
+                visualIssues
             };
         }
 
         function displayResults(analysis) {
             const resultsDiv = document.getElementById('results');
             
+            // Create visual issues summary
+            let visualIssuesHtml = '';
+            if (analysis.visualIssues && analysis.visualIssues.length > 0) {
+                const criticalIssues = analysis.visualIssues.filter(issue => issue.severity === 'critical');
+                const majorIssues = analysis.visualIssues.filter(issue => issue.severity === 'major');
+                const minorIssues = analysis.visualIssues.filter(issue => issue.severity === 'minor');
+                
+                visualIssuesHtml = '<div class="visual-issues-summary">';
+                
+                if (criticalIssues.length > 0) {
+                    visualIssuesHtml += '<div class="critical-visual-issues">';
+                    visualIssuesHtml += '<h4>🚨 CRITICAL Visual Issues:</h4><ul>';
+                    criticalIssues.forEach(issue => {
+                        visualIssuesHtml += `<li><strong>${formatIssueId(issue.id)}:</strong> ${getIssueDescription(issue.id)}</li>`;
+                    });
+                    visualIssuesHtml += '</ul></div>';
+                }
+                
+                if (majorIssues.length > 0) {
+                    visualIssuesHtml += '<h4>⚠️ Major Issues Found:</h4><ul>';
+                    majorIssues.forEach(issue => {
+                        visualIssuesHtml += `<li><strong>${formatIssueId(issue.id)}:</strong> ${getIssueDescription(issue.id)}</li>`;
+                    });
+                    visualIssuesHtml += '</ul>';
+                }
+                
+                if (minorIssues.length > 0) {
+                    visualIssuesHtml += '<h4>ℹ️ Minor Issues to Monitor:</h4><ul>';
+                    minorIssues.forEach(issue => {
+                        visualIssuesHtml += `<li><strong>${formatIssueId(issue.id)}:</strong> ${getIssueDescription(issue.id)}</li>`;
+                    });
+                    visualIssuesHtml += '</ul>';
+                }
+                
+                visualIssuesHtml += '</div>';
+            }
+            
             const html = `
                 <div class="result-card ${analysis.className}">
                     <div class="result-title">${analysis.title}</div>
-                    <div class="result-depth">Measured Depth: ${analysis.depth}mm</div>
+                    <div class="result-depth">Measured Tread Depth: ${analysis.depth}mm</div>
                     <div class="result-description">${analysis.description}</div>
                     
                     <div class="safety-info">
-                        <h4>🛡️ Safety Information:</h4>
+                        <h4>🛡️ Safety Assessment:</h4>
                         <p>${analysis.safetyInfo}</p>
                         
-                        <h4 style="margin-top: 15px;">📋 Recommendations:</h4>
+                        ${visualIssuesHtml}
+                        
+                        <h4 style="margin-top: 15px;">📋 Immediate Actions:</h4>
                         <ul style="margin-top: 10px; padding-left: 20px;">
                             ${analysis.recommendations.map(rec => `<li style="margin-bottom: 5px;">${rec}</li>`).join('')}
                         </ul>
                         
+                        ${analysis.visualIssues && analysis.visualIssues.length > 0 ? 
+                            '<div class="visual-recommendations"><h4>🔧 Visual Issue Recommendations:</h4><ul><li>Have a professional tire technician inspect all identified issues</li><li>Do not attempt repairs on structural damage (bulges, separation)</li><li>Address pressure-related wear patterns immediately</li><li>Schedule wheel alignment if uneven wear is present</li></ul></div>' : ''
+                        }
+                        
                         <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
-                            <strong>⚠️ Professional Advice:</strong> This tool provides guidance based on tread depth only. Always consult a qualified tire technician for comprehensive tire inspection including sidewall condition, age, and internal damage.
+                            <strong>⚠️ Professional Advice:</strong> This analysis combines tread depth and visual inspection. Always consult a qualified tire technician for safety-critical decisions and professional tire inspection.
                         </div>
                     </div>
                 </div>
@@ -476,6 +885,10 @@
             resultsDiv.innerHTML = html;
             resultsDiv.style.display = 'block';
             resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function formatIssueId(id) {
+            return id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         }
 
         // Auto-analyze when user types
