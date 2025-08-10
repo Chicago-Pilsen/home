@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Alignment Test</title>
+    <title>Vehicle Alignment Knowledge Test</title>
     <style>
         * {
             margin: 0;
@@ -89,96 +89,145 @@
             transform: none;
         }
 
-        .game-area {
+        .quiz-area {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
             padding: 30px;
             margin: 30px 0;
             min-height: 400px;
-            position: relative;
             border: 2px solid rgba(255, 255, 255, 0.2);
+            display: none;
         }
 
-        .alignment-track {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(90deg, #333, #666, #333);
-            border-radius: 10px;
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 30px;
-            border: 3px solid #444;
+        .quiz-area.active {
+            display: block;
         }
 
-        .center-line {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: #ffff00;
-            transform: translateX(-50%);
-            box-shadow: 0 0 10px #ffff00;
-        }
-
-        .vehicle {
-            position: absolute;
-            top: 50%;
-            width: 80px;
-            height: 40px;
-            background: linear-gradient(45deg, #ff4757, #ff3742);
-            border-radius: 8px;
-            transform: translateY(-50%);
-            transition: left 0.1s ease;
-            border: 2px solid #fff;
-            box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);
-        }
-
-        .vehicle::before {
-            content: '🚗';
-            position: absolute;
-            font-size: 30px;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .controls {
+        .question-header {
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
             flex-wrap: wrap;
+            gap: 15px;
         }
 
-        .control-btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(45deg, #54a0ff, #2e86de);
-            color: white;
+        .question-counter {
             font-size: 18px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            color: #ffff00;
             font-weight: bold;
-            min-width: 120px;
-        }
-
-        .control-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(84, 160, 255, 0.4);
-        }
-
-        .control-btn:active {
-            transform: scale(0.95);
         }
 
         .score-display {
-            text-align: center;
-            font-size: 24px;
-            margin: 20px 0;
+            font-size: 18px;
+            color: #00ff88;
             font-weight: bold;
+        }
+
+        .question {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #ffff00;
+        }
+
+        .question h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .answers {
+            display: grid;
+            gap: 15px;
+        }
+
+        .answer {
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .answer:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
+        }
+
+        .answer.selected {
+            background: rgba(84, 160, 255, 0.3);
+            border-color: #54a0ff;
+        }
+
+        .answer.correct {
+            background: rgba(0, 255, 136, 0.3);
+            border-color: #00ff88;
+        }
+
+        .answer.incorrect {
+            background: rgba(255, 71, 87, 0.3);
+            border-color: #ff4757;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(45deg, #54a0ff, #2e86de);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(84, 160, 255, 0.4);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .final-score {
+            font-size: 3rem;
+            color: #ffff00;
+            margin: 20px 0;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .performance {
+            font-size: 1.2rem;
+            margin: 15px 0;
         }
 
         .leaderboard {
@@ -213,32 +262,20 @@
             transform: translateX(5px);
         }
 
-        .instructions {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            text-align: center;
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
         }
 
-        .game-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .timer {
-            font-size: 20px;
-            font-weight: bold;
-            color: #ffff00;
-        }
-
-        .accuracy {
-            font-size: 18px;
-            color: #00ff88;
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #ffff00);
+            border-radius: 4px;
+            transition: width 0.3s ease;
         }
 
         @media (max-width: 600px) {
@@ -250,100 +287,177 @@
                 font-size: 2rem;
             }
             
-            .controls {
+            .question-header {
                 flex-direction: column;
-                align-items: center;
+                text-align: center;
             }
             
-            .control-btn {
-                min-width: 200px;
+            .navigation {
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🚗 Vehicle Alignment Test</h1>
+        <h1>🔧 Vehicle Alignment Knowledge Test</h1>
         
-        <div class="instructions">
-            <p><strong>Instructions:</strong> Use the Left/Right buttons to align your vehicle with the yellow center line. You have 30 seconds to get as many perfect alignments as possible. The closer you are to perfect alignment, the more points you score!</p>
-        </div>
-
-        <div class="user-input">
+        <div class="user-input" id="userInput">
             <input type="text" id="usernameInput" placeholder="Enter your username" maxlength="20">
-            <button class="btn" onclick="startGame()">Start Game</button>
+            <button class="btn" onclick="startQuiz()">Start Test</button>
         </div>
 
-        <div class="game-area">
-            <div class="game-info">
-                <div class="timer" id="timer">Time: 30s</div>
-                <div class="accuracy" id="accuracy">Accuracy: 0%</div>
+        <div class="quiz-area" id="quizArea">
+            <div class="question-header">
+                <div class="question-counter" id="questionCounter">Question 1 of 10</div>
                 <div class="score-display" id="currentScore">Score: 0</div>
             </div>
             
-            <div class="alignment-track">
-                <div class="center-line"></div>
-                <div class="vehicle" id="vehicle"></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 10%"></div>
             </div>
-            
-            <div class="controls">
-                <button class="control-btn" id="leftBtn" onclick="moveVehicle('left')" disabled>⬅ Left</button>
-                <button class="control-btn" onclick="testAlignment()" id="testBtn" disabled>🎯 Test Alignment</button>
-                <button class="control-btn" id="rightBtn" onclick="moveVehicle('right')" disabled>➡ Right</button>
+
+            <div class="question" id="questionContainer">
+                <!-- Questions will be loaded here -->
+            </div>
+
+            <div class="navigation">
+                <button class="nav-btn" id="prevBtn" onclick="previousQuestion()" disabled>⬅ Previous</button>
+                <button class="nav-btn" id="nextBtn" onclick="nextQuestion()">Next ➡</button>
+                <button class="nav-btn" id="submitBtn" onclick="submitQuiz()" style="display: none;">🏁 Finish Test</button>
             </div>
         </div>
 
+        <div class="results" id="results">
+            <h2>Test Completed! 🎉</h2>
+            <div class="final-score" id="finalScore">0/10</div>
+            <div class="performance" id="performance">Vehicle Alignment Novice</div>
+            <button class="btn" onclick="restartQuiz()" style="margin-top: 20px;">Take Test Again</button>
+        </div>
+
         <div class="leaderboard">
-            <h3>🏆 High Scores</h3>
+            <h3>🏆 Top Scores</h3>
             <div id="scoresList">
                 <div class="score-item">
                     <span>No scores yet - be the first!</span>
-                    <span>0</span>
+                    <span>0/10</span>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let gameActive = false;
-        let currentScore = 0;
-        let vehiclePosition = 50; // percentage from left
-        let timeLeft = 30;
-        let gameTimer;
-        let scores = {};
-        let currentUsername = '';
-        let totalTests = 0;
-        let accurateTests = 0;
-
-        // Load scores from memory
-        function loadScores() {
-            // In a real application, this would load from a database
-            // For now, scores are stored in memory during the session
-            updateLeaderboard();
-        }
-
-        function updateLeaderboard() {
-            const scoresList = document.getElementById('scoresList');
-            const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-            
-            if (sortedScores.length === 0) {
-                scoresList.innerHTML = '<div class="score-item"><span>No scores yet - be the first!</span><span>0</span></div>';
-                return;
+        const questions = [
+            {
+                question: "What is the primary purpose of wheel alignment?",
+                answers: [
+                    "To make the car look better",
+                    "To ensure proper tire contact with the road surface",
+                    "To increase fuel consumption",
+                    "To make the steering wheel shiny"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which of these is NOT a main wheel alignment angle?",
+                answers: [
+                    "Camber",
+                    "Caster",
+                    "Toe",
+                    "Throttle"
+                ],
+                correct: 3
+            },
+            {
+                question: "What does 'toe-in' mean in wheel alignment?",
+                answers: [
+                    "The front of the wheels point toward each other",
+                    "The front of the wheels point away from each other",
+                    "The wheels are perfectly parallel",
+                    "The wheels are tilted upward"
+                ],
+                correct: 0
+            },
+            {
+                question: "How often should you check your wheel alignment?",
+                answers: [
+                    "Every week",
+                    "Every 6,000 miles or when you notice issues",
+                    "Only when buying new tires",
+                    "Never, it's permanent"
+                ],
+                correct: 1
+            },
+            {
+                question: "What is camber in wheel alignment?",
+                answers: [
+                    "The angle of the wheel when viewed from the front or rear",
+                    "The distance between front and rear wheels",
+                    "The steering wheel position",
+                    "The tire pressure measurement"
+                ],
+                correct: 0
+            },
+            {
+                question: "Which symptom suggests your car needs alignment?",
+                answers: [
+                    "Engine making noise",
+                    "Car pulls to one side while driving straight",
+                    "Radio not working",
+                    "Air conditioning is cold"
+                ],
+                correct: 1
+            },
+            {
+                question: "What is caster angle?",
+                answers: [
+                    "How fast the car can go",
+                    "The angle of the steering axis when viewed from the side",
+                    "The color of the wheels",
+                    "The size of the tires"
+                ],
+                correct: 1
+            },
+            {
+                question: "Uneven tire wear is often caused by:",
+                answers: [
+                    "Washing the car too often",
+                    "Poor wheel alignment",
+                    "Using the radio",
+                    "Having clean windows"
+                ],
+                correct: 1
+            },
+            {
+                question: "What happens if you ignore alignment issues?",
+                answers: [
+                    "The car becomes more fuel efficient",
+                    "Premature tire wear and reduced vehicle control",
+                    "The paint job improves",
+                    "Nothing at all"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which professional should perform wheel alignment?",
+                answers: [
+                    "A hair stylist",
+                    "A qualified automotive technician",
+                    "A chef",
+                    "Anyone with basic tools"
+                ],
+                correct: 1
             }
-            
-            scoresList.innerHTML = '';
-            sortedScores.forEach(([username, score], index) => {
-                const scoreItem = document.createElement('div');
-                scoreItem.className = 'score-item';
-                scoreItem.innerHTML = `
-                    <span>${index + 1}. ${username}</span>
-                    <span>${score} pts</span>
-                `;
-                scoresList.appendChild(scoreItem);
-            });
-        }
+        ];
 
-        function startGame() {
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let currentScore = 0;
+        let currentUsername = '';
+        let scores = {};
+        let quizStarted = false;
+
+        function startQuiz() {
             const usernameInput = document.getElementById('usernameInput');
             const username = usernameInput.value.trim();
             
@@ -353,155 +467,165 @@
             }
             
             currentUsername = username;
-            gameActive = true;
+            currentQuestionIndex = 0;
+            userAnswers = [];
             currentScore = 0;
-            vehiclePosition = Math.random() * 80 + 10; // Random start position
-            timeLeft = 30;
-            totalTests = 0;
-            accurateTests = 0;
+            quizStarted = true;
             
-            // Enable game controls
-            document.getElementById('leftBtn').disabled = false;
-            document.getElementById('rightBtn').disabled = false;
-            document.getElementById('testBtn').disabled = false;
+            document.getElementById('userInput').style.display = 'none';
+            document.getElementById('quizArea').classList.add('active');
             
-            // Update displays
-            updateVehiclePosition();
-            updateScore();
-            updateAccuracy();
-            
-            // Start timer
-            gameTimer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('timer').textContent = `Time: ${timeLeft}s`;
-                
-                if (timeLeft <= 0) {
-                    endGame();
-                }
-            }, 1000);
+            loadQuestion();
         }
 
-        function endGame() {
-            gameActive = false;
-            clearInterval(gameTimer);
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            const questionContainer = document.getElementById('questionContainer');
             
-            // Disable controls
-            document.getElementById('leftBtn').disabled = true;
-            document.getElementById('rightBtn').disabled = true;
-            document.getElementById('testBtn').disabled = true;
+            questionContainer.innerHTML = `
+                <h3>${question.question}</h3>
+                <div class="answers">
+                    ${question.answers.map((answer, index) => `
+                        <div class="answer" onclick="selectAnswer(${index})" data-index="${index}">
+                            ${String.fromCharCode(65 + index)}. ${answer}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
             
-            // Update high score if necessary
+            // Update question counter and progress
+            document.getElementById('questionCounter').textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+            document.getElementById('progressFill').style.width = `${((currentQuestionIndex + 1) / questions.length) * 100}%`;
+            
+            // Show previously selected answer if any
+            if (userAnswers[currentQuestionIndex] !== undefined) {
+                const selectedAnswer = document.querySelector(`[data-index="${userAnswers[currentQuestionIndex]}"]`);
+                if (selectedAnswer) {
+                    selectedAnswer.classList.add('selected');
+                }
+            }
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === questions.length - 1) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'inline-block';
+            } else {
+                document.getElementById('nextBtn').style.display = 'inline-block';
+                document.getElementById('submitBtn').style.display = 'none';
+            }
+        }
+
+        function selectAnswer(answerIndex) {
+            // Remove previous selection
+            document.querySelectorAll('.answer').forEach(answer => {
+                answer.classList.remove('selected');
+            });
+            
+            // Add selection to clicked answer
+            document.querySelector(`[data-index="${answerIndex}"]`).classList.add('selected');
+            
+            // Store the answer
+            userAnswers[currentQuestionIndex] = answerIndex;
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            // Calculate score
+            currentScore = 0;
+            for (let i = 0; i < questions.length; i++) {
+                if (userAnswers[i] === questions[i].correct) {
+                    currentScore++;
+                }
+            }
+            
+            // Show results
+            showResults();
+            
+            // Update high scores
             if (!scores[currentUsername] || currentScore > scores[currentUsername]) {
                 scores[currentUsername] = currentScore;
-                alert(`Game Over! New high score for ${currentUsername}: ${currentScore} points!`);
-            } else {
-                alert(`Game Over! Your score: ${currentScore} points. Your high score remains: ${scores[currentUsername]} points.`);
             }
             
             updateLeaderboard();
         }
 
-        function moveVehicle(direction) {
-            if (!gameActive) return;
+        function showResults() {
+            document.getElementById('quizArea').classList.remove('active');
+            document.getElementById('results').classList.add('active');
             
-            if (direction === 'left') {
-                vehiclePosition = Math.max(0, vehiclePosition - 2);
-            } else if (direction === 'right') {
-                vehiclePosition = Math.min(90, vehiclePosition + 2);
-            }
+            document.getElementById('finalScore').textContent = `${currentScore}/${questions.length}`;
             
-            updateVehiclePosition();
-        }
-
-        function updateVehiclePosition() {
-            const vehicle = document.getElementById('vehicle');
-            vehicle.style.left = vehiclePosition + '%';
-        }
-
-        function testAlignment() {
-            if (!gameActive) return;
+            let performance = '';
+            let percentage = (currentScore / questions.length) * 100;
             
-            totalTests++;
-            const perfectCenter = 50;
-            const difference = Math.abs(vehiclePosition - perfectCenter);
-            
-            let points = 0;
-            let feedback = '';
-            
-            if (difference === 0) {
-                points = 100;
-                feedback = 'Perfect! 🎯';
-                accurateTests++;
-            } else if (difference <= 1) {
-                points = 80;
-                feedback = 'Excellent! ⭐';
-                accurateTests++;
-            } else if (difference <= 3) {
-                points = 60;
-                feedback = 'Good! 👍';
-            } else if (difference <= 5) {
-                points = 40;
-                feedback = 'Close! 👌';
-            } else if (difference <= 10) {
-                points = 20;
-                feedback = 'Not bad! 📏';
+            if (percentage >= 90) {
+                performance = "Alignment Expert! 🏆";
+            } else if (percentage >= 80) {
+                performance = "Alignment Professional! 🔧";
+            } else if (percentage >= 70) {
+                performance = "Good Knowledge! 👍";
+            } else if (percentage >= 60) {
+                performance = "Basic Understanding 📚";
             } else {
-                points = 5;
-                feedback = 'Try again! 🎪';
+                performance = "Keep Learning! 📖";
             }
             
-            currentScore += points;
-            updateScore();
-            updateAccuracy();
+            document.getElementById('performance').textContent = performance;
             
-            // Show feedback briefly
-            const testBtn = document.getElementById('testBtn');
-            const originalText = testBtn.textContent;
-            testBtn.textContent = feedback;
-            setTimeout(() => {
-                testBtn.textContent = originalText;
-            }, 1000);
-            
-            // Move vehicle to new random position for next test
-            vehiclePosition = Math.random() * 80 + 10;
-            updateVehiclePosition();
-        }
-
-        function updateScore() {
-            document.getElementById('currentScore').textContent = `Score: ${currentScore}`;
-        }
-
-        function updateAccuracy() {
-            const accuracy = totalTests > 0 ? Math.round((accurateTests / totalTests) * 100) : 0;
-            document.getElementById('accuracy').textContent = `Accuracy: ${accuracy}%`;
-        }
-
-        // Keyboard controls
-        document.addEventListener('keydown', (event) => {
-            if (!gameActive) return;
-            
-            switch(event.key) {
-                case 'ArrowLeft':
-                case 'a':
-                case 'A':
-                    moveVehicle('left');
-                    break;
-                case 'ArrowRight':
-                case 'd':
-                case 'D':
-                    moveVehicle('right');
-                    break;
-                case ' ':
-                case 'Enter':
-                    event.preventDefault();
-                    testAlignment();
-                    break;
+            // Check if it's a new high score
+            if (!scores[currentUsername] || currentScore > scores[currentUsername]) {
+                document.getElementById('performance').innerHTML += "<br><span style='color: #ffff00;'>🎉 New High Score!</span>";
             }
-        });
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            currentScore = 0;
+            
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('userInput').style.display = 'flex';
+            document.getElementById('usernameInput').value = currentUsername;
+        }
+
+        function updateLeaderboard() {
+            const scoresList = document.getElementById('scoresList');
+            const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            
+            if (sortedScores.length === 0) {
+                scoresList.innerHTML = '<div class="score-item"><span>No scores yet - be the first!</span><span>0/10</span></div>';
+                return;
+            }
+            
+            scoresList.innerHTML = '';
+            sortedScores.forEach(([username, score], index) => {
+                const scoreItem = document.createElement('div');
+                scoreItem.className = 'score-item';
+                scoreItem.innerHTML = `
+                    <span>${index + 1}. ${username}</span>
+                    <span>${score}/${questions.length}</span>
+                `;
+                scoresList.appendChild(scoreItem);
+            });
+        }
 
         // Initialize
-        loadScores();
-        updateVehiclePosition();
+        updateLeaderboard();
     </script>
 </body>
 </html>
