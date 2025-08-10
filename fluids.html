@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Alignment Knowledge Test</title>
+    <title>Truck Suspension Guide</title>
     <style>
         * {
             margin: 0;
@@ -12,620 +12,515 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            color: white;
         }
 
         .container {
-            max-width: 800px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        h1 {
+        .header {
             text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: white;
+            margin-bottom: 40px;
         }
 
-        .user-input {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        input[type="text"] {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-            font-size: 16px;
-            min-width: 200px;
-            transition: all 0.3s ease;
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
         }
 
-        input[type="text"]:focus {
-            outline: none;
+        .comparison-section {
             background: white;
-            transform: scale(1.05);
-        }
-
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 25px;
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .quiz-area {
-            background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
-            padding: 30px;
-            margin: 30px 0;
-            min-height: 400px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            display: none;
-        }
-
-        .quiz-area.active {
-            display: block;
-        }
-
-        .question-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
             margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 15px;
         }
 
-        .question-counter {
-            font-size: 18px;
-            color: #ffff00;
-            font-weight: bold;
-        }
-
-        .score-display {
-            font-size: 18px;
-            color: #00ff88;
-            font-weight: bold;
-        }
-
-        .question {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border-left: 4px solid #ffff00;
-        }
-
-        .question h3 {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-
-        .answers {
-            display: grid;
-            gap: 15px;
-        }
-
-        .answer {
-            padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid transparent;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 16px;
-        }
-
-        .answer:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateX(5px);
-        }
-
-        .answer.selected {
-            background: rgba(84, 160, 255, 0.3);
-            border-color: #54a0ff;
-        }
-
-        .answer.correct {
-            background: rgba(0, 255, 136, 0.3);
-            border-color: #00ff88;
-        }
-
-        .answer.incorrect {
-            background: rgba(255, 71, 87, 0.3);
-            border-color: #ff4757;
-        }
-
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 30px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .nav-btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 25px;
-            background: linear-gradient(45deg, #54a0ff, #2e86de);
+        .section-header {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
             color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-        }
-
-        .nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(84, 160, 255, 0.4);
-        }
-
-        .nav-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .results {
+            padding: 20px;
             text-align: center;
+        }
+
+        .section-header h2 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .suspension-type {
             padding: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            display: none;
+            transition: transform 0.3s ease;
         }
 
-        .results.active {
-            display: block;
+        .suspension-type:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
 
-        .final-score {
-            font-size: 3rem;
-            color: #ffff00;
-            margin: 20px 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        .regular-suspension {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-right: 2px solid #ddd;
         }
 
-        .performance {
-            font-size: 1.2rem;
-            margin: 15px 0;
+        .heavy-suspension {
+            background: linear-gradient(135deg, #fff3e0, #ffcc02);
         }
 
-        .leaderboard {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 30px;
-        }
-
-        .leaderboard h3 {
-            text-align: center;
+        .type-title {
+            font-size: 1.5em;
+            font-weight: bold;
             margin-bottom: 20px;
-            font-size: 1.5rem;
-            color: #ffff00;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
         }
 
-        .score-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            margin: 10px 0;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            border-left: 4px solid #ffff00;
-            transition: all 0.3s ease;
+        .regular-suspension .type-title {
+            background: #2196F3;
+            color: white;
         }
 
-        .score-item:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .heavy-suspension .type-title {
+            background: #FF9800;
+            color: white;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .feature-list li {
+            margin-bottom: 12px;
+            padding: 10px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 8px;
+            border-left: 4px solid;
+            transition: transform 0.2s ease;
+        }
+
+        .feature-list li:hover {
             transform: translateX(5px);
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            margin: 20px 0;
+        .regular-suspension .feature-list li {
+            border-left-color: #2196F3;
+        }
+
+        .heavy-suspension .feature-list li {
+            border-left-color: #FF9800;
+        }
+
+        .visual-indicators {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .indicator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .indicator-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .indicator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .indicator-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .specs-table {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             overflow: hidden;
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #00ff88, #ffff00);
-            border-radius: 4px;
-            transition: width 0.3s ease;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .interactive-checker {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .checker-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .question {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .option-btn {
+            padding: 8px 16px;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover {
+            border-color: #4CAF50;
+            background: #4CAF50;
+            color: white;
+        }
+
+        .option-btn.selected {
+            background: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2em;
+            display: none;
+        }
+
+        .result.regular {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 2px solid #2196F3;
+        }
+
+        .result.heavy {
+            background: #fff3e0;
+            color: #ef6c00;
+            border: 2px solid #FF9800;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
             }
-            
-            h1 {
-                font-size: 2rem;
+
+            .regular-suspension {
+                border-right: none;
+                border-bottom: 2px solid #ddd;
             }
-            
-            .question-header {
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .options {
                 flex-direction: column;
-                text-align: center;
-            }
-            
-            .navigation {
-                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔧 Vehicle Alignment Knowledge Test</h1>
-        
-        <div class="user-input" id="userInput">
-            <input type="text" id="usernameInput" placeholder="Enter your username" maxlength="20">
-            <button class="btn" onclick="startQuiz()">Start Test</button>
+        <div class="header">
+            <h1>🚛 Truck Suspension Guide</h1>
+            <p>Learn to identify regular vs heavy-duty truck suspension systems</p>
         </div>
 
-        <div class="quiz-area" id="quizArea">
-            <div class="question-header">
-                <div class="question-counter" id="questionCounter">Question 1 of 10</div>
-                <div class="score-display" id="currentScore">Score: 0</div>
+        <div class="comparison-section">
+            <div class="section-header">
+                <h2>Key Differences</h2>
+                <p>Compare regular and heavy-duty suspension characteristics</p>
             </div>
-            
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 10%"></div>
-            </div>
-
-            <div class="question" id="questionContainer">
-                <!-- Questions will be loaded here -->
-            </div>
-
-            <div class="navigation">
-                <button class="nav-btn" id="prevBtn" onclick="previousQuestion()" disabled>⬅ Previous</button>
-                <button class="nav-btn" id="nextBtn" onclick="nextQuestion()">Next ➡</button>
-                <button class="nav-btn" id="submitBtn" onclick="submitQuiz()" style="display: none;">🏁 Finish Test</button>
-            </div>
-        </div>
-
-        <div class="results" id="results">
-            <h2>Test Completed! 🎉</h2>
-            <div class="final-score" id="finalScore">0/10</div>
-            <div class="performance" id="performance">Vehicle Alignment Novice</div>
-            <button class="btn" onclick="restartQuiz()" style="margin-top: 20px;">Take Test Again</button>
-        </div>
-
-        <div class="leaderboard">
-            <h3>🏆 Top Scores</h3>
-            <div id="scoresList">
-                <div class="score-item">
-                    <span>No scores yet - be the first!</span>
-                    <span>0/10</span>
+            <div class="comparison-grid">
+                <div class="suspension-type regular-suspension">
+                    <div class="type-title">Regular Suspension</div>
+                    <ul class="feature-list">
+                        <li><strong>Leaf Springs:</strong> 2-4 thin leaves, lighter gauge steel</li>
+                        <li><strong>Shocks:</strong> Standard diameter (1-2 inches), single tube design</li>
+                        <li><strong>Frame:</strong> Lighter construction, smaller cross-members</li>
+                        <li><strong>Ride Height:</strong> Lower ground clearance (6-8 inches)</li>
+                        <li><strong>Axle:</strong> Smaller diameter axle housing</li>
+                        <li><strong>Payload:</strong> 1,000-3,500 lbs typical capacity</li>
+                    </ul>
                 </div>
+                <div class="suspension-type heavy-suspension">
+                    <div class="type-title">Heavy-Duty Suspension</div>
+                    <ul class="feature-list">
+                        <li><strong>Leaf Springs:</strong> 6-12+ thick leaves, heavy gauge steel</li>
+                        <li><strong>Shocks:</strong> Large diameter (2.5+ inches), often dual-tube</li>
+                        <li><strong>Frame:</strong> Reinforced construction, larger cross-members</li>
+                        <li><strong>Ride Height:</strong> Higher ground clearance (8-12+ inches)</li>
+                        <li><strong>Axle:</strong> Thick, heavy-duty axle housing</li>
+                        <li><strong>Payload:</strong> 3,500+ lbs capacity, up to 7,000+ lbs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="visual-indicators">
+            <div class="section-header">
+                <h2>Visual Identification Points</h2>
+                <p>What to look for when inspecting a truck</p>
+            </div>
+            <div class="indicator-grid">
+                <div class="indicator-card">
+                    <div class="indicator-title">🍃 Leaf Spring Stack</div>
+                    <p><strong>Regular:</strong> Thin stack, 2-4 leaves visible</p>
+                    <p><strong>Heavy-duty:</strong> Thick stack, 6+ leaves, often with overload springs</p>
+                </div>
+                <div class="indicator-card">
+                    <div class="indicator-title">🔧 Shock Absorber Size</div>
+                    <p><strong>Regular:</strong> Pencil-thin to finger-thick shocks</p>
+                    <p><strong>Heavy-duty:</strong> Thick as a soda can or larger</p>
+                </div>
+                <div class="indicator-card">
+                    <div class="indicator-title">📏 Ground Clearance</div>
+                    <p><strong>Regular:</strong> Lower stance, car-like height</p>
+                    <p><strong>Heavy-duty:</strong> High stance, obvious ground clearance</p>
+                </div>
+                <div class="indicator-card">
+                    <div class="indicator-title">⚙️ Frame Rails</div>
+                    <p><strong>Regular:</strong> Standard thickness, basic construction</p>
+                    <p><strong>Heavy-duty:</strong> Thick, reinforced with additional bracing</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="specs-table">
+            <div class="section-header">
+                <h2>Technical Specifications Comparison</h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Regular Suspension</th>
+                        <th>Heavy-Duty Suspension</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Leaf Spring Thickness</td>
+                        <td>0.25" - 0.5" per leaf</td>
+                        <td>0.5" - 0.75" per leaf</td>
+                    </tr>
+                    <tr>
+                        <td>Number of Leaves</td>
+                        <td>2-4 leaves</td>
+                        <td>6-12+ leaves</td>
+                    </tr>
+                    <tr>
+                        <td>Shock Diameter</td>
+                        <td>1" - 2"</td>
+                        <td>2.5" - 3.5"</td>
+                    </tr>
+                    <tr>
+                        <td>Spring Rate</td>
+                        <td>200-800 lbs/inch</td>
+                        <td>800-2000+ lbs/inch</td>
+                    </tr>
+                    <tr>
+                        <td>Axle Weight Rating</td>
+                        <td>3,000-6,000 lbs</td>
+                        <td>6,000-14,000+ lbs</td>
+                    </tr>
+                    <tr>
+                        <td>Typical Applications</td>
+                        <td>Light hauling, daily driving</td>
+                        <td>Towing, heavy loads, commercial</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="interactive-checker">
+            <h2 class="checker-title">🔍 Interactive Suspension Checker</h2>
+            <p>Answer these questions about the truck you're examining:</p>
+
+            <div class="question">
+                <p><strong>How many leaf springs can you count in the stack?</strong></p>
+                <div class="options">
+                    <button class="option-btn" data-question="leaves" data-value="regular">2-4 leaves</button>
+                    <button class="option-btn" data-question="leaves" data-value="heavy">6+ leaves</button>
+                    <button class="option-btn" data-question="leaves" data-value="unsure">Can't tell</button>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><strong>How thick are the shock absorbers?</strong></p>
+                <div class="options">
+                    <button class="option-btn" data-question="shocks" data-value="regular">Thin (pencil to finger thick)</button>
+                    <button class="option-btn" data-question="shocks" data-value="heavy">Thick (soda can or larger)</button>
+                    <button class="option-btn" data-question="shocks" data-value="unsure">Can't see clearly</button>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><strong>How high does the truck sit?</strong></p>
+                <div class="options">
+                    <button class="option-btn" data-question="height" data-value="regular">Lower, car-like stance</button>
+                    <button class="option-btn" data-question="height" data-value="heavy">High stance, lots of ground clearance</button>
+                    <button class="option-btn" data-question="height" data-value="unsure">Looks average</button>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><strong>What's the truck's intended use?</strong></p>
+                <div class="options">
+                    <button class="option-btn" data-question="use" data-value="regular">Daily driving, light hauling</button>
+                    <button class="option-btn" data-question="use" data-value="heavy">Towing, heavy loads, work truck</button>
+                    <button class="option-btn" data-question="use" data-value="unsure">Mixed/unknown use</button>
+                </div>
+            </div>
+
+            <div class="result regular" id="regularResult">
+                🚙 This appears to be a <strong>REGULAR SUSPENSION</strong> truck!<br>
+                Suitable for daily driving and light hauling tasks.
+            </div>
+
+            <div class="result heavy" id="heavyResult">
+                🚛 This appears to be a <strong>HEAVY-DUTY SUSPENSION</strong> truck!<br>
+                Built for towing and heavy-duty work applications.
             </div>
         </div>
     </div>
 
     <script>
-        const questions = [
-            {
-                question: "What is the primary purpose of wheel alignment?",
-                answers: [
-                    "To make the car look better",
-                    "To ensure proper tire contact with the road surface",
-                    "To increase fuel consumption",
-                    "To make the steering wheel shiny"
-                ],
-                correct: 1
-            },
-            {
-                question: "Which of these is NOT a main wheel alignment angle?",
-                answers: [
-                    "Camber",
-                    "Caster",
-                    "Toe",
-                    "Throttle"
-                ],
-                correct: 3
-            },
-            {
-                question: "What does 'toe-in' mean in wheel alignment?",
-                answers: [
-                    "The front of the wheels point toward each other",
-                    "The front of the wheels point away from each other",
-                    "The wheels are perfectly parallel",
-                    "The wheels are tilted upward"
-                ],
-                correct: 0
-            },
-            {
-                question: "How often should you check your wheel alignment?",
-                answers: [
-                    "Every week",
-                    "Every 6,000 miles or when you notice issues",
-                    "Only when buying new tires",
-                    "Never, it's permanent"
-                ],
-                correct: 1
-            },
-            {
-                question: "What is camber in wheel alignment?",
-                answers: [
-                    "The angle of the wheel when viewed from the front or rear",
-                    "The distance between front and rear wheels",
-                    "The steering wheel position",
-                    "The tire pressure measurement"
-                ],
-                correct: 0
-            },
-            {
-                question: "Which symptom suggests your car needs alignment?",
-                answers: [
-                    "Engine making noise",
-                    "Car pulls to one side while driving straight",
-                    "Radio not working",
-                    "Air conditioning is cold"
-                ],
-                correct: 1
-            },
-            {
-                question: "What is caster angle?",
-                answers: [
-                    "How fast the car can go",
-                    "The angle of the steering axis when viewed from the side",
-                    "The color of the wheels",
-                    "The size of the tires"
-                ],
-                correct: 1
-            },
-            {
-                question: "Uneven tire wear is often caused by:",
-                answers: [
-                    "Washing the car too often",
-                    "Poor wheel alignment",
-                    "Using the radio",
-                    "Having clean windows"
-                ],
-                correct: 1
-            },
-            {
-                question: "What happens if you ignore alignment issues?",
-                answers: [
-                    "The car becomes more fuel efficient",
-                    "Premature tire wear and reduced vehicle control",
-                    "The paint job improves",
-                    "Nothing at all"
-                ],
-                correct: 1
-            },
-            {
-                question: "Which professional should perform wheel alignment?",
-                answers: [
-                    "A hair stylist",
-                    "A qualified automotive technician",
-                    "A chef",
-                    "Anyone with basic tools"
-                ],
-                correct: 1
-            }
-        ];
+        let answers = {
+            leaves: '',
+            shocks: '',
+            height: '',
+            use: ''
+        };
 
-        let currentQuestionIndex = 0;
-        let userAnswers = [];
-        let currentScore = 0;
-        let currentUsername = '';
-        let scores = {};
-        let quizStarted = false;
-
-        function startQuiz() {
-            const usernameInput = document.getElementById('usernameInput');
-            const username = usernameInput.value.trim();
-            
-            if (!username) {
-                alert('Please enter a username!');
-                return;
-            }
-            
-            currentUsername = username;
-            currentQuestionIndex = 0;
-            userAnswers = [];
-            currentScore = 0;
-            quizStarted = true;
-            
-            document.getElementById('userInput').style.display = 'none';
-            document.getElementById('quizArea').classList.add('active');
-            
-            loadQuestion();
-        }
-
-        function loadQuestion() {
-            const question = questions[currentQuestionIndex];
-            const questionContainer = document.getElementById('questionContainer');
-            
-            questionContainer.innerHTML = `
-                <h3>${question.question}</h3>
-                <div class="answers">
-                    ${question.answers.map((answer, index) => `
-                        <div class="answer" onclick="selectAnswer(${index})" data-index="${index}">
-                            ${String.fromCharCode(65 + index)}. ${answer}
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-            
-            // Update question counter and progress
-            document.getElementById('questionCounter').textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
-            document.getElementById('progressFill').style.width = `${((currentQuestionIndex + 1) / questions.length) * 100}%`;
-            
-            // Show previously selected answer if any
-            if (userAnswers[currentQuestionIndex] !== undefined) {
-                const selectedAnswer = document.querySelector(`[data-index="${userAnswers[currentQuestionIndex]}"]`);
-                if (selectedAnswer) {
-                    selectedAnswer.classList.add('selected');
-                }
-            }
-            
-            // Update navigation buttons
-            document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
-            
-            if (currentQuestionIndex === questions.length - 1) {
-                document.getElementById('nextBtn').style.display = 'none';
-                document.getElementById('submitBtn').style.display = 'inline-block';
-            } else {
-                document.getElementById('nextBtn').style.display = 'inline-block';
-                document.getElementById('submitBtn').style.display = 'none';
-            }
-        }
-
-        function selectAnswer(answerIndex) {
-            // Remove previous selection
-            document.querySelectorAll('.answer').forEach(answer => {
-                answer.classList.remove('selected');
+        document.querySelectorAll('.option-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const question = this.getAttribute('data-question');
+                const value = this.getAttribute('data-value');
+                
+                // Remove selected class from all buttons in this question
+                document.querySelectorAll(`[data-question="${question}"]`).forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked button
+                this.classList.add('selected');
+                
+                // Store answer
+                answers[question] = value;
+                
+                // Check if all questions answered
+                checkAllAnswered();
             });
-            
-            // Add selection to clicked answer
-            document.querySelector(`[data-index="${answerIndex}"]`).classList.add('selected');
-            
-            // Store the answer
-            userAnswers[currentQuestionIndex] = answerIndex;
-        }
+        });
 
-        function nextQuestion() {
-            if (currentQuestionIndex < questions.length - 1) {
-                currentQuestionIndex++;
-                loadQuestion();
+        function checkAllAnswered() {
+            const allAnswered = Object.values(answers).every(answer => answer !== '');
+            
+            if (allAnswered) {
+                analyzeAnswers();
             }
         }
 
-        function previousQuestion() {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                loadQuestion();
-            }
-        }
-
-        function submitQuiz() {
-            // Calculate score
-            currentScore = 0;
-            for (let i = 0; i < questions.length; i++) {
-                if (userAnswers[i] === questions[i].correct) {
-                    currentScore++;
-                }
-            }
+        function analyzeAnswers() {
+            const heavyCount = Object.values(answers).filter(answer => answer === 'heavy').length;
+            const regularCount = Object.values(answers).filter(answer => answer === 'regular').length;
             
-            // Show results
-            showResults();
+            // Hide both results first
+            document.getElementById('regularResult').style.display = 'none';
+            document.getElementById('heavyResult').style.display = 'none';
             
-            // Update high scores
-            if (!scores[currentUsername] || currentScore > scores[currentUsername]) {
-                scores[currentUsername] = currentScore;
-            }
-            
-            updateLeaderboard();
-        }
-
-        function showResults() {
-            document.getElementById('quizArea').classList.remove('active');
-            document.getElementById('results').classList.add('active');
-            
-            document.getElementById('finalScore').textContent = `${currentScore}/${questions.length}`;
-            
-            let performance = '';
-            let percentage = (currentScore / questions.length) * 100;
-            
-            if (percentage >= 90) {
-                performance = "Alignment Expert! 🏆";
-            } else if (percentage >= 80) {
-                performance = "Alignment Professional! 🔧";
-            } else if (percentage >= 70) {
-                performance = "Good Knowledge! 👍";
-            } else if (percentage >= 60) {
-                performance = "Basic Understanding 📚";
+            // Show result based on majority
+            if (heavyCount > regularCount) {
+                document.getElementById('heavyResult').style.display = 'block';
             } else {
-                performance = "Keep Learning! 📖";
-            }
-            
-            document.getElementById('performance').textContent = performance;
-            
-            // Check if it's a new high score
-            if (!scores[currentUsername] || currentScore > scores[currentUsername]) {
-                document.getElementById('performance').innerHTML += "<br><span style='color: #ffff00;'>🎉 New High Score!</span>";
+                document.getElementById('regularResult').style.display = 'block';
             }
         }
 
-        function restartQuiz() {
-            currentQuestionIndex = 0;
-            userAnswers = [];
-            currentScore = 0;
-            
-            document.getElementById('results').classList.remove('active');
-            document.getElementById('userInput').style.display = 'flex';
-            document.getElementById('usernameInput').value = currentUsername;
-        }
-
-        function updateLeaderboard() {
-            const scoresList = document.getElementById('scoresList');
-            const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-            
-            if (sortedScores.length === 0) {
-                scoresList.innerHTML = '<div class="score-item"><span>No scores yet - be the first!</span><span>0/10</span></div>';
-                return;
-            }
-            
-            scoresList.innerHTML = '';
-            sortedScores.forEach(([username, score], index) => {
-                const scoreItem = document.createElement('div');
-                scoreItem.className = 'score-item';
-                scoreItem.innerHTML = `
-                    <span>${index + 1}. ${username}</span>
-                    <span>${score}/${questions.length}</span>
-                `;
-                scoresList.appendChild(scoreItem);
+        // Add smooth scrolling animation for better UX
+        document.querySelectorAll('.option-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Small delay to show selection, then scroll to result if all answered
+                setTimeout(() => {
+                    const allAnswered = Object.values(answers).every(answer => answer !== '');
+                    if (allAnswered) {
+                        document.querySelector('.result').scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    }
+                }, 300);
             });
-        }
-
-        // Initialize
-        updateLeaderboard();
+        });
     </script>
 </body>
 </html>
