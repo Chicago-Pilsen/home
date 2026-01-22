@@ -4,7 +4,7 @@
    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>On-Site Auto Repair - 24/7 Roadside Assistance</title>
+    <title>Emergency Roadside Repair - 24/7 Emergency Auto Service</title>
     <style>
         * {
             margin: 0;
@@ -46,7 +46,7 @@
         .logo {
             font-size: 2rem;
             font-weight: bold;
-            color: #ff6b35;
+            color: #dc2626;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
@@ -64,11 +64,11 @@
         }
 
         .nav-links a:hover {
-            color: #ff6b35;
+            color: #dc2626;
         }
 
         .emergency-btn {
-            background: linear-gradient(45deg, #ff6b35, #ff8c42);
+            background: linear-gradient(45deg, #dc2626, #ef4444);
             padding: 12px 24px;
             border: none;
             border-radius: 6px;
@@ -78,16 +78,23 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             text-decoration: none;
             display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
         }
 
         .emergency-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.4);
         }
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23333" width="1200" height="600"/><path fill="%23444" d="M0 300L200 200L400 350L600 250L800 400L1000 300L1200 350V600H0Z"/></svg>');
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.6)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23333" width="1200" height="600"/><path fill="%23444" d="M0 300L200 200L400 350L600 250L800 400L1000 300L1200 350V600H0Z"/></svg>');
             background-size: cover;
             background-position: center;
             color: white;
@@ -101,6 +108,24 @@
             margin-bottom: 1rem;
             text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
             font-weight: 900;
+            color: #dc2626;
+        }
+
+        .emergency-banner {
+            background: linear-gradient(45deg, #dc2626, #ef4444);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: flash 3s infinite;
+        }
+
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
 
         .hero p {
@@ -119,40 +144,43 @@
         }
 
         .btn-primary {
-            background: linear-gradient(45deg, #ff6b35, #ff8c42);
-            padding: 15px 30px;
+            background: linear-gradient(45deg, #dc2626, #ef4444);
+            padding: 18px 36px;
             border: none;
             border-radius: 8px;
             color: white;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.5);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.5);
         }
 
         .btn-secondary {
             background: rgba(255,255,255,0.1);
-            padding: 15px 30px;
-            border: 2px solid #ff6b35;
+            padding: 18px 36px;
+            border: 2px solid #dc2626;
             border-radius: 8px;
             color: white;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
+            text-transform: uppercase;
         }
 
         .btn-secondary:hover {
-            background: #ff6b35;
+            background: #dc2626;
             transform: translateY(-3px);
         }
 
@@ -165,42 +193,76 @@
 
         .services h2 {
             text-align: center;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            color: #dc2626;
+            text-transform: uppercase;
+        }
+
+        .services-subtitle {
+            text-align: center;
+            font-size: 1.3rem;
             margin-bottom: 3rem;
-            color: #ff6b35;
+            color: #ccc;
         }
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
         }
 
         .service-card {
             background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
-            padding: 2rem;
+            padding: 2.5rem;
             border-radius: 12px;
             text-align: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 2px solid #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(45deg, #dc2626, #ef4444);
         }
 
         .service-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(255, 107, 53, 0.2);
-            border-color: #ff6b35;
+            box-shadow: 0 15px 30px rgba(220, 38, 38, 0.3);
+            border-color: #dc2626;
         }
 
         .service-icon {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 1rem;
-            color: #ff6b35;
+            color: #dc2626;
         }
 
         .service-card h3 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
-            color: #ff6b35;
+            color: #dc2626;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .emergency-tag {
+            background: #dc2626;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: inline-block;
         }
 
         /* Why Choose Us Section */
@@ -214,7 +276,8 @@
             text-align: center;
             font-size: 2.5rem;
             margin-bottom: 3rem;
-            color: #ff6b35;
+            color: #dc2626;
+            text-transform: uppercase;
         }
 
         .features-grid {
@@ -225,19 +288,29 @@
 
         .feature {
             text-align: center;
-            padding: 1.5rem;
+            padding: 2rem;
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border-radius: 12px;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            border-color: #dc2626;
+            transform: translateY(-5px);
         }
 
         .feature-icon {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 1rem;
-            color: #ff6b35;
+            color: #dc2626;
         }
 
         .feature h3 {
             font-size: 1.3rem;
             margin-bottom: 1rem;
-            color: #ff6b35;
+            color: #dc2626;
+            text-transform: uppercase;
         }
 
         /* Contact Section */
@@ -249,9 +322,10 @@
 
         .contact h2 {
             text-align: center;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 3rem;
-            color: #ff6b35;
+            color: #dc2626;
+            text-transform: uppercase;
         }
 
         .contact-info {
@@ -263,20 +337,33 @@
 
         .contact-item {
             background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
-            padding: 2rem;
+            padding: 2.5rem;
             border-radius: 12px;
             border: 2px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            border-color: #dc2626;
+            transform: translateY(-5px);
         }
 
         .contact-item h3 {
-            color: #ff6b35;
+            color: #dc2626;
             font-size: 1.5rem;
             margin-bottom: 1rem;
+            text-transform: uppercase;
         }
 
         .contact-item p {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: bold;
+        }
+
+        .phone-number {
+            font-size: 2rem;
+            color: #dc2626;
+            font-weight: 900;
         }
 
         /* Footer */
@@ -285,7 +372,7 @@
             color: white;
             text-align: center;
             padding: 40px 0;
-            border-top: 3px solid #ff6b35;
+            border-top: 3px solid #dc2626;
         }
 
         /* Responsive Design */
@@ -307,6 +394,10 @@
                 width: 100%;
                 max-width: 300px;
             }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
    <!-- Google tag (gtag.js) -->
@@ -323,80 +414,72 @@
     
     <header>
         <nav class="container">
-            <div class="logo">🛞 Tire Repair</div>
+            <div class="logo">🚨 Emergency Auto</div>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-                
-  <li><a href="#" style="color: #ff6b35; font-weight: bold;">SE HABLA ESPAÑOL</a></li>
+                <li><a href="#services">Emergency Services</a></li>
+                <li><a href="#contact">Emergency Contact</a></li>
+                <li><a href="#" style="color: #dc2626; font-weight: bold;">SE HABLA ESPAÑOL</a></li>
             </ul>
-            <a href="tel:+1-773-680-2671" class="emergency-btn">CALL NOW</a>
+            <a href="tel:+1-773-680-2671" class="emergency-btn">EMERGENCY CALL</a>
         </nav>
     </header>
 
     <section id="home" class="hero">
         <div class="container">
-            <h1>EMERGENCY ROAD SERVICES</h1>
-            <p>Professional 24/7 roadside assistance when you need it most. Fast, reliable, and always ready to get you back on the road.</p>
-             <p style="font-size: 1.1rem; color: #ff6b35; font-weight: bold; margin-bottom: 2rem;">🗣️ SE HABLA ESPAÑOL - SERVICIO EN ESPAÑOL DISPONIBLE</p>            
+            <div class="emergency-banner">
+                🚨 EMERGENCY ROADSIDE REPAIRS 🚨
+            </div>
+            <h1>STRANDED? WE'RE COMING!</h1>
+            <p>24/7 emergency roadside repair service. When your car breaks down, we're your lifeline. Fast response, professional repairs, get you moving again.</p>
+            <p style="font-size: 1.1rem; color: #dc2626; font-weight: bold; margin-bottom: 2rem;">🗣️ SE HABLA ESPAÑOL - SERVICIO DE EMERGENCIA EN ESPAÑOL</p>            
             <div class="hero-buttons">
-                <a href="tel:+1-773-680-2671" class="btn-primary">EMERGENCY CALL</a>
-                <a href="#services" class="btn-secondary">VIEW SERVICES</a>
+                <a href="tel:+1-773-680-2671" class="btn-primary">CALL FOR EMERGENCY</a>
+                <a href="#services" class="btn-secondary">Emergency Services</a>
             </div>
         </div>
     </section>
 
     <section id="services" class="services">
         <div class="container">
-            <h2>PROFESSIONAL SERVICES</h2>
+            <h2>Emergency Repairs Only</h2>
+            <p class="services-subtitle">When you're stranded and need immediate roadside assistance</p>
             <div class="services-grid">
                 <div class="service-card">
+                    <div class="emergency-tag">Emergency Only</div>
                     <div class="service-icon">🔋</div>
-                    <h3>BATTERY JUMP START</h3>
-                    <p>Dead battery? We'll get you started fast with professional-grade equipment and safety protocols.</p>
+                    <h3>Emergency Jump Start</h3>
+                    <p>Dead battery leaving you stranded? Emergency jump start service to get you moving immediately. Professional equipment, safe procedures.</p>
                 </div>
                 <div class="service-card">
+                    <div class="emergency-tag">Emergency Only</div>
                     <div class="service-icon">🛞</div>
-                    <h3>TIRE PLUG REPAIR </h3>
-                    <p>While DIY plug kits are available, professional installation is highly recommended
-                    for safety reasons</p>
+                    <h3>Emergency Tire Repair</h3>
+                    <p>Flat tire on the roadside? Emergency tire plugging and temporary repairs to get you to safety. Quick fixes when you're stuck.</p>
                 </div>
                 <div class="service-card">
+                    <div class="emergency-tag">Emergency Only</div>
                     <div class="service-icon">🔐</div>
-                    <h3>LOCKOUT SERVICE</h3>
-                    <p>Locked out? Our skilled technicians will safely get you back in your vehicle without damage.</p>
+                    <h3>Emergency Lockout</h3>
+                    <p>Locked out of your vehicle? Emergency lockout service available 24/7. Fast entry without damage to your car.</p>
                 </div>
                 <div class="service-card">
+                    <div class="emergency-tag">Emergency Only</div>
                     <div class="service-icon">⛽</div>
-                    <h3>FUEL DELIVERY</h3>
-                    <p>Ran out of gas? We'll bring quality fuel directly to your location, day or night.</p>
+                    <h3>Emergency Fuel Delivery</h3>
+                    <p>Ran out of gas and stranded? Emergency fuel delivery to your exact location. Get enough gas to reach the nearest station.</p>
                 </div>
                 <div class="service-card">
+                    <div class="emergency-tag">Emergency Only</div>
                     <div class="service-icon">🚗</div>
-                    <h3>TOWING SERVICE</h3>
-                    <p>Professional towing with modern equipment. Safe transport to your preferred repair facility.</p>
+                    <h3>Emergency Towing</h3>
+                    <p>Can't drive? Emergency towing service when repairs aren't possible on-site. Safe transport to your preferred location.</p>
                 </div>
                 <div class="service-card">
+                    <div class="emergency-tag">Emergency Only</div>
                     <div class="service-icon">🔧</div>
-                    <h3>MECHANICAL REPAIRS</h3>
-                    <p>On-site mechanical assistance for common roadside issues. Get back on the road faster.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">🔋</div>
-                    <h3>BATTERY INSTALLATION</h3>
-                    <p>Complete battery replacement service. We install high-quality batteries and dispose of old ones properly.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">📡</div>
-                    <h3>TPMS PROGRAMMING</h3>
-                    <p>Tire Pressure Monitoring System programming and calibration. Ensure your safety sensors work perfectly.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">⚖️</div>
-                    <h3>WHEEL ALIGNMENT</h3>
-                    <p>Professional wheel alignment service to improve tire life, fuel efficiency, and vehicle handling.</p>
+                    <h3>Emergency Roadside Fixes</h3>
+                    <p>Quick emergency repairs for common breakdowns. Belt replacements, hose fixes, and other urgent repairs to get you moving.</p>
                 </div>
             </div>
         </div>
@@ -404,27 +487,27 @@
 
     <section class="why-choose">
         <div class="container">
-            <h2>WHY CHOOSE On-Site Auto Repair</h2>
+            <h2>Emergency Response Specialists</h2>
             <div class="features-grid">
                 <div class="feature">
                     <div class="feature-icon">⚡</div>
-                    <h3>RAPID RESPONSE</h3>
-                    <p>Average 15-minute response time. We're always ready to roll.</p>
+                    <h3>Emergency Response</h3>
+                    <p>15-minute average response time. When you're stranded, every minute counts. We prioritize emergency calls.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🚨</div>
+                    <h3>24/7 Emergency Line</h3>
+                    <p>Never closed. Emergency hotline available around the clock, 365 days a year. Always ready for your emergency.</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">🛡️</div>
-                    <h3>FULLY INSURED</h3>
-                    <p>Complete insurance coverage and bonded technicians for your peace of mind.</p>
+                    <h3>Emergency Certified</h3>
+                    <p>Licensed emergency roadside technicians. Fully insured and bonded for emergency roadside situations.</p>
                 </div>
                 <div class="feature">
-                    <div class="feature-icon">🎯</div>
-                    <h3>PROFESSIONAL GRADE</h3>
-                    <p>Top-tier equipment and certified technicians deliver quality results.</p>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🕐</div>
-                    <h3>24/7 AVAILABILITY</h3>
-                    <p>Round-the-clock service, 365 days a year. We never close.</p>
+                    <div class="feature-icon">📍</div>
+                    <h3>GPS Emergency Tracking</h3>
+                    <p>We'll find you anywhere. GPS tracking ensures we reach your exact emergency location quickly.</p>
                 </div>
             </div>
         </div>
@@ -432,18 +515,22 @@
 
     <section id="contact" class="contact">
         <div class="container">
-            <h2>GET HELP NOW</h2>
+            <h2>Emergency Contact</h2>
             <div class="contact-info">
-               
                 <div class="contact-item">
-                    <h3>RESPONSE TIME</h3>
-                    <p>15-30 Minutes</p>
-                    <p>Average Arrival</p>
+                    <h3>🚨 Emergency Hotline</h3>
+                    <p class="phone-number">773-680-2671</p>
+                    <p>Call Now - Available 24/7</p>
                 </div>
                 <div class="contact-item">
-                    <h3>SERVICE AREA</h3>
-                    <p>50-Mile Radius</p>
-                    <p>Major Metro Areas</p>
+                    <h3>⚡ Emergency Response</h3>
+                    <p>15-30 Minutes</p>
+                    <p>Average Emergency Arrival</p>
+                </div>
+                <div class="contact-item">
+                    <h3>📍 Emergency Coverage</h3>
+                    <p>50-Mile Emergency Radius</p>
+                    <p>All Major Roads & Highways</p>
                 </div>
             </div>
         </div>
@@ -451,7 +538,7 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2025 On-Site Auto Repair, Licensed, Bonded & Insured. Professional roadside assistance you can trust.</p>
+            <p>&copy; 2025 Emergency Roadside Repair - Licensed Emergency Service Provider. When you're stranded, we're your solution.</p>
         </div>
     </footer>
 
@@ -482,11 +569,23 @@
             }
         });
 
-        // Add click-to-call functionality
+        // Emergency call tracking
         document.querySelectorAll('a[href^="tel:"]').forEach(link => {
             link.addEventListener('click', function() {
-                // Track emergency calls if needed
+                // Track emergency calls
                 console.log('Emergency call initiated');
+                gtag('event', 'emergency_call', {
+                    'event_category': 'emergency',
+                    'event_label': 'phone_call'
+                });
+            });
+        });
+
+        // Add urgency animations on page load
+        window.addEventListener('load', function() {
+            const emergencyElements = document.querySelectorAll('.emergency-btn, .emergency-banner');
+            emergencyElements.forEach(element => {
+                element.style.animation = 'pulse 2s infinite';
             });
         });
     </script>
