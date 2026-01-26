@@ -520,50 +520,45 @@
                 
                 <div class="volunteer-buttons">
                     <button class="volunteer-btn" onclick="toggleVolunteerForm()">Become A Volunteer Responder</button>
-                    <button class="volunteer-btn admin-btn" onclick="openAdminSheet()">📊 Admin: View All Data (Google Sheets)</button>
+                    <button class="volunteer-btn admin-btn" onclick="openAdminSheet()">📧 Admin: Check Email Inbox</button>
                 </div>
                 
                 <div class="admin-info">
-                    <strong>📋 ENTRY IDs NEEDED - QUICK SETUP:</strong>
-                    1. Open this link in new tab: <a href="https://docs.google.com/forms/d/e/1FAIpQLSeHPrS4t_Tt20mFhIMJmJZTd0MvWVmVUw2tFVgHtM3fdmDTJA/viewform" target="_blank" style="color: #ffd700;">Your Google Form</a><br>
-                    2. Right-click → "View Page Source" → Search for "entry." (you'll see 5 different ones)<br>
-                    3. Replace the 5 "REPLACE_ENTRY_ID" below with your actual entry IDs<br>
-                    4. Set up Google Sheet responses tab → Copy that URL to replace googleSheetUrl<br>
-                    <strong>💡 TIP:</strong> Form URL is already updated with your form!
+                    <strong>📧 EMAIL SOLUTION - WORKS IMMEDIATELY:</strong>
+                    1. All volunteer registrations will be emailed directly to you<br>
+                    2. Replace "YOUR_ADMIN_EMAIL@gmail.com" below with your actual email<br>
+                    3. When someone registers, it opens their email to send you the data<br>
+                    4. Simple, reliable, and works right away!
                 </div>
                 
                 <div id="volunteerForm" class="volunteer-signup-form">
                     <h3 style="color: #ff6600; margin-bottom: 25px; text-align: center; font-size: 20px;">Emergency Volunteer Registration</h3>
                     
-                    <!-- GOOGLE FORMS INTEGRATION - REPLACE WITH YOUR FORM DETAILS -->
-                    <form id="volunteerRegistration" 
-                          action="https://docs.google.com/forms/d/e/1FAIpQLSeHPrS4t_Tt20mFhIMJmJZTd0MvWVmVUw2tFVgHtM3fdmDTJA/formResponse" 
-                          method="POST" 
-                          target="hidden_iframe">
-                        
+                    <!-- EMAIL SOLUTION - SIMPLE AND RELIABLE -->
+                    <form id="volunteerRegistration">
                         <div class="form-group">
                             <label for="volunteerName">Full Name:</label>
-                            <input type="text" name="entry.REPLACE_NAME_ENTRY_ID" required>
+                            <input type="text" id="volunteerName" name="volunteerName" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="volunteerPhone">Phone Number:</label>
-                            <input type="tel" name="entry.REPLACE_PHONE_ENTRY_ID" placeholder="(773) 555-0123" required>
+                            <input type="tel" id="volunteerPhone" name="volunteerPhone" placeholder="(773) 555-0123" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="volunteerEmail">Email Address:</label>
-                            <input type="email" name="entry.REPLACE_EMAIL_ENTRY_ID" required>
+                            <input type="email" id="volunteerEmail" name="volunteerEmail" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="volunteerZip">ZIP Code (for local alerts):</label>
-                            <input type="text" name="entry.REPLACE_ZIP_ENTRY_ID" placeholder="60608" required>
+                            <input type="text" id="volunteerZip" name="volunteerZip" placeholder="60608" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="volunteerSkills">Emergency Skills (optional):</label>
-                            <select name="entry.REPLACE_SKILLS_ENTRY_ID">
+                            <select id="volunteerSkills" name="volunteerSkills">
                                 <option value="">Select your skills...</option>
                                 <option value="Basic Mechanical Knowledge">Basic Mechanical Knowledge</option>
                                 <option value="First Aid Certified">First Aid Certified</option>
@@ -583,9 +578,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Hidden iframe to handle Google Forms submission -->
-    <iframe name="hidden_iframe" class="hidden-iframe" onload="formSubmitted()"></iframe>
 
     <section class="services" id="services">
         <div class="container">
@@ -699,8 +691,8 @@
     </footer>
 
     <script>
-        // Global variable to store Google Sheet URL for admin access
-        let googleSheetUrl = "REPLACE_WITH_YOUR_GOOGLE_SHEET_URL";
+        // Admin email address - REPLACE WITH YOUR EMAIL
+        let adminEmail = "YOUR_ADMIN_EMAIL@gmail.com";
 
         function toggleVolunteerForm() {
             const form = document.getElementById('volunteerForm');
@@ -720,31 +712,62 @@
             }
         }
 
-        // Function to open Google Sheet for admin
+        // Function to open admin email inbox
         function openAdminSheet() {
-            if (googleSheetUrl === "REPLACE_WITH_YOUR_GOOGLE_SHEET_URL") {
-                alert("ADMIN SETUP NEEDED:\n\n1. Create Google Form\n2. Replace the form URL in the code\n3. Replace the Google Sheet URL\n\nSee setup instructions above!");
+            if (adminEmail === "YOUR_ADMIN_EMAIL@gmail.com") {
+                alert("ADMIN SETUP NEEDED:\n\nReplace 'YOUR_ADMIN_EMAIL@gmail.com' in the code with your actual email address.\n\nThen all volunteer registrations will be emailed to you!");
                 return;
             }
-            window.open(googleSheetUrl, '_blank');
+            
+            // Open Gmail or default email client
+            window.open(`https://mail.google.com/mail/u/0/#search/Emergency+Volunteer+Registration`, '_blank');
         }
 
-        // Function called when Google Form is submitted successfully
-        function formSubmitted() {
-            // Small delay to ensure the form was submitted
+        // Handle email-based form submission
+        function handleEmailSubmission(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const name = formData.get('volunteerName');
+            const phone = formData.get('volunteerPhone');
+            const email = formData.get('volunteerEmail');
+            const zip = formData.get('volunteerZip');
+            const skills = formData.get('volunteerSkills') || 'None specified';
+            
+            // Create email content
+            const subject = `🚨 New Emergency Volunteer Registration: ${name}`;
+            const body = `NEW EMERGENCY VOLUNTEER REGISTRATION\n\n` +
+                        `📅 Registration Date: ${new Date().toLocaleString()}\n` +
+                        `👤 Full Name: ${name}\n` +
+                        `📞 Phone Number: ${phone}\n` +
+                        `📧 Email Address: ${email}\n` +
+                        `📍 ZIP Code: ${zip}\n` +
+                        `🛠️ Emergency Skills: ${skills}\n` +
+                        `🚨 Status: Active Volunteer\n\n` +
+                        `This volunteer will receive emergency alerts in their area.\n\n` +
+                        `--- Emergency Roadside Repair - Volunteer System ---`;
+            
+            // Open email client with pre-filled content
+            const mailtoLink = `mailto:${adminEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+            
+            // Show success message
             setTimeout(() => {
-                alert("🎉 Registration Successful!\n\nThank you for joining our Emergency Response Network!\n\n✅ Your data has been sent directly to our admin team\n📊 Admin can view all volunteer data in Google Sheets\n📱 You'll receive emergency alerts in your area\n\nWelcome aboard!");
+                alert(`🎉 Registration Successful!\n\nThank you ${name}!\n\n✅ Your volunteer registration email is being sent to our admin team\n📧 Admin will receive: ${adminEmail}\n📱 You'll receive emergency alerts in ZIP code ${zip}\n\nWelcome to the Emergency Response Network!`);
                 
                 // Reset and hide form
-                document.getElementById('volunteerRegistration').reset();
+                e.target.reset();
                 toggleVolunteerForm();
             }, 1000);
         }
 
-        // Make sure the form is hidden initially
+        // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('volunteerForm');
             form.style.display = 'none';
+            
+            // Add form submission handler
+            document.getElementById('volunteerRegistration').addEventListener('submit', handleEmailSubmission);
         });
     </script>
 </body>
