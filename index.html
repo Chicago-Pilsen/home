@@ -91,7 +91,130 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(220, 38, 38, 0.4);
         }
+/* VOLUNTEER SECTION STYLES - Add to your CSS */
+.volunteer-section {
+    background: #1a1a1a;
+    padding: 80px 0;
+    position: relative;
+    clear: both;
+    width: 100%;
+}
 
+.volunteer-content {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.volunteer-section h2 {
+    font-size: 32px;
+    color: #ff6600;
+    margin-bottom: 25px;
+    font-weight: bold;
+}
+
+.volunteer-section p {
+    font-size: 18px;
+    margin-bottom: 35px;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+.volunteer-btn {
+    background: #ff6600;
+    color: #ffffff;
+    padding: 18px 35px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.volunteer-btn:hover {
+    background: #ff0000;
+}
+
+.volunteer-signup-form {
+    background: #000000;
+    padding: 40px;
+    border-radius: 12px;
+    border: 2px solid #ff6600;
+    margin-top: 40px;
+    display: none;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.volunteer-signup-form.active {
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #ff6600;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #000000;
+    font-size: 16px;
+}
+
+.form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: #ff6600;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.btn-submit {
+    background: #ff0000;
+}
+
+.btn-cancel {
+    background: #666666;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .volunteer-section h2 {
+        font-size: 24px;
+    }
+
+    .volunteer-signup-form {
+        padding: 25px;
+        margin: 30px 10px 0 10px;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+    }
+
+    .volunteer-btn {
+        padding: 15px 25px;
+        font-size: 15px;
+    }
+}
         /* Hero Section */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.6)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23333" width="1200" height="600"/><path fill="%23444" d="M0 300L200 200L400 350L600 250L800 400L1000 300L1200 350V600H0Z"/></svg>');
@@ -701,5 +824,6 @@
     </script>
 </body>
 </html>
+
 
 
