@@ -522,47 +522,48 @@
                     <button class="volunteer-btn" onclick="toggleVolunteerForm()">Become A Volunteer Responder</button>
                     <button class="volunteer-btn admin-btn" onclick="openAdminSheet()">📊 Admin: View All Data (Google Sheets)</button>
                 </div>
-                <!--
+                
                 <div class="admin-info">
-                    <strong>ADMIN INSTRUCTIONS:</strong>
-                    1. Create Google Form at forms.google.com<br>
-                    2. Replace FORM_ACTION_URL and entry.XXXXXX below<br>
-                    3. Click "Admin: View All Data" to see your Google Sheet<br>
-                    4. All volunteer submissions will go directly to YOUR Google Sheet
+                    <strong>📋 ENTRY IDs NEEDED - QUICK SETUP:</strong>
+                    1. Open this link in new tab: <a href="https://docs.google.com/forms/d/e/1FAIpQLSeHPrS4t_Tt20mFhIMJmJZTd0MvWVmVUw2tFVgHtM3fdmDTJA/viewform" target="_blank" style="color: #ffd700;">Your Google Form</a><br>
+                    2. Right-click → "View Page Source" → Search for "entry." (you'll see 5 different ones)<br>
+                    3. Replace the 5 "REPLACE_ENTRY_ID" below with your actual entry IDs<br>
+                    4. Set up Google Sheet responses tab → Copy that URL to replace googleSheetUrl<br>
+                    <strong>💡 TIP:</strong> Form URL is already updated with your form!
                 </div>
-                -->
+                
                 <div id="volunteerForm" class="volunteer-signup-form">
                     <h3 style="color: #ff6600; margin-bottom: 25px; text-align: center; font-size: 20px;">Emergency Volunteer Registration</h3>
                     
                     <!-- GOOGLE FORMS INTEGRATION - REPLACE WITH YOUR FORM DETAILS -->
                     <form id="volunteerRegistration" 
-                          action="https://docs.google.com/forms/d/e/REPLACE_WITH_YOUR_FORM_ID/formResponse" 
+                          action="https://docs.google.com/forms/d/e/1FAIpQLSeHPrS4t_Tt20mFhIMJmJZTd0MvWVmVUw2tFVgHtM3fdmDTJA/formResponse" 
                           method="POST" 
                           target="hidden_iframe">
                         
                         <div class="form-group">
                             <label for="volunteerName">Full Name:</label>
-                            <input type="text" name="entry.REPLACE_WITH_NAME_ENTRY_ID" required>
+                            <input type="text" name="entry.REPLACE_NAME_ENTRY_ID" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="volunteerPhone">Phone Number:</label>
-                            <input type="tel" name="entry.REPLACE_WITH_PHONE_ENTRY_ID" placeholder="(773) 555-0123" required>
+                            <input type="tel" name="entry.REPLACE_PHONE_ENTRY_ID" placeholder="(773) 555-0123" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="volunteerEmail">Email Address:</label>
-                            <input type="email" name="entry.REPLACE_WITH_EMAIL_ENTRY_ID" required>
+                            <input type="email" name="entry.REPLACE_EMAIL_ENTRY_ID" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="volunteerZip">ZIP Code (for local alerts):</label>
-                            <input type="text" name="entry.REPLACE_WITH_ZIP_ENTRY_ID" placeholder="60608" required>
+                            <input type="text" name="entry.REPLACE_ZIP_ENTRY_ID" placeholder="60608" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="volunteerSkills">Emergency Skills (optional):</label>
-                            <select name="entry.REPLACE_WITH_SKILLS_ENTRY_ID">
+                            <select name="entry.REPLACE_SKILLS_ENTRY_ID">
                                 <option value="">Select your skills...</option>
                                 <option value="Basic Mechanical Knowledge">Basic Mechanical Knowledge</option>
                                 <option value="First Aid Certified">First Aid Certified</option>
