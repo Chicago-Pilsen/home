@@ -634,7 +634,51 @@
   gtag('js', new Date());
 
   gtag('config', 'AW-17536027009');
-</script></head>
+</script>
+<script>
+function toggleVolunteerForm() {
+    const form = document.getElementById('volunteerForm');
+    const button = document.querySelector('.volunteer-btn');
+    
+    if (form.style.display === 'none' || form.style.display === '') {
+        form.style.display = 'block';
+        form.classList.add('active');
+        button.textContent = 'Hide Form';
+        setTimeout(() => {
+            form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+    } else {
+        form.style.display = 'none';
+        form.classList.remove('active');
+        button.textContent = 'Become A Volunteer Responder';
+    }
+}
+
+// Make sure the form is hidden initially
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('volunteerForm');
+    form.style.display = 'none';
+    
+    // Add form submission handler
+    document.getElementById('volunteerRegistration').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const name = formData.get('volunteerName');
+        const phone = formData.get('volunteerPhone');
+        const email = formData.get('volunteerEmail');
+        const zip = formData.get('volunteerZip');
+        const skills = formData.get('volunteerSkills');
+        
+        alert(`Thank you ${name}! You've been registered as an emergency volunteer.\n\nPhone: ${phone}\nCoverage Area: ${zip}\n\nYou'll receive emergency alerts when help is needed in your area.`);
+        
+        e.target.reset();
+        toggleVolunteerForm();
+    });
+});
+</script>
+
+</head>
 <body>
     
     <header>
@@ -825,6 +869,7 @@
   
 </body>
 </html>
+
 
 
 
