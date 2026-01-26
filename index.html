@@ -1,887 +1,750 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emergency Roadside Repair - 24/7 Emergency Auto Service</title>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      body {
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
-        color: #ffffff;
-        background-color: #000000;
-      }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background-color: #000000;
+        }
 
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-      }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-      /* Header */
-      header {
-        background: #000000;
-        padding: 20px 0;
-        border-bottom: 3px solid #ff0000;
-      }
+        /* Header */
+        header {
+            background: #000000;
+            padding: 20px 0;
+            border-bottom: 3px solid #ff0000;
+        }
 
-      .header-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-      }
-
-      .logo {
-        font-size: 24px;
-        font-weight: bold;
-        color: #ff0000;
-      }
-
-      nav ul {
-        display: flex;
-        list-style: none;
-        gap: 30px;
-      }
-
-      nav a {
-        color: #ffffff;
-        text-decoration: none;
-        font-weight: bold;
-        padding: 10px 15px;
-      }
-
-      nav a:hover {
-        color: #ff6600;
-      }
-
-      .emergency-btn {
-        background: #ff0000;
-        color: #ffffff;
-        padding: 15px 25px;
-        text-decoration: none;
-        border-radius: 5px;
-        font-weight: bold;
-        border: none;
-      }
-
-      .emergency-btn:hover {
-        background: #cc0000;
-      }
-
-      /* Hero Section */
-      .hero {
-        text-align: center;
-        padding: 100px 0;
-        background: linear-gradient(135deg, #000000 0%, #333333 100%);
-      }
-
-      .hero h1 {
-        font-size: 48px;
-        color: #ff0000;
-        margin-bottom: 20px;
-        font-weight: bold;
-      }
-
-      .hero h2 {
-        font-size: 40px;
-        color: #ff0000;
-        margin-bottom: 30px;
-        font-weight: bold;
-      }
-
-      .hero p {
-        font-size: 20px;
-        margin-bottom: 30px;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .spanish-text {
-        color: #ffd700;
-        font-weight: bold;
-        font-size: 18px;
-        margin-bottom: 40px;
-      }
-
-      .hero-buttons {
-        display: flex;
-        gap: 20px;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      .btn-primary {
-        background: #ff0000;
-        color: #ffffff;
-        padding: 20px 40px;
-        text-decoration: none;
-        border-radius: 5px;
-        font-size: 18px;
-        font-weight: bold;
-        border: none;
-      }
-
-      .btn-secondary {
-        background: transparent;
-        color: #ff6600;
-        padding: 20px 40px;
-        text-decoration: none;
-        border: 2px solid #ff6600;
-        border-radius: 5px;
-        font-size: 18px;
-        font-weight: bold;
-      }
-
-      /* VOLUNTEER SECTION */
-      .volunteer-section {
-        background: #1a1a1a;
-        padding: 80px 0;
-        position: relative;
-        clear: both;
-        width: 100%;
-      }
-
-      .volunteer-content {
-        text-align: center;
-        max-width: 900px;
-        margin: 0 auto;
-      }
-
-      .volunteer-section h2 {
-        font-size: 32px;
-        color: #ff6600;
-        margin-bottom: 25px;
-        font-weight: bold;
-      }
-
-      .volunteer-section p {
-        font-size: 18px;
-        margin-bottom: 35px;
-        color: #ffffff;
-        line-height: 1.6;
-      }
-
-      .volunteer-buttons {
-        display: flex;
-        gap: 20px;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-bottom: 20px;
-      }
-
-      .volunteer-btn {
-        background: #ff6600;
-        color: #ffffff;
-        padding: 18px 35px;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background 0.3s ease;
-      }
-
-      .volunteer-btn:hover {
-        background: #ff0000;
-      }
-
-      .download-btn {
-        background: #28a745;
-      }
-
-      .download-btn:hover {
-        background: #218838;
-      }
-
-      .volunteer-signup-form {
-        background: #000000;
-        padding: 40px;
-        border-radius: 12px;
-        border: 2px solid #ff6600;
-        margin-top: 40px;
-        display: none;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .volunteer-signup-form.active {
-        display: block;
-      }
-
-      .form-group {
-        margin-bottom: 25px;
-        text-align: left;
-      }
-
-      .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        color: #ff6600;
-        font-weight: bold;
-        font-size: 14px;
-      }
-
-      .form-group input,
-      .form-group select {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #444;
-        border-radius: 6px;
-        background: #ffffff;
-        color: #000000;
-        font-size: 16px;
-      }
-
-      .form-group input:focus,
-      .form-group select:focus {
-        outline: none;
-        border-color: #ff6600;
-      }
-
-      .form-buttons {
-        display: flex;
-        gap: 15px;
-        justify-content: center;
-        margin-top: 30px;
-      }
-
-      .btn-submit {
-        background: #ff0000;
-      }
-
-      .btn-cancel {
-        background: #666666;
-      }
-
-      .volunteer-count {
-        margin-top: 20px;
-        color: #28a745;
-        font-weight: bold;
-        font-size: 16px;
-      }
-
-      /* Services Section */
-      .services {
-        padding: 80px 0;
-        background: #000000;
-      }
-
-      .services h2 {
-        text-align: center;
-        font-size: 36px;
-        color: #ff0000;
-        margin-bottom: 20px;
-      }
-
-      .services-subtitle {
-        text-align: center;
-        font-size: 20px;
-        margin-bottom: 60px;
-      }
-
-      .services-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 30px;
-      }
-
-      .service-card {
-        background: #333333;
-        padding: 30px;
-        border-radius: 10px;
-        text-align: center;
-        border-left: 5px solid #ff6600;
-      }
-
-      .emergency-badge {
-        background: #ff0000;
-        color: #ffffff;
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-size: 14px;
-        font-weight: bold;
-        margin-bottom: 20px;
-        display: inline-block;
-      }
-
-      .service-icon {
-        font-size: 48px;
-        margin-bottom: 20px;
-      }
-
-      .service-card h3 {
-        color: #ff6600;
-        margin-bottom: 15px;
-        font-size: 24px;
-      }
-
-      .service-card p {
-        font-size: 16px;
-        line-height: 1.6;
-      }
-
-      /* Features Section */
-      .features {
-        background: #333333;
-        padding: 80px 0;
-      }
-
-      .features h2 {
-        text-align: center;
-        font-size: 36px;
-        color: #ff0000;
-        margin-bottom: 60px;
-      }
-
-      .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 30px;
-      }
-
-      .feature-card {
-        background: #000000;
-        padding: 30px;
-        border-radius: 10px;
-        text-align: center;
-        border-top: 4px solid #ff6600;
-      }
-
-      .feature-icon {
-        font-size: 48px;
-        color: #ff6600;
-        margin-bottom: 20px;
-      }
-
-      .feature-card h3 {
-        color: #ffffff;
-        margin-bottom: 15px;
-        font-size: 24px;
-      }
-
-      .feature-card p {
-        font-size: 16px;
-        line-height: 1.6;
-      }
-
-      /* Contact Section */
-      .contact {
-        padding: 80px 0;
-        background: #000000;
-      }
-
-      .contact h2 {
-        text-align: center;
-        font-size: 36px;
-        color: #ff0000;
-        margin-bottom: 60px;
-      }
-
-      .contact-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 40px;
-        text-align: center;
-      }
-
-      .contact-item {
-        background: #333333;
-        padding: 40px 30px;
-        border-radius: 10px;
-      }
-
-      .contact-item h3 {
-        color: #ff6600;
-        margin-bottom: 20px;
-        font-size: 24px;
-      }
-
-      .emergency-number {
-        font-size: 48px;
-        color: #ff6600;
-        font-weight: bold;
-        margin: 20px 0;
-      }
-
-      .contact-item p {
-        font-size: 18px;
-        line-height: 1.6;
-      }
-
-      /* Footer */
-      footer {
-        background: #000000;
-        padding: 30px 0;
-        text-align: center;
-        border-top: 3px solid #ff0000;
-        color: #cccccc;
-      }
-
-      /* Responsive */
-      @media (max-width: 768px) {
         .header-content {
-          flex-direction: column;
-          gap: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff0000;
         }
 
         nav ul {
-          display: none;
+            display: flex;
+            list-style: none;
+            gap: 30px;
         }
 
-        .hero h1,
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px;
+        }
+
+        nav a:hover {
+            color: #ff6600;
+        }
+
+        .emergency-btn {
+            background: #ff0000;
+            color: #ffffff;
+            padding: 15px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            border: none;
+        }
+
+        .emergency-btn:hover {
+            background: #cc0000;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 100px 0;
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            color: #ff0000;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
         .hero h2 {
-          font-size: 28px;
+            font-size: 40px;
+            color: #ff0000;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .spanish-text {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 40px;
         }
 
         .hero-buttons {
-          flex-direction: column;
-          align-items: center;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: #ff0000;
+            color: #ffffff;
+            padding: 20px 40px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #ff6600;
+            padding: 20px 40px;
+            text-decoration: none;
+            border: 2px solid #ff6600;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* VOLUNTEER SECTION */
+        .volunteer-section {
+            background: #1a1a1a;
+            padding: 80px 0;
+            position: relative;
+            clear: both;
+            width: 100%;
+        }
+
+        .volunteer-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         .volunteer-section h2 {
-          font-size: 24px;
+            font-size: 32px;
+            color: #ff6600;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .volunteer-section p {
+            font-size: 18px;
+            margin-bottom: 35px;
+            color: #ffffff;
+            line-height: 1.6;
         }
 
         .volunteer-buttons {
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .volunteer-signup-form {
-          padding: 25px;
-          margin: 30px 10px 0 10px;
-        }
-
-        .form-buttons {
-          flex-direction: column;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
         .volunteer-btn {
-          padding: 15px 25px;
-          font-size: 15px;
+            background: #ff6600;
+            color: #ffffff;
+            padding: 18px 35px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
         }
-      }
+
+        .volunteer-btn:hover {
+            background: #ff0000;
+        }
+
+        .admin-btn {
+            background: #28a745;
+        }
+
+        .admin-btn:hover {
+            background: #218838;
+        }
+
+        .volunteer-signup-form {
+            background: #000000;
+            padding: 40px;
+            border-radius: 12px;
+            border: 2px solid #ff6600;
+            margin-top: 40px;
+            display: none;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .volunteer-signup-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ff6600;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background: #ffffff;
+            color: #000000;
+            font-size: 16px;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #ff6600;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn-submit {
+            background: #ff0000;
+        }
+
+        .btn-cancel {
+            background: #666666;
+        }
+
+        .admin-info {
+            background: #28a745;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .admin-info strong {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 80px 0;
+            background: #000000;
+        }
+
+        .services h2 {
+            text-align: center;
+            font-size: 36px;
+            color: #ff0000;
+            margin-bottom: 20px;
+        }
+
+        .services-subtitle {
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 60px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: #333333;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 5px solid #ff6600;
+        }
+
+        .emergency-badge {
+            background: #ff0000;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .service-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            color: #ff6600;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .service-card p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* Features Section */
+        .features {
+            background: #333333;
+            padding: 80px 0;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 36px;
+            color: #ff0000;
+            margin-bottom: 60px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: #000000;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            border-top: 4px solid #ff6600;
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            color: #ff6600;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            color: #ffffff;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .feature-card p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 80px 0;
+            background: #000000;
+        }
+
+        .contact h2 {
+            text-align: center;
+            font-size: 36px;
+            color: #ff0000;
+            margin-bottom: 60px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .contact-item {
+            background: #333333;
+            padding: 40px 30px;
+            border-radius: 10px;
+        }
+
+        .contact-item h3 {
+            color: #ff6600;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .emergency-number {
+            font-size: 48px;
+            color: #ff6600;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .contact-item p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: #000000;
+            padding: 30px 0;
+            text-align: center;
+            border-top: 3px solid #ff0000;
+            color: #cccccc;
+        }
+
+        /* Hidden iframe for Google Forms submission */
+        .hidden-iframe {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav ul {
+                display: none;
+            }
+
+            .hero h1, .hero h2 {
+                font-size: 28px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .volunteer-section h2 {
+                font-size: 24px;
+            }
+
+            .volunteer-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .volunteer-signup-form {
+                padding: 25px;
+                margin: 30px 10px 0 10px;
+            }
+
+            .form-buttons {
+                flex-direction: column;
+            }
+
+            .volunteer-btn {
+                padding: 15px 25px;
+                font-size: 15px;
+            }
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <header id="home">
-      <div class="container">
-        <div class="header-content">
-          <div class="logo">🚨 Emergency Auto</div>
-          <nav>
-            <ul>
-              <li><a href="#home">Home</a></li>
-              <li><a href="#services">Emergency Services</a></li>
-              <li><a href="#contact">Emergency Contact</a></li>
-              <li><a href="#">SE HABLA ESPAÑOL</a></li>
-            </ul>
-          </nav>
-          <a href="tel:+1-773-680-2671" class="emergency-btn">EMERGENCY CALL</a>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">🚨 Emergency Auto</div>
+                <nav>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#services">Emergency Services</a></li>
+                        <li><a href="#contact">Emergency Contact</a></li>
+                        <li><a href="#">SE HABLA ESPAÑOL</a></li>
+                    </ul>
+                </nav>
+                <a href="tel:+1-773-680-2671" class="emergency-btn">EMERGENCY CALL</a>
+            </div>
         </div>
-      </div>
     </header>
 
     <section class="hero">
-      <div class="container">
-        <h1>🚨 EMERGENCY ROADSIDE REPAIRS 🚨</h1>
-        <h2>STRANDED? WE'RE COMING!</h2>
-        <p>
-          24/7 emergency roadside repair service. When your car breaks down,
-          we're your lifeline. Fast response, professional repairs, get you
-          moving again.
-        </p>
-        <p class="spanish-text">
-          🗣️ SE HABLA ESPAÑOL - SERVICIO DE EMERGENCIA EN ESPAÑOL
-        </p>
-        <div class="hero-buttons">
-          <a href="tel:+1-773-680-2671" class="btn-primary"
-            >CALL FOR EMERGENCY</a
-          >
-          <a href="#services" class="btn-secondary">Emergency Services</a>
+        <div class="container">
+            <h1>🚨 EMERGENCY ROADSIDE REPAIRS 🚨</h1>
+            <h2>STRANDED? WE'RE COMING!</h2>
+            <p>24/7 emergency roadside repair service. When your car breaks down, we're your lifeline. Fast response, professional repairs, get you moving again.</p>
+            <p class="spanish-text">🗣️ SE HABLA ESPAÑOL - SERVICIO DE EMERGENCIA EN ESPAÑOL</p>
+            <div class="hero-buttons">
+                <a href="tel:+1-773-680-2671" class="btn-primary">CALL FOR EMERGENCY</a>
+                <a href="#services" class="btn-secondary">Emergency Services</a>
+            </div>
         </div>
-      </div>
     </section>
 
     <section class="volunteer-section">
-      <div class="container">
-        <div class="volunteer-content">
-          <h2>🤝 Join Our Emergency Response Network</h2>
-          <p>
-            Help fellow drivers in emergency situations. Volunteer responders
-            get priority alerts in their area and help build a stronger
-            community safety network.
-          </p>
-
-          <div class="volunteer-buttons">
-            <button class="volunteer-btn" onclick="toggleVolunteerForm()">
-              Become A Volunteer Responder
-            </button>
-            <button class="volunteer-btn download-btn" onclick="saveToExcel()">
-              📊 Download Volunteer Data (Excel)
-            </button>
-          </div>
-
-          <div id="volunteerCount" class="volunteer-count">
-            Total volunteers registered: <span id="countNumber">0</span>
-          </div>
-
-          <div id="volunteerForm" class="volunteer-signup-form">
-            <h3
-              style="
-                color: #ff6600;
-                margin-bottom: 25px;
-                text-align: center;
-                font-size: 20px;
-              "
-            >
-              Emergency Volunteer Registration
-            </h3>
-            <form id="volunteerRegistration">
-              <div class="form-group">
-                <label for="volunteerName">Full Name:</label>
-                <input
-                  type="text"
-                  id="volunteerName"
-                  name="volunteerName"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="volunteerPhone">Phone Number:</label>
-                <input
-                  type="tel"
-                  id="volunteerPhone"
-                  name="volunteerPhone"
-                  placeholder="(773) 555-0123"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="volunteerEmail">Email Address:</label>
-                <input
-                  type="email"
-                  id="volunteerEmail"
-                  name="volunteerEmail"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="volunteerZip">ZIP Code (for local alerts):</label>
-                <input
-                  type="text"
-                  id="volunteerZip"
-                  name="volunteerZip"
-                  placeholder="60608"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="volunteerSkills"
-                  >Emergency Skills (optional):</label
-                >
-                <select id="volunteerSkills" name="volunteerSkills">
-                  <option value="">Select your skills...</option>
-                  <option value="mechanical">Basic Mechanical Knowledge</option>
-                  <option value="first-aid">First Aid Certified</option>
-                  <option value="towing">Towing Equipment Available</option>
-                  <option value="tools">Emergency Tools Available</option>
-                  <option value="language">Bilingual (Spanish/English)</option>
-                  <option value="general">General Emergency Assistance</option>
-                </select>
-              </div>
-              <div class="form-buttons">
-                <button type="submit" class="volunteer-btn btn-submit">
-                  Join Emergency Network
-                </button>
-                <button
-                  type="button"
-                  class="volunteer-btn btn-cancel"
-                  onclick="toggleVolunteerForm()"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
+        <div class="container">
+            <div class="volunteer-content">
+                <h2>🤝 Join Our Emergency Response Network</h2>
+                <p>Help fellow drivers in emergency situations. Volunteer responders get priority alerts in their area and help build a stronger community safety network.</p>
+                
+                <div class="volunteer-buttons">
+                    <button class="volunteer-btn" onclick="toggleVolunteerForm()">Become A Volunteer Responder</button>
+                    <button class="volunteer-btn admin-btn" onclick="openAdminSheet()">📊 Admin: View All Data (Google Sheets)</button>
+                </div>
+                
+                <div class="admin-info">
+                    <strong>ADMIN INSTRUCTIONS:</strong>
+                    1. Create Google Form at forms.google.com<br>
+                    2. Replace FORM_ACTION_URL and entry.XXXXXX below<br>
+                    3. Click "Admin: View All Data" to see your Google Sheet<br>
+                    4. All volunteer submissions will go directly to YOUR Google Sheet
+                </div>
+                
+                <div id="volunteerForm" class="volunteer-signup-form">
+                    <h3 style="color: #ff6600; margin-bottom: 25px; text-align: center; font-size: 20px;">Emergency Volunteer Registration</h3>
+                    
+                    <!-- GOOGLE FORMS INTEGRATION - REPLACE WITH YOUR FORM DETAILS -->
+                    <form id="volunteerRegistration" 
+                          action="https://docs.google.com/forms/d/e/REPLACE_WITH_YOUR_FORM_ID/formResponse" 
+                          method="POST" 
+                          target="hidden_iframe">
+                        
+                        <div class="form-group">
+                            <label for="volunteerName">Full Name:</label>
+                            <input type="text" name="entry.REPLACE_WITH_NAME_ENTRY_ID" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="volunteerPhone">Phone Number:</label>
+                            <input type="tel" name="entry.REPLACE_WITH_PHONE_ENTRY_ID" placeholder="(773) 555-0123" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="volunteerEmail">Email Address:</label>
+                            <input type="email" name="entry.REPLACE_WITH_EMAIL_ENTRY_ID" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="volunteerZip">ZIP Code (for local alerts):</label>
+                            <input type="text" name="entry.REPLACE_WITH_ZIP_ENTRY_ID" placeholder="60608" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="volunteerSkills">Emergency Skills (optional):</label>
+                            <select name="entry.REPLACE_WITH_SKILLS_ENTRY_ID">
+                                <option value="">Select your skills...</option>
+                                <option value="Basic Mechanical Knowledge">Basic Mechanical Knowledge</option>
+                                <option value="First Aid Certified">First Aid Certified</option>
+                                <option value="Towing Equipment Available">Towing Equipment Available</option>
+                                <option value="Emergency Tools Available">Emergency Tools Available</option>
+                                <option value="Bilingual (Spanish/English)">Bilingual (Spanish/English)</option>
+                                <option value="General Emergency Assistance">General Emergency Assistance</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-buttons">
+                            <button type="submit" class="volunteer-btn btn-submit">Join Emergency Network</button>
+                            <button type="button" class="volunteer-btn btn-cancel" onclick="toggleVolunteerForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
     </section>
 
+    <!-- Hidden iframe to handle Google Forms submission -->
+    <iframe name="hidden_iframe" class="hidden-iframe" onload="formSubmitted()"></iframe>
+
     <section class="services" id="services">
-      <div class="container">
-        <h2>Emergency Repairs Only</h2>
-        <p class="services-subtitle">
-          When you're stranded and need immediate roadside assistance
-        </p>
-
-        <div class="services-grid">
-          <div class="service-card">
-            <div class="emergency-badge">Emergency Only</div>
-            <div class="service-icon">🔋</div>
-            <h3>Emergency Jump Start</h3>
-            <p>
-              Dead battery leaving you stranded? Emergency jump start service to
-              get you moving immediately. Professional equipment, safe
-              procedures.
-            </p>
-          </div>
-
-          <div class="service-card">
-            <div class="emergency-badge">Emergency Only</div>
-            <div class="service-icon">🛞</div>
-            <h3>Emergency Tire Repair</h3>
-            <p>
-              Flat tire on the roadside? Emergency tire plugging and temporary
-              repairs to get you to safety. Quick fixes when you're stuck.
-            </p>
-          </div>
-
-          <div class="service-card">
-            <div class="emergency-badge">Emergency Only</div>
-            <div class="service-icon">🔐</div>
-            <h3>Emergency Lockout</h3>
-            <p>
-              Locked out of your vehicle? Emergency lockout service available
-              24/7. Fast entry without damage to your car.
-            </p>
-          </div>
-
-          <div class="service-card">
-            <div class="emergency-badge">Emergency Only</div>
-            <div class="service-icon">⛽</div>
-            <h3>Emergency Fuel Delivery</h3>
-            <p>
-              Ran out of gas and stranded? Emergency fuel delivery to your exact
-              location. Get enough gas to reach the nearest station.
-            </p>
-          </div>
-
-          <div class="service-card">
-            <div class="emergency-badge">Emergency Only</div>
-            <div class="service-icon">🚗</div>
-            <h3>Emergency Towing</h3>
-            <p>
-              Can't drive? Emergency towing service when repairs aren't possible
-              on-site. Safe transport to your preferred location.
-            </p>
-          </div>
-
-          <div class="service-card">
-            <div class="emergency-badge">Emergency Only</div>
-            <div class="service-icon">🔧</div>
-            <h3>Emergency Roadside Fixes</h3>
-            <p>
-              Quick emergency repairs for common breakdowns. Belt replacements,
-              hose fixes, and other urgent repairs to get you moving.
-            </p>
-          </div>
+        <div class="container">
+            <h2>Emergency Repairs Only</h2>
+            <p class="services-subtitle">When you're stranded and need immediate roadside assistance</p>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="emergency-badge">Emergency Only</div>
+                    <div class="service-icon">🔋</div>
+                    <h3>Emergency Jump Start</h3>
+                    <p>Dead battery leaving you stranded? Emergency jump start service to get you moving immediately. Professional equipment, safe procedures.</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="emergency-badge">Emergency Only</div>
+                    <div class="service-icon">🛞</div>
+                    <h3>Emergency Tire Repair</h3>
+                    <p>Flat tire on the roadside? Emergency tire plugging and temporary repairs to get you to safety. Quick fixes when you're stuck.</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="emergency-badge">Emergency Only</div>
+                    <div class="service-icon">🔐</div>
+                    <h3>Emergency Lockout</h3>
+                    <p>Locked out of your vehicle? Emergency lockout service available 24/7. Fast entry without damage to your car.</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="emergency-badge">Emergency Only</div>
+                    <div class="service-icon">⛽</div>
+                    <h3>Emergency Fuel Delivery</h3>
+                    <p>Ran out of gas and stranded? Emergency fuel delivery to your exact location. Get enough gas to reach the nearest station.</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="emergency-badge">Emergency Only</div>
+                    <div class="service-icon">🚗</div>
+                    <h3>Emergency Towing</h3>
+                    <p>Can't drive? Emergency towing service when repairs aren't possible on-site. Safe transport to your preferred location.</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="emergency-badge">Emergency Only</div>
+                    <div class="service-icon">🔧</div>
+                    <h3>Emergency Roadside Fixes</h3>
+                    <p>Quick emergency repairs for common breakdowns. Belt replacements, hose fixes, and other urgent repairs to get you moving.</p>
+                </div>
+            </div>
         </div>
-      </div>
     </section>
 
     <section class="features">
-      <div class="container">
-        <h2>Emergency Response Specialists</h2>
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">⚡</div>
-            <h3>Emergency Response</h3>
-            <p>
-              15-minute average response time. When you're stranded, every
-              minute counts. We prioritize emergency calls.
-            </p>
-          </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">🚨</div>
-            <h3>24/7 Emergency Line</h3>
-            <p>
-              Never closed. Emergency hotline available around the clock, 365
-              days a year. Always ready for your emergency.
-            </p>
-          </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">🛡️</div>
-            <h3>Emergency Certified</h3>
-            <p>
-              Licensed emergency roadside technicians. Fully insured and bonded
-              for emergency roadside situations.
-            </p>
-          </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">📍</div>
-            <h3>GPS Emergency Tracking</h3>
-            <p>
-              We'll find you anywhere. GPS tracking ensures we reach your exact
-              emergency location quickly.
-            </p>
-          </div>
+        <div class="container">
+            <h2>Emergency Response Specialists</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Emergency Response</h3>
+                    <p>15-minute average response time. When you're stranded, every minute counts. We prioritize emergency calls.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🚨</div>
+                    <h3>24/7 Emergency Line</h3>
+                    <p>Never closed. Emergency hotline available around the clock, 365 days a year. Always ready for your emergency.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Emergency Certified</h3>
+                    <p>Licensed emergency roadside technicians. Fully insured and bonded for emergency roadside situations.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📍</div>
+                    <h3>GPS Emergency Tracking</h3>
+                    <p>We'll find you anywhere. GPS tracking ensures we reach your exact emergency location quickly.</p>
+                </div>
+            </div>
         </div>
-      </div>
     </section>
 
     <section class="contact" id="contact">
-      <div class="container">
-        <h2>Emergency Contact</h2>
-        <div class="contact-grid">
-          <div class="contact-item">
-            <h3>🚨 Emergency Hotline</h3>
-            <div class="emergency-number">773-680-2671</div>
-            <p>Call Now - Available 24/7</p>
-          </div>
-
-          <div class="contact-item">
-            <h3>⚡ Emergency Response</h3>
-            <p><strong>15-30 Minutes</strong><br />Average Emergency Arrival</p>
-          </div>
-
-          <div class="contact-item">
-            <h3>📍 Emergency Coverage</h3>
-            <p>
-              <strong>50-Mile Emergency Radius</strong><br />All Major Roads &
-              Highways
-            </p>
-          </div>
+        <div class="container">
+            <h2>Emergency Contact</h2>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <h3>🚨 Emergency Hotline</h3>
+                    <div class="emergency-number">773-680-2671</div>
+                    <p>Call Now - Available 24/7</p>
+                </div>
+                
+                <div class="contact-item">
+                    <h3>⚡ Emergency Response</h3>
+                    <p><strong>15-30 Minutes</strong><br>Average Emergency Arrival</p>
+                </div>
+                
+                <div class="contact-item">
+                    <h3>📍 Emergency Coverage</h3>
+                    <p><strong>50-Mile Emergency Radius</strong><br>All Major Roads & Highways</p>
+                </div>
+            </div>
         </div>
-      </div>
     </section>
 
     <footer>
-      <div class="container">
-        <p>
-          © 2025 Emergency Roadside Repair - Licensed Emergency Service
-          Provider. When you're stranded, we're your solution.
-        </p>
-      </div>
+        <div class="container">
+            <p>© 2025 Emergency Roadside Repair - Licensed Emergency Service Provider. When you're stranded, we're your solution.</p>
+        </div>
     </footer>
 
     <script>
-      // Array to store volunteer data
-      let volunteerData = [];
+        // Global variable to store Google Sheet URL for admin access
+        let googleSheetUrl = "REPLACE_WITH_YOUR_GOOGLE_SHEET_URL";
 
-      function toggleVolunteerForm() {
-        const form = document.getElementById("volunteerForm");
-        const button = document.querySelector(".volunteer-btn");
-
-        if (form.style.display === "none" || form.style.display === "") {
-          form.style.display = "block";
-          form.classList.add("active");
-          button.textContent = "Hide Form";
-          setTimeout(() => {
-            form.scrollIntoView({ behavior: "smooth", block: "center" });
-          }, 100);
-        } else {
-          form.style.display = "none";
-          form.classList.remove("active");
-          button.textContent = "Become A Volunteer Responder";
-        }
-      }
-
-      // Function to save data to Excel (CSV format)
-      function saveToExcel() {
-        if (volunteerData.length === 0) {
-          alert(
-            "No volunteer data to save. Please register some volunteers first.",
-          );
-          return;
+        function toggleVolunteerForm() {
+            const form = document.getElementById('volunteerForm');
+            const button = document.querySelector('.volunteer-btn');
+            
+            if (form.style.display === 'none' || form.style.display === '') {
+                form.style.display = 'block';
+                form.classList.add('active');
+                button.textContent = 'Hide Form';
+                setTimeout(() => {
+                    form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+            } else {
+                form.style.display = 'none';
+                form.classList.remove('active');
+                button.textContent = 'Become A Volunteer Responder';
+            }
         }
 
-        // Create CSV content
-        let csvContent = "data:text/csv;charset=utf-8,";
+        // Function to open Google Sheet for admin
+        function openAdminSheet() {
+            if (googleSheetUrl === "REPLACE_WITH_YOUR_GOOGLE_SHEET_URL") {
+                alert("ADMIN SETUP NEEDED:\n\n1. Create Google Form\n2. Replace the form URL in the code\n3. Replace the Google Sheet URL\n\nSee setup instructions above!");
+                return;
+            }
+            window.open(googleSheetUrl, '_blank');
+        }
 
-        // Add headers
-        csvContent +=
-          "Registration Date,Full Name,Phone Number,Email,ZIP Code,Skills,Status\n";
+        // Function called when Google Form is submitted successfully
+        function formSubmitted() {
+            // Small delay to ensure the form was submitted
+            setTimeout(() => {
+                alert("🎉 Registration Successful!\n\nThank you for joining our Emergency Response Network!\n\n✅ Your data has been sent directly to our admin team\n📊 Admin can view all volunteer data in Google Sheets\n📱 You'll receive emergency alerts in your area\n\nWelcome aboard!");
+                
+                // Reset and hide form
+                document.getElementById('volunteerRegistration').reset();
+                toggleVolunteerForm();
+            }, 1000);
+        }
 
-        // Add data rows
-        volunteerData.forEach(function (volunteer) {
-          let row = [
-            `"${volunteer.date}"`,
-            `"${volunteer.name}"`,
-            `"${volunteer.phone}"`,
-            `"${volunteer.email}"`,
-            `"${volunteer.zip}"`,
-            `"${volunteer.skills || "None specified"}"`,
-            '"Active"',
-          ].join(",");
-          csvContent += row + "\n";
+        // Make sure the form is hidden initially
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('volunteerForm');
+            form.style.display = 'none';
         });
-
-        // Create download link
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "emergency_volunteers.csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        alert(
-          `Excel file downloaded successfully!\n\nFile: emergency_volunteers.csv\nRecords: ${volunteerData.length}\n\nOpen with Microsoft Excel or Excel Online.`,
-        );
-      }
-
-      // Update volunteer count display
-      function updateVolunteerCount() {
-        document.getElementById("countNumber").textContent =
-          volunteerData.length;
-      }
-
-      // Make sure the form is hidden initially
-      document.addEventListener("DOMContentLoaded", function () {
-        const form = document.getElementById("volunteerForm");
-        form.style.display = "none";
-
-        // Update initial count
-        updateVolunteerCount();
-
-        // Add form submission handler
-        document
-          .getElementById("volunteerRegistration")
-          .addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            const formData = new FormData(e.target);
-            const name = formData.get("volunteerName");
-            const phone = formData.get("volunteerPhone");
-            const email = formData.get("volunteerEmail");
-            const zip = formData.get("volunteerZip");
-            const skills = formData.get("volunteerSkills");
-
-            // Save data to array
-            const volunteerRecord = {
-              date: new Date().toLocaleString(),
-              name: name,
-              phone: phone,
-              email: email,
-              zip: zip,
-              skills: skills,
-            };
-
-            volunteerData.push(volunteerRecord);
-            updateVolunteerCount();
-
-            // Show success message
-            alert(
-              `Thank you ${name}! You've been registered as an emergency volunteer.\n\nPhone: ${phone}\nCoverage Area: ${zip}\n\n✅ Data saved successfully!\nTotal volunteers: ${volunteerData.length}\n\nClick "Download Volunteer Data" to export to Excel.`,
-            );
-
-            // Reset form and close
-            e.target.reset();
-            toggleVolunteerForm();
-          });
-      });
     </script>
-  </body>
+</body>
 </html>
