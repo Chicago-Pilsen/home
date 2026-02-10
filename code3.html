@@ -206,19 +206,13 @@
     <div id="start-screen" class="screen">
       <h1 style="color: var(--gold); font-size: 3rem; margin-bottom: 10px">
         PRO SPEED QUIZ
-          <!-- How to Play Section -->
-        <div style="background: rgba(255,255,255,0.1); padding: 15px 25px; border-radius: 10px; margin-bottom: 20px; max-width: 600px; border: 1px solid rgba(255,215,0,0.3);">
-            <h3 style="color: var(--gold); margin-top: 0; margin-bottom: 10px;">📋 HOW TO PLAY</h3>
-            <div style="text-align: left; font-size: 0.95rem; line-height: 1.6;">
-                <p style="margin: 8px 0;">✓ Answer 25 CDL Air Brakes questions</p>
-                <p style="margin: 8px 0;">✓ Click the correct answer card before time runs out</p>
-                <p style="margin: 8px 0;">✓ <span style="color: var(--gold)">+10 points</span> for fast correct answers</p>
-                <p style="margin: 8px 0;">✓ <span style="color: var(--gold)">+5 points</span> for slow correct answers</p>
-                <p style="margin: 8px 0;">✓ <span style="color: #ff6b6b">-2 points</span> for wrong answers</p>
-                <p style="margin: 8px 0;">✓ Beat the clock and compete globally!</p>
-            </div>
+      <div id="top-score-box">
+        <div style="color: var(--gold); margin-bottom: 10px; font-size: 1.2rem">
+          🏆 GLOBAL LEADERBOARD 🏆
         </div>
-      </h1>
+        <div id="best-display">Loading scores...</div>
+      </div>
+    </div>      </h1>
       <input
         type="text"
         id="username"
@@ -236,15 +230,19 @@
       </div>
       <button class="gold-btn" onclick="startGame()">DEAL CARDS</button>
 
-      <div id="top-score-box">
-        <div style="color: var(--gold); margin-bottom: 10px; font-size: 1.2rem">
-          🏆 GLOBAL LEADERBOARD 🏆
-        </div>
-        <div id="best-display">Loading scores...</div>
-      </div>
-    </div>
-
-    <div id="game-ui" class="hidden">
+      
+  <!-- How to Play Section -->
+        <div style="background: rgba(255,255,255,0.1); padding: 15px 25px; border-radius: 10px; margin-bottom: 20px; max-width: 600px; border: 1px solid rgba(255,215,0,0.3);">
+            <h3 style="color: var(--gold); margin-top: 0; margin-bottom: 10px;">📋 HOW TO PLAY</h3>
+            <div style="text-align: left; font-size: 0.95rem; line-height: 1.6;">
+                <p style="margin: 8px 0;">✓ Answer 25 CDL Air Brakes questions</p>
+                <p style="margin: 8px 0;">✓ Click the correct answer card before time runs out</p>
+                <p style="margin: 8px 0;">✓ <span style="color: var(--gold)">+10 points</span> for fast correct answers</p>
+                <p style="margin: 8px 0;">✓ <span style="color: var(--gold)">+5 points</span> for slow correct answers</p>
+                <p style="margin: 8px 0;">✓ <span style="color: #ff6b6b">-2 points</span> for wrong answers</p>
+                <p style="margin: 8px 0;">✓ Beat the clock and compete globally!</p>
+            </div>
+        </div>    <div id="game-ui" class="hidden">
       <div id="game-header">
         <div class="stat-box">
           DRIVER: <span id="display-name" style="color: var(--gold)"></span>
