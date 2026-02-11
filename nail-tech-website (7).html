@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Nail Artistry by Jane Doe | Premium Nail Services</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #d4af37;
+            --secondary: #2c2c2c;
+            --light: #f8f8f8;
+            --accent: #8b7355;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--secondary);
+            background: #fff;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--secondary) 0%, #1a1a1a 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1600') center/cover;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .hero-content .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .cta-button {
+            background: var(--primary);
+            color: var(--secondary);
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .cta-button:hover {
+            background: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            font-size: 1.05rem;
+            color: #555;
+        }
+
+        .credentials {
+            background: var(--light);
+            padding: 2rem;
+            border-left: 4px solid var(--primary);
+            margin-top: 2rem;
+        }
+
+        .credentials h4 {
+            margin-bottom: 1rem;
+            color: var(--secondary);
+            font-size: 1.3rem;
+        }
+
+        .credentials ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .credentials li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .credentials li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .about-image {
+            height: 500px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            border-top: 4px solid var(--primary);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .service-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .service-card .price {
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .service-card p {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .service-features {
+            list-style: none;
+            padding: 0;
+            margin-top: 1.5rem;
+        }
+
+        .service-features li {
+            padding: 0.5rem 0;
+            color: #555;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .service-features li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        .gallery {
+            background: var(--light);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .gallery-item {
+            height: 350px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .process {
+            background: white;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 1.5rem;
+        }
+
+        .step h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .step p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .testimonials {
+            background: linear-gradient(135deg, var(--secondary) 0%, #1a1a1a 100%);
+            color: white;
+        }
+
+        .testimonials .section-title {
+            color: white;
+        }
+
+        .testimonials .section-subtitle {
+            color: var(--primary);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial {
+            background: rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .stars {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .contact {
+            background: var(--light);
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        .contact-info {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: var(--secondary);
+        }
+
+        .info-item {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .info-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .info-details h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .info-details p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .social-links a {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .social-links a:hover {
+            background: white;
+            color: var(--secondary);
+            transform: translateY(-5px);
+        }
+
+        .hours-table {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+        }
+
+        .hours-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .hours-table th,
+        .hours-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .hours-table th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 3rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">JANE DOE</div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#testimonials">Reviews</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Elite Nail Artistry</h1>
+            <p class="tagline">Where Precision Meets Elegance</p>
+            <a href="#contact" class="cta-button">Book Your Appointment</a>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <h2 class="section-title">About Jane Doe</h2>
+        <p class="section-subtitle">Master Nail Technician & Certified Specialist</p>
+        
+        <div class="about-content">
+            <div class="about-text">
+                <h3>Elevating Nail Care to an Art Form</h3>
+                <p>With over 12 years of dedicated experience in the nail care industry, I've cultivated a reputation for delivering exceptional, personalized nail services that exceed expectations. My journey began at the prestigious Academy of Nail Technology, where I mastered both the technical and artistic aspects of nail care.</p>
+                
+                <p>I believe that nail care is more than just aesthetics—it's about health, confidence, and self-expression. Each client receives my undivided attention in a private, luxurious setting designed for your comfort and relaxation. I use only premium, toxin-free products and maintain the highest standards of sanitation and hygiene.</p>
+                
+                <p>My approach combines classical technique with contemporary trends, ensuring that your nails not only look stunning but remain healthy and strong. Whether you're seeking a timeless French manicure or intricate nail art, I bring precision, creativity, and genuine care to every appointment.</p>
+
+                <div class="credentials">
+                    <h4>Professional Certifications & Expertise</h4>
+                    <ul>
+                        <li>Licensed Nail Technician (State Board Certified)</li>
+                        <li>Advanced Gel & Acrylic Specialist Certification</li>
+                        <li>Certified in Medical-Grade Sanitation Protocols</li>
+                        <li>Expert in Nail Health & Disorder Recognition</li>
+                        <li>Trained in Japanese Gel Nail Techniques</li>
+                        <li>Specialized in Nail Art & Custom Designs</li>
+                        <li>Member of Professional Beauty Association</li>
+                        <li>Continuing Education: 40+ hours annually</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=800" alt="Professional Nail Service">
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="section">
+        <h2 class="section-title">Premium Services</h2>
+        <p class="section-subtitle">Tailored treatments for every occasion</p>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>Classic Manicure</h3>
+                <div class="price">$45</div>
+                <p>The foundation of excellent nail care. Our signature manicure includes detailed cuticle work, nail shaping to your preference, hand exfoliation, moisturizing massage, and your choice of premium polish.</p>
+                <ul class="service-features">
+                    <li>Detailed nail analysis & consultation</li>
+                    <li>Precision cuticle care & nail shaping</li>
+                    <li>Gentle hand exfoliation treatment</li>
+                    <li>Relaxing aromatherapy massage</li>
+                    <li>Premium polish application</li>
+                    <li>Duration: 45 minutes</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <h3>Gel Manicure</h3>
+                <div class="price">$65</div>
+                <p>Long-lasting, chip-resistant perfection. Using medical-grade LED curing technology and the finest gel formulas, achieve a flawless, glossy finish that lasts up to 3 weeks without chipping.</p>
+                <ul class="service-features">
+                    <li>Comprehensive nail preparation</li>
+                    <li>Premium gel application (over 200 colors)</li>
+                    <li>LED curing for optimal longevity</li>
+                    <li>Chip-free guarantee up to 3 weeks</li>
+                    <li>Strengthening base coat included</li>
+                    <li>Duration: 60 minutes</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <h3>Spa Pedicure</h3>
+                <div class="price">$75</div>
+                <p>The ultimate in foot rejuvenation. Indulge in our luxury spa pedicure featuring an aromatic foot soak, exfoliation, callus removal, reflexology massage, and polish perfection.</p>
+                <ul class="service-features">
+                    <li>Therapeutic aromatic foot soak</li>
+                    <li>Deep exfoliation & callus treatment</li>
+                    <li>15-minute reflexology massage</li>
+                    <li>Hot towel treatment</li>
+                    <li>Cuticle care & nail shaping</li>
+                    <li>Premium polish or gel option</li>
+                    <li>Duration: 75 minutes</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <h3>Acrylic Full Set</h3>
+                <div class="price">$85</div>
+                <p>Sculptured elegance that lasts. Custom-shaped acrylic enhancements using premium, low-odor formulas. Perfect for special occasions or everyday glamour.</p>
+                <ul class="service-features">
+                    <li>Personalized length & shape consultation</li>
+                    <li>Professional acrylic application</li>
+                    <li>Precision filing & buffing</li>
+                    <li>Detailed cuticle work</li>
+                    <li>Your choice of finish: natural, French, or color</li>
+                    <li>Lasts 3-4 weeks with proper care</li>
+                    <li>Duration: 90 minutes</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <h3>Custom Nail Art</h3>
+                <div class="price">Starting at $15</div>
+                <p>Express your unique style with bespoke nail designs. From subtle accents to intricate artwork, I create custom designs that reflect your personality and occasion.</p>
+                <ul class="service-features">
+                    <li>Personalized design consultation</li>
+                    <li>Hand-painted artistry</li>
+                    <li>3D embellishments available</li>
+                    <li>Rhinestones, foils, and specialty finishes</li>
+                    <li>Seasonal & trendy designs</li>
+                    <li>Pricing varies by complexity</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <h3>Nail Repair & Strengthening</h3>
+                <div class="price">$35</div>
+                <p>Restore damaged or weak nails to health. Specialized treatments for brittle, peeling, or damaged nails using pharmaceutical-grade strengthening products.</p>
+                <ul class="service-features">
+                    <li>Comprehensive nail health assessment</li>
+                    <li>Targeted treatment protocol</li>
+                    <li>Protein-enriched strengthening treatment</li>
+                    <li>Nail repair for breaks or tears</li>
+                    <li>At-home care recommendations</li>
+                    <li>Duration: 30 minutes</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="section gallery">
+        <h2 class="section-title">Portfolio Gallery</h2>
+        <p class="section-subtitle">A showcase of recent work</p>
+        
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=800&q=80" alt="Elegant Manicure">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1610992015732-2449b76344bc?w=800&q=80" alt="Nail Art Design">
+            </div>
+            <div class="gallery-item">
+                <img src="https://plus.unsplash.com/premium_photo-1723460945065-bdceeba51ea8?q=80&w=2624&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Luxury Nail Service">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?w=800&q=80" alt="Professional Pedicure">
+            </div>
+            <div class="gallery-item">
+                <img src="https://plus.unsplash.com/premium_photo-1670590820777-3b03f589cb89?q=80&w=3164&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Gel Polish Application">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1719138249072-b36721bebced?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Beautiful Manicure">
+            </div>
+        </div>
+    </section>
+
+    <section class="section process">
+        <h2 class="section-title">The Experience</h2>
+        <p class="section-subtitle">What to expect during your visit</p>
+        
+        <div class="process-steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Consultation</h3>
+                <p>We begin with a thorough consultation to understand your nail health, lifestyle, and desired outcome. I'll assess your natural nails and recommend the best treatment plan tailored to your needs.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Preparation</h3>
+                <p>Your hands and nails are carefully prepared using professional-grade tools and techniques. All implements are medical-grade sterilized, and I follow strict sanitation protocols for your safety.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Treatment</h3>
+                <p>Relax as I perform your chosen service with meticulous attention to detail. I use only premium products that are gentle on nails and skin while delivering exceptional, long-lasting results.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Aftercare</h3>
+                <p>You'll receive personalized aftercare instructions and product recommendations to maintain your results at home. I'm always available for questions or concerns between appointments.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="section testimonials">
+        <h2 class="section-title">Client Testimonials</h2>
+        <p class="section-subtitle">Trusted by hundreds of satisfied clients</p>
+        
+        <div class="testimonial-grid">
+            <div class="testimonial">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">"Jane is absolutely phenomenal! I've been going to her for 3 years and won't trust anyone else with my nails. Her attention to detail is unmatched, and my gel manicures last a full 3 weeks without any chipping. The studio is immaculate and so relaxing. Worth every penny!"</p>
+                <div class="testimonial-author">— Sarah Mitchell, Regular Client</div>
+            </div>
+            
+            <div class="testimonial">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">"I had severely damaged nails from years of acrylics at other salons. Jane created a treatment plan that restored my nails to health in just 3 months. She's knowledgeable, professional, and genuinely cares about nail health, not just aesthetics. My nails have never looked better!"</p>
+                <div class="testimonial-author">— Emily Rodriguez, Restoration Client</div>
+            </div>
+            
+            <div class="testimonial">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">"Jane did my wedding party nails and they were absolutely perfect! She accommodated 8 bridesmaids with patience and precision. Each design was unique yet cohesive. Two weeks later on my honeymoon, my nails still looked freshly done. She's an artist and a perfectionist!"</p>
+                <div class="testimonial-author">— Amanda Chen, Bridal Client</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section contact">
+        <h2 class="section-title">Book Your Appointment</h2>
+        <p class="section-subtitle">Experience the difference of personalized nail care</p>
+        
+        <div class="contact-content">
+            <div class="contact-info">
+                <h3>Get in Touch</h3>
+                
+                <div class="info-item">
+                    <div class="info-icon">📍</div>
+                    <div class="info-details">
+                        <h4>Studio Location</h4>
+                        <p>123 Elegance Avenue, Suite 205<br>Beverly Hills, CA 90210</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; font-style: italic;">Private, appointment-only studio</p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">📞</div>
+                    <div class="info-details">
+                        <h4>Phone & Text</h4>
+                        <p>(310) 555-NAIL (6245)</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Text preferred for faster response</p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">✉️</div>
+                    <div class="info-details">
+                        <h4>Email</h4>
+                        <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="640e050a012401080d10010a050d080516100d1710161d4a070b09">[email&#160;protected]</a></p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Response within 24 hours</p>
+                    </div>
+                </div>
+
+                <div class="hours-table">
+                    <h4 style="margin-bottom: 1rem; color: var(--secondary);">Studio Hours</h4>
+                    <table>
+                        <tr>
+                            <th>Day</th>
+                            <th>Hours</th>
+                        </tr>
+                        <tr>
+                            <td>Monday</td>
+                            <td>Closed</td>
+                        </tr>
+                        <tr>
+                            <td>Tuesday - Friday</td>
+                            <td>10:00 AM - 7:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td>Saturday</td>
+                            <td>9:00 AM - 5:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td>Sunday</td>
+                            <td>By Appointment Only</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <h3 style="margin-bottom: 2rem; color: var(--secondary);">Appointment Request Form</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="service">Desired Service *</label>
+                        <select id="service" name="service" required>
+                            <option value="">Select a service...</option>
+                            <option value="classic-manicure">Classic Manicure - $45</option>
+                            <option value="gel-manicure">Gel Manicure - $65</option>
+                            <option value="spa-pedicure">Spa Pedicure - $75</option>
+                            <option value="acrylic">Acrylic Full Set - $85</option>
+                            <option value="nail-art">Custom Nail Art - Starting at $15</option>
+                            <option value="repair">Nail Repair & Strengthening - $35</option>
+                            <option value="consultation">Not sure - Need consultation</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="date">Preferred Date</label>
+                        <input type="date" id="date" name="date">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Additional Information</label>
+                        <textarea id="message" name="message" placeholder="Tell me about any specific requests, nail concerns, or questions you have..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="cta-button" style="width: 100%;">Request Appointment</button>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: #666; text-align: center;">I'll respond within 24 hours to confirm your appointment</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="logo" style="margin-bottom: 1rem;">JANE DOE</div>
+            <p style="margin-bottom: 1rem;">Elite Nail Artistry | Licensed & Certified Master Nail Technician</p>
+            
+            <div class="social-links">
+                <a href="#" title="Instagram">IG</a>
+                <a href="#" title="Facebook">FB</a>
+                <a href="#" title="Pinterest">PT</a>
+                <a href="#" title="Email">@</a>
+            </div>
+            
+            <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+                © 2024 Elite Nail Artistry. All rights reserved.<br>
+                Licensed in the State of California | License #NT-123456<br>
+                Strict sanitation protocols | Medical-grade sterilization | Premium products only
+            </p>
+            
+            <p style="margin-top: 2rem; font-size: 0.85rem; color: var(--primary);">
+                "Excellence is not a skill, it's an attitude" — Jane Doe
+            </p>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form submission handling (placeholder)
+        document.querySelector('form').addEventListener('submit', fu
