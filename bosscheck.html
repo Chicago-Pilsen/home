@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BossCheck — Manager Accountability Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0e0e0e;--surface:#161616;--surface2:#1e1e1e;--border:#2a2a2a;
+    --accent:#e8ff47;--text:#f0f0f0;--muted:#888;--good:#47ff8a;--bad:#ff4747;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.3}
+  header{border-bottom:1px solid var(--border);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;background:rgba(14,14,14,0.95);backdrop-filter:blur(10px);z-index:100}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--accent);display:flex;align-items:center;gap:10px}
+  .logo span{color:var(--text)}
+  .logo-badge{background:var(--accent);color:#000;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;padding:2px 6px;letter-spacing:1px;transform:translateY(-2px)}
+  nav{display:flex;gap:6px;align-items:center}
+  nav button{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;padding:8px 16px;cursor:pointer;transition:all 0.15s;text-transform:uppercase}
+  nav button:hover,nav button.active{border-color:var(--accent);color:var(--accent)}
+  nav button.primary{background:var(--accent);border-color:var(--accent);color:#000;font-weight:600}
+  nav button.primary:hover{background:#d4eb00;color:#000}
+  .db-indicator{display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px}
+  .db-dot{width:6px;height:6px;border-radius:50%;background:var(--good);animation:pulse 2s ease-in-out infinite}
+  .db-dot.error{background:var(--bad);animation:none}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+  .ticker{background:var(--accent);color:#000;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:2px;padding:6px 0;overflow:hidden;white-space:nowrap}
+  .ticker-inner{display:inline-block;animation:ticker 30s linear infinite}
+  @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  main{max-width:1200px;margin:0 auto;padding:40px}
+  .hero{padding:60px 0 40px;border-bottom:1px solid var(--border);margin-bottom:40px;display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:center}
+  .hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,8vw,96px);line-height:0.9;letter-spacing:2px}
+  .hero h1 em{color:var(--accent);font-style:normal;display:block}
+  .hero p{color:var(--muted);font-size:14px;line-height:1.7;margin-top:20px;max-width:500px;font-family:'IBM Plex Mono',monospace}
+  .stats-box{border:1px solid var(--border);background:var(--surface);padding:24px;display:flex;flex-direction:column;gap:20px}
+  .stat{text-align:center}
+  .stat-num{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--accent);line-height:1;display:block}
+  .stat-label{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+  .stat-divider{border:none;border-top:1px solid var(--border)}
+  .search-bar{display:flex;margin-bottom:40px}
+  .search-bar input{flex:1;background:var(--surface);border:1px solid var(--border);border-right:none;color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:14px;padding:14px 20px;outline:none;transition:border-color 0.15s}
+  .search-bar input:focus{border-color:var(--accent)}
+  .search-bar input::placeholder{color:var(--muted)}
+  .search-bar select{background:var(--surface);border:1px solid var(--border);border-right:none;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:12px;padding:14px 16px;outline:none;cursor:pointer;appearance:none;min-width:140px}
+  .search-bar button{background:var(--accent);border:1px solid var(--accent);color:#000;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;padding:0 32px;cursor:pointer;transition:background 0.15s}
+  .search-bar button:hover{background:#d4eb00}
+  .section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px}
+  .section-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px}
+  .section-title span{color:var(--accent);margin-right:10px}
+  .section-meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px}
+  .managers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1px;background:var(--border);margin-bottom:60px}
+  .manager-card{background:var(--surface);padding:24px;cursor:pointer;transition:background 0.15s;position:relative;overflow:hidden;animation:fadeIn 0.3s ease forwards}
+  .manager-card:hover{background:var(--surface2)}
+  .manager-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+  .manager-card.good::before{background:var(--good)}
+  .manager-card.mid::before{background:var(--accent)}
+  .manager-card.bad::before{background:var(--bad)}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+  .manager-name{font-weight:700;font-size:17px;line-height:1.2}
+  .manager-role{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px}
+  .score-badge{font-family:'Bebas Neue',sans-serif;font-size:36px;line-height:1;min-width:60px;text-align:right}
+  .score-badge.good{color:var(--good)}.score-badge.mid{color:var(--accent)}.score-badge.bad{color:var(--bad)}
+  .company-tag{display:inline-block;background:var(--bg);border:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);padding:3px 8px;letter-spacing:1px;margin-bottom:12px}
+  .card-stats{display:flex;gap:20px;margin-bottom:14px}
+  .card-stat{font-family:'IBM Plex Mono',monospace;font-size:11px}
+  .card-stat strong{display:block;font-size:16px;color:var(--text);margin-bottom:2px}
+  .card-stat.complaints strong{color:var(--bad)}.card-stat.commend strong{color:var(--good)}
+  .card-stat span{color:var(--muted)}
+  .latest-review{border-top:1px solid var(--border);padding-top:12px;font-size:12px;color:var(--muted);font-family:'IBM Plex Mono',monospace;line-height:1.5;font-style:italic}
+  .loading{text-align:center;padding:60px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--muted);grid-column:1/-1;letter-spacing:2px}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s}
+  .modal-overlay.open{opacity:1;pointer-events:all}
+  .modal{background:var(--surface);border:1px solid var(--border);max-width:680px;width:100%;max-height:90vh;overflow-y:auto;transform:translateY(20px);transition:transform 0.2s}
+  .modal-overlay.open .modal{transform:translateY(0)}
+  .modal-header{padding:28px 32px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;position:sticky;top:0;background:var(--surface);z-index:2}
+  .modal-close{background:transparent;border:1px solid var(--border);color:var(--muted);font-size:18px;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;flex-shrink:0}
+  .modal-close:hover{border-color:var(--bad);color:var(--bad)}
+  .modal-body{padding:28px 32px}
+  .modal-score-display{display:flex;align-items:center;gap:24px;margin-bottom:24px;padding:20px;background:var(--bg);border:1px solid var(--border)}
+  .big-score{font-family:'Bebas Neue',sans-serif;font-size:80px;line-height:1}
+  .big-score.good{color:var(--good)}.big-score.mid{color:var(--accent)}.big-score.bad{color:var(--bad)}
+  .score-bar-wrap{margin-bottom:8px}
+  .score-bar-label{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:4px;letter-spacing:1px;text-transform:uppercase}
+  .score-bar{height:6px;background:var(--border);position:relative;overflow:hidden}
+  .score-bar-fill{height:100%;transition:width 0.5s ease}
+  .review-item{border:1px solid var(--border);padding:16px;margin-bottom:12px}
+  .review-type{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:2px 8px;margin-bottom:10px;font-weight:600}
+  .review-type.complaint{background:rgba(255,71,71,0.15);color:var(--bad);border:1px solid rgba(255,71,71,0.3)}
+  .review-type.commend{background:rgba(71,255,138,0.1);color:var(--good);border:1px solid rgba(71,255,138,0.25)}
+  .review-text{font-size:13px;line-height:1.65;color:var(--text);margin-bottom:10px}
+  .review-meta{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px}
+  .submit-section{background:var(--bg);border:1px solid var(--border);padding:24px;margin-top:28px}
+  .submit-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:20px}
+  .form-row{margin-bottom:14px}
+  .form-label{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+  .form-input,.form-textarea,.form-select{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:10px 14px;outline:none;transition:border-color 0.15s}
+  .form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--accent)}
+  .form-textarea{min-height:100px;resize:vertical}
+  .type-toggle{display:flex;gap:8px;margin-bottom:14px}
+  .type-btn{flex:1;padding:10px;border:1px solid var(--border);background:transparent;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:var(--muted);transition:all 0.15s}
+  .type-btn.complaint.active{background:rgba(255,71,71,0.15);border-color:var(--bad);color:var(--bad)}
+  .type-btn.commend.active{background:rgba(71,255,138,0.1);border-color:var(--good);color:var(--good)}
+  .submit-btn{width:100%;background:var(--accent);border:none;color:#000;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;padding:14px;cursor:pointer;margin-top:16px;transition:background 0.15s}
+  .submit-btn:hover{background:#d4eb00}
+  .submit-btn:disabled{opacity:0.5;cursor:not-allowed}
+  .empty-state{text-align:center;padding:60px 20px;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:13px;border:1px dashed var(--border);grid-column:1/-1}
+  .empty-state .icon{font-size:40px;margin-bottom:16px;display:block;opacity:0.4}
+  .fab{position:fixed;bottom:40px;right:40px;background:var(--accent);color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:16px 28px;cursor:pointer;z-index:50;transition:all 0.15s;box-shadow:0 8px 32px rgba(232,255,71,0.3)}
+  .fab:hover{background:#d4eb00;transform:translateY(-2px)}
+  .toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--accent);color:#000;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;padding:14px 24px;letter-spacing:1px;z-index:300;transition:transform 0.3s ease}
+  .toast.error{background:var(--bad);color:#fff}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border)}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="ticker">
+  <span class="ticker-inner">&nbsp;&nbsp;&nbsp;&nbsp;EMPLOYEE REVIEWS ARE ANONYMOUS &bull; YOUR VOICE MATTERS &bull; HOLD MANAGEMENT ACCOUNTABLE &bull; BOSSCHECK — TRANSPARENCY FOR EVERY WORKPLACE &bull; EMPLOYEE REVIEWS ARE ANONYMOUS &bull; YOUR VOICE MATTERS &bull; HOLD MANAGEMENT ACCOUNTABLE &bull; BOSSCHECK — TRANSPARENCY FOR EVERY WORKPLACE &bull;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+</div>
+
+<header>
+  <div class="logo">BOSS<span>CHECK</span><div class="logo-badge">BETA</div></div>
+  <nav>
+    <button class="active" onclick="showView('browse')">Browse</button>
+    <button onclick="showView('rankings')">Rankings</button>
+    <div class="db-indicator"><div class="db-dot" id="db-dot"></div><span id="db-status">SQLite DB</span></div>
+    <button class="primary" onclick="openAddManager()">+ Add Manager</button>
+  </nav>
+</header>
+
+<main id="browse-view">
+  <div class="hero">
+    <div>
+      <h1>RATE YOUR <em>BOSS.</em></h1>
+      <p>// Anonymous employee reviews of managers &amp; supervisors. No company too big, no boss too powerful. Accountability starts here.</p>
+    </div>
+    <div class="stats-box">
+      <div class="stat"><span class="stat-num" id="total-managers">—</span><div class="stat-label">Managers Listed</div></div>
+      <hr class="stat-divider">
+      <div class="stat"><span class="stat-num" id="total-reviews">—</span><div class="stat-label">Reviews Submitted</div></div>
+      <hr class="stat-divider">
+      <div class="stat"><span class="stat-num" id="total-companies">—</span><div class="stat-label">Companies</div></div>
+    </div>
+  </div>
+  <div class="search-bar">
+    <input type="text" id="search-input" placeholder="Search by name, company, or industry..." oninput="debounceSearch()">
+    <select id="filter-industry" onchange="loadManagers()">
+      <option value="">All Industries</option>
+      <option>Retail</option><option>Restaurant</option><option>Healthcare</option><option>Tech</option>
+      <option>Finance</option><option>Logistics</option><option>Construction</option><option>Education</option><option>Other</option>
+    </select>
+    <button onclick="loadManagers()">SEARCH</button>
+  </div>
+  <div class="section-header">
+    <div class="section-title"><span>#</span>MOST REPORTED</div>
+    <div class="section-meta" id="result-count">Loading...</div>
+  </div>
+  <div class="managers-grid" id="managers-grid"><div class="loading">Connecting to database</div></div>
+</main>
+
+<main id="rankings-view" style="display:none;">
+  <div style="padding:40px 0 20px;">
+    <h1 style="font-family:'Bebas Neue',sans-serif;font-size:64px;letter-spacing:2px;margin-bottom:10px;">LEADERBOARD</h1>
+    <p style="font-family:'IBM Plex Mono',monospace;color:var(--muted);font-size:13px;">// Ranked by BossScore — calculated from complaints, commendations, and review volume.</p>
+  </div>
+  <div id="rankings-list" style="margin-top:30px;"></div>
+</main>
+
+<button class="fab" onclick="openAddManager()">+ REPORT A BOSS</button>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detail-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div id="modal-name" style="font-size:22px;font-weight:700;"></div>
+        <div class="manager-role" id="modal-role"></div>
+        <div class="company-tag" id="modal-company" style="margin-top:8px;"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('detail-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-score-display">
+        <div class="big-score" id="modal-big-score">—</div>
+        <div style="flex:1;">
+          <div class="score-bar-wrap">
+            <div class="score-bar-label"><span>COMPLAINTS</span><span id="bar-complaints-val">0</span></div>
+            <div class="score-bar"><div class="score-bar-fill" id="bar-complaints" style="background:var(--bad);width:0%"></div></div>
+          </div>
+          <div class="score-bar-wrap">
+            <div class="score-bar-label"><span>COMMENDATIONS</span><span id="bar-commend-val">0</span></div>
+            <div class="score-bar"><div class="score-bar-fill" id="bar-commend" style="background:var(--good);width:0%"></div></div>
+          </div>
+          <div style="margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;">TOTAL REVIEWS: <strong id="modal-total-reviews" style="color:var(--text);">0</strong></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;margin-bottom:16px;">EMPLOYEE REVIEWS</div>
+        <div id="modal-reviews"></div>
+      </div>
+      <div class="submit-section">
+        <div class="submit-title">LEAVE A REVIEW</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:16px;text-transform:uppercase;">Review type</div>
+        <div class="type-toggle">
+          <button class="type-btn complaint active" id="type-complaint" onclick="setType('complaint')">⚠ File Complaint</button>
+          <button class="type-btn commend" id="type-commend" onclick="setType('commend')">✓ Commend</button>
+        </div>
+        <div class="form-row"><label class="form-label">Your Review *</label><textarea class="form-textarea" id="review-text" placeholder="Describe your experience with this manager..."></textarea></div>
+        <div class="form-row">
+          <label class="form-label">Category</label>
+          <select class="form-select" id="review-category">
+            <option>Workplace conduct</option><option>Discrimination</option><option>Harassment</option>
+            <option>Scheduling issues</option><option>Favoritism</option><option>Communication</option>
+            <option>Leadership</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-row"><label class="form-label">Your Role (optional)</label><input class="form-input" type="text" id="review-role" placeholder="e.g. Cashier, Server, Engineer..."></div>
+        <button class="submit-btn" id="review-submit-btn" onclick="submitReview()">SUBMIT REVIEW</button>
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:12px;text-align:center;">Reviews are anonymous. Never include personally identifying information.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD MANAGER MODAL -->
+<div class="modal-overlay" id="add-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;">ADD A MANAGER</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:1px;">Report a manager to the BossCheck database</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('add-modal')">✕</button>
+    </div>
+    <div style="padding:28px 32px;">
+      <div class="form-row"><label class="form-label">Manager's Name *</label><input class="form-input" type="text" id="add-name" placeholder="Full name or first name + last initial"></div>
+      <div class="form-row"><label class="form-label">Job Title / Role *</label><input class="form-input" type="text" id="add-role" placeholder="e.g. Store Manager, Shift Supervisor"></div>
+      <div class="form-row"><label class="form-label">Company / Business Name *</label><input class="form-input" type="text" id="add-company" placeholder="e.g. Target (Springfield, IL)"></div>
+      <div class="form-row">
+        <label class="form-label">Industry</label>
+        <select class="form-select" id="add-industry">
+          <option>Retail</option><option>Restaurant</option><option>Healthcare</option><option>Tech</option>
+          <option>Finance</option><option>Logistics</option><option>Construction</option><option>Education</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-row"><label class="form-label">Initial Review *</label><textarea class="form-textarea" id="add-review" placeholder="Write your initial review of this manager..."></textarea></div>
+      <div class="form-row">
+        <label class="form-label">Review Type</label>
+        <div class="type-toggle">
+          <button class="type-btn complaint active" id="add-type-complaint" onclick="setAddType('complaint')">⚠ Complaint</button>
+          <button class="type-btn commend" id="add-type-commend" onclick="setAddType('commend')">✓ Commendation</button>
+        </div>
+      </div>
+      <button class="submit-btn" id="add-submit-btn" onclick="addManager()">ADD TO DATABASE</button>
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:12px;text-align:center;">All submissions are anonymous.</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API='/api';
+let currentManagerId=null,currentReviewType='complaint',currentAddType='complaint',searchDebounce=null;
+
+async function apiFetch(path,opts={}){
+  try{
+    const res=await fetch(API+path,{headers:{'Content-Type':'application/json'},...opts});
+    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error||`HTTP ${res.status}`);}
+    setDbStatus(true);return await res.json();
+  }catch(e){setDbStatus(false);throw e;}
+}
+function setDbStatus(ok){
+  document.getElementById('db-dot').className='db-dot'+(ok?'':' error');
+  document.getElementById('db-status').textContent=ok?'SQLite DB ✓':'DB Offline';
+}
+function scoreClass(s){return s>=65?'good':s>=35?'mid':'bad';}
+function trunc(s,n){return s.length>n?s.substring(0,n)+'…':s;}
+
+async function loadStats(){
+  try{const d=await apiFetch('/stats');document.getElementById('total-managers').textContent=d.managers;document.getElementById('total-reviews').textContent=d.reviews;document.getElementById('total-companies').textContent=d.companies;}catch(e){}
+}
+
+async function loadManagers(){
+  const q=document.getElementById('search-input').value.trim(),industry=document.getElementById('filter-industry').value;
+  const grid=document.getElementById('managers-grid'),count=document.getElementById('result-count');
+  grid.innerHTML='<div class="loading">Fetching from database</div>';
+  try{
+    const p=new URLSearchParams();if(q)p.set('q',q);if(industry)p.set('industry',industry);
+    const managers=await apiFetch('/managers?'+p);
+    managers.sort((a,b)=>b.complaints-a.complaints);
+    count.textContent=`${managers.length} manager${managers.length!==1?'s':''} found`;
+    if(!managers.length){grid.innerHTML=`<div class="empty-state"><span class="icon">🔍</span>No managers match your search.<br>Be the first to add one.</div>`;return;}
+    grid.innerHTML=managers.map(m=>{
+      const cls=scoreClass(m.score),latest=m.reviews[m.reviews.length-1];
+      return `<div class="manager-card ${cls}" onclick="openDetail(${m.id})">
+        <div class="card-top"><div><div class="manager-name">${m.name}</div><div class="manager-role">${m.role}</div></div><div class="score-badge ${cls}">${m.score}</div></div>
+        <div class="company-tag">${m.company} · ${m.industry}</div>
+        <div class="card-stats">
+          <div class="card-stat complaints"><strong>${m.complaints}</strong><span>Complaints</span></div>
+          <div class="card-stat commend"><strong>${m.commends}</strong><span>Commendations</span></div>
+          <div class="card-stat"><strong>${m.total_reviews}</strong><span>Total Reviews</span></div>
+        </div>
+        ${latest?`<div class="latest-review">"${trunc(latest.text,100)}"</div>`:''}
+      </div>`;
+    }).join('');
+  }catch(e){
+    grid.innerHTML=`<div class="empty-state"><span class="icon">⚠</span>Could not connect to database.<br>Make sure <strong>server.py</strong> is running on port 5000.</div>`;
+    count.textContent='Connection error';
+  }
+}
+function debounceSearch(){clearTimeout(searchDebounce);searchDebounce=setTimeout(loadManagers,350);}
+
+async function openDetail(id){
+  currentManagerId=id;openModal('detail-modal');
+  document.getElementById('modal-name').textContent='Loading...';
+  document.getElementById('modal-reviews').innerHTML='<div class="loading" style="border:none;grid-column:unset">Fetching reviews</div>';
+  try{
+    const m=await apiFetch(`/managers/${id}`),cls=scoreClass(m.score);
+    document.getElementById('modal-name').textContent=m.name;
+    document.getElementById('modal-role').textContent=m.role;
+    document.getElementById('modal-company').textContent=m.company+' · '+m.industry;
+    document.getElementById('modal-big-score').textContent=m.score;
+    document.getElementById('modal-big-score').className='big-score '+cls;
+    document.getElementById('modal-total-reviews').textContent=m.total_reviews;
+    document.getElementById('bar-complaints-val').textContent=m.complaints;
+    document.getElementById('bar-commend-val').textContent=m.commends;
+    const total=m.total_reviews||1;
+    setTimeout(()=>{document.getElementById('bar-complaints').style.width=(m.complaints/total*100)+'%';document.getElementById('bar-commend').style.width=(m.commends/total*100)+'%';},100);
+    const el=document.getElementById('modal-reviews');
+    if(!m.reviews.length){el.innerHTML=`<div class="empty-state" style="grid-column:unset"><span class="icon">📝</span>No reviews yet. Be the first.</div>`;}
+    else{el.innerHTML=[...m.reviews].reverse().map(r=>`
+      <div class="review-item">
+        <span class="review-type ${r.type}">${r.type==='complaint'?'⚠ COMPLAINT':'✓ COMMENDATION'}</span>
+        <div class="review-text">${r.text}</div>
+        <div class="review-meta">${r.category||''} ${r.reviewer_role?' · '+r.reviewer_role:''} ${r.created_at?' · '+r.created_at:''}</div>
+      </div>`).join('');}
+    document.getElementById('review-text').value='';document.getElementById('review-role').value='';setType('complaint');
+  }catch(e){showToast('Failed to load manager.',true);closeModal('detail-modal');}
+}
+
+function setType(t){currentReviewType=t;document.getElementById('type-complaint').classList.toggle('active',t==='complaint');document.getElementById('type-commend').classList.toggle('active',t==='commend');}
+async function submitReview(){
+  const text=document.getElementById('review-text').value.trim();
+  if(!text){showToast('Please write a review.',true);return;}
+  const btn=document.getElementById('review-submit-btn');btn.disabled=true;btn.textContent='SAVING...';
+  try{
+    await apiFetch(`/managers/${currentManagerId}/reviews`,{method:'POST',body:JSON.stringify({type:currentReviewType,text,category:document.getElementById('review-category').value,role:document.getElementById('review-role').value||'Anonymous Employee'})});
+    await openDetail(currentManagerId);await loadStats();await loadManagers();showToast('Review saved to database.');
+  }catch(e){showToast('Failed to submit review.',true);}
+  finally{btn.disabled=false;btn.textContent='SUBMIT REVIEW';}
+}
+
+function setAddType(t){currentAddType=t;document.getElementById('add-type-complaint').classList.toggle('active',t==='complaint');document.getElementById('add-type-commend').classList.toggle('active',t==='commend');}
+function openAddManager(){['add-name','add-role','add-company','add-review'].forEach(id=>document.getElementById(id).value='');setAddType('complaint');openModal('add-modal');}
+async function addManager(){
+  const name=document.getElementById('add-name').value.trim(),role=document.getElementById('add-role').value.trim(),company=document.getElementById('add-company').value.trim(),review=document.getElementById('add-review').value.trim(),industry=document.getElementById('add-industry').value;
+  if(!name||!role||!company||!review){showToast('Please fill in all required fields.',true);return;}
+  const btn=document.getElementById('add-submit-btn');btn.disabled=true;btn.textContent='SAVING...';
+  try{
+    await apiFetch('/managers',{method:'POST',body:JSON.stringify({name,role,company,industry,review,type:currentAddType})});
+    closeModal('add-modal');await loadStats();await loadManagers();showToast(`${name} added to the database.`);
+  }catch(e){showToast('Failed to add manager.',true);}
+  finally{btn.disabled=false;btn.textContent='ADD TO DATABASE';}
+}
+
+async function loadRankings(){
+  const list=document.getElementById('rankings-list');
+  list.innerHTML='<div class="loading" style="border:none">Fetching rankings</div>';
+  try{
+    const managers=await apiFetch('/rankings');
+    list.innerHTML=managers.map((m,i)=>{
+      const cls=scoreClass(m.score);
+      return `<div style="display:flex;align-items:center;gap:24px;padding:20px;border:1px solid var(--border);margin-bottom:1px;background:var(--surface);cursor:pointer;transition:background 0.15s;" onmouseenter="this.style.background='var(--surface2)'" onmouseleave="this.style.background='var(--surface)'" onclick="showView('browse');setTimeout(()=>openDetail(${m.id}),200)">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--border);min-width:60px;text-align:center;">${i+1}</div>
+        <div style="flex:1;"><div style="font-weight:700;font-size:16px;">${m.name}</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:3px;">${m.role} · ${m.company}</div></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);text-align:right;"><div style="color:var(--bad);">⚠ ${m.complaints}</div><div style="color:var(--good);margin-top:4px;">✓ ${m.commends}</div></div>
+        <div class="score-badge ${cls}" style="font-size:44px;min-width:70px;text-align:right;">${m.score}</div>
+      </div>`;
+    }).join('');
+  }catch(e){list.innerHTML='<div class="empty-state" style="grid-column:unset"><span class="icon">⚠</span>Could not load rankings.</div>';}
+}
+
+function showView(v){
+  document.getElementById('browse-view').style.display=v==='browse'?'block':'none';
+  document.getElementById('rankings-view').style.display=v==='rankings'?'block':'none';
+  document.querySelectorAll('nav button:not(.primary)').forEach((b,i)=>b.classList.toggle('active',(i===0&&v==='browse')||(i===1&&v==='rankings')));
+  if(v==='rankings')loadRankings();
+}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(el=>el.addEventListener('click',function(e){if(e.target===this)closeModal(this.id);}));
+let toastTimer;
+function showToast(msg,isError=false){
+  const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(isError?' error':'')+' show';
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3500);
+}
+loadStats();loadManagers();
+</script>
+</body>
+</html>
