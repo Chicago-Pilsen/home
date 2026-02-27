@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brake Pad & Rotor Replacement — DIY Guide</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0e0e0e;
+      --surface: #161616;
+      --border: #2a2a2a;
+      --accent: #e8490f;
+      --accent2: #f5a623;
+      --success: #27ae60;
+      --text: #e8e4df;
+      --muted: #6b6560;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* NOISE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    header {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 60px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 80% 40%, rgba(232, 73, 15, 0.12) 0%, transparent 70%);
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(60px, 10vw, 120px);
+      line-height: 0.9;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    h1 em {
+      color: var(--accent);
+      font-style: normal;
+      display: block;
+    }
+
+    .warning {
+      background: rgba(232, 73, 15, 0.08);
+      border: 1px solid rgba(232, 73, 15, 0.3);
+      padding: 20px 60px;
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: #c87050;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 60px;
+    }
+
+    .part-block {
+      margin-bottom: 80px;
+    }
+
+    .part-header {
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 30px;
+      padding-bottom: 10px;
+    }
+
+    .part-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 42px;
+      letter-spacing: 1px;
+    }
+
+    .part-title span {
+      color: var(--accent);
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 40px;
+      padding: 30px 0;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .step:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* COMPLETED STATE */
+    .step.completed {
+      border-left: 4px solid var(--success);
+      padding-left: 20px;
+      opacity: 0.7;
+    }
+
+    .step.completed .step-num {
+      color: var(--success);
+    }
+
+    .step-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      color: var(--border);
+      line-height: 1;
+    }
+
+    .timestamp-btn {
+      display: inline-block;
+      margin-top: 8px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent2);
+      text-transform: uppercase;
+      border: 1px solid var(--accent2);
+      padding: 2px 8px;
+    }
+
+    .step-title {
+      font-weight: 500;
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .step-desc {
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: 15px;
+    }
+
+    .torque-box {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+    }
+
+    .torque-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      color: var(--accent2);
+    }
+
+    .parts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 60px;
+    }
+
+    .part-chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 12px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .part-chip:hover {
+      border-color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .step {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      header,
+      .warning,
+      main {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="hero-bg"></div>
+    <div class="eyebrow">Video-Linked Tutorial</div>
+    <h1>Front Brake <em>Replacement</em></h1>
+  </header>
+
+  <div class="warning">
+    ⚠ Reference Video: "How to Replace Front Brakes" by ChrisFix. Click any step to watch that specific part.
+  </div>
+
+  <main>
+    <section>
+      <h2 style="font-family: 'Bebas Neue'; font-size: 32px; margin-bottom: 20px;">Parts & Tools</h2>
+      <div class="parts-grid">
+        <a href="https://www.rockauto.com/en/catalog/brake+&+wheel+hub,brake+pad" target="_blank" class="part-chip">New
+          Brake Pads <span>↗</span></a>
+        <a href="https://www.rockauto.com/en/catalog/brake+&+wheel+hub,rotor" target="_blank" class="part-chip">New
+          Rotors <span>↗</span></a>
+        <a href="https://www.amazon.com/breaker-bar/s?k=breaker+bar" target="_blank" class="part-chip">Breaker Bar
+          <span>↗</span></a>
+        <a href="https://www.tekton.com/torque-wrenches" target="_blank" class="part-chip">Torque Wrench
+          <span>↗</span></a>
+      </div>
+    </section>
+
+    <div class="part-block">
+      <div class="part-header">
+        <div class="part-title">01. Dis<span>assembly</span></div>
+      </div>
+
+      <a href="https://www.youtube.com/watch?v=UlbFFq60Tec&t=45s" target="_blank" class="step"
+        onclick="markComplete(this)">
+        <div class="step-meta">
+          <div class="step-num">01</div>
+          <span class="timestamp-btn">Watch @ 0:45</span>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Remove Top Caliper Pin</div>
+          <div class="step-desc">Unscrew the 12mm top guide pin to allow the caliper to open.</div>
+        </div>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=UlbFFq60Tec&t=59s" target="_blank" class="step"
+        onclick="markComplete(this)">
+        <div class="step-meta">
+          <div class="step-num">02</div>
+          <span class="timestamp-btn">Watch @ 0:59</span>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Pry & Remove Pads</div>
+          <div class="step-desc">Use a screwdriver to pry the caliper open and pull out the old pads.</div>
+        </div>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=UlbFFq60Tec&t=87s" target="_blank" class="step"
+        onclick="markComplete(this)">
+        <div class="step-meta">
+          <div class="step-num">03</div>
+          <span class="timestamp-btn">Watch @ 1:27</span>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Remove Bracket & Secure Caliper</div>
+          <div class="step-desc">Remove the two bracket bolts and hang the caliper securely so it doesn't strain the
+            brake line.</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="part-block">
+      <div class="part-header">
+        <div class="part-title">02. Rotor <span>Swap</span></div>
+      </div>
+
+      <a href="https://www.youtube.com/watch?v=UlbFFq60Tec&t=144s" target="_blank" class="step"
+        onclick="markComplete(this)">
+        <div class="step-meta">
+          <div class="step-num">04</div>
+          <span class="timestamp-btn">Watch @ 2:24</span>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Clean & Install New Rotor</div>
+          <div class="step-desc">Clean the new rotor with brake clean and slide it onto the hub. Secure it with a lug
+            nut.</div>
+        </div>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=UlbFFq60Tec&t=185s" target="_blank" class="step"
+        onclick="markComplete(this)">
+        <div class="step-meta">
+          <div class="step-num">05</div>
+          <span class="timestamp-btn">Watch @ 3:05</span>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Reinstall Bracket & Torque</div>
+          <div class="step-desc">Apply Loctite to the bracket bolts and torque them down.</div>
+          <div class="torque-box">
+            <span class="torque-val">85</span> <span style="font-size:10px; color:var(--muted)">FT-LBS</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="part-block">
+      <div class="part-header">
+        <div class="part-title">03. Prep <span>& Lube</span></div>
+      </div>
+
+      <a href="https://www.youtube.com/watch?v=UlbFFq60Tec&t=252s" target="_blank" class="step"
+        onclick="markComplete(this)">
+        <div class="step-meta">
+          <div class="step-num">06</div>
+          <span class="timestamp-btn">Watch @ 4:12</span>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Compress Pistons</div>
+          <div class="step-desc">Open the master cylinder cap and use a tool to press the pistons back into the caliper.
+          </div>
+        </div>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=UlbFFq60Tec&t=311s" target="_blank" class="step"
+        onclick="markComplete(this)">
+        <div class="step-meta">
+          <div class="step-num">07</div>
+          <span class="timestamp-btn">Watch @ 5:11</span>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Grease Contact Points</div>
+          <div class="step-desc">Apply brake grease to the metal-to-metal contact points and guide pins.</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="part-block">
+      <div class="part-header">
+        <div class="part-title">04. Final <span>Install</span></div>
+      </div>
+
+      <a href="https://www.youtube.com/watch?v=UlbFFq60Tec&t=428s" target="_blank" class="step"
+        onclick="markComplete(this)">
+        <div class="step-meta">
+          <div class="step-num">08</div>
+          <span class="timestamp-btn">Watch @ 7:08</span>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Install New Pads</div>
+          <div class="step-desc">Slide the new pads in, ensuring the wear indicators are positioned correctly.</div>
+        </div>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=UlbFFq60Tec&t=464s" target="_blank" class="step"
+        onclick="markComplete(this)">
+        <div class="step-meta">
+          <div class="step-num">09</div>
+          <span class="timestamp-btn">Watch @ 7:44</span>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Close Caliper & Final Torque</div>
+          <div class="step-desc">Close the caliper and torque the guide pin.</div>
+          <div class="torque-box">
+            <span class="torque-val">25</span> <span style="font-size:10px; color:var(--muted)">FT-LBS</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=UlbFFq60Tec&t=490s" target="_blank" class="step"
+        onclick="markComplete(this)">
+        <div class="step-meta">
+          <div class="step-num">10</div>
+          <span class="timestamp-btn">Watch @ 8:10</span>
+        </div>
+        <div class="step-body">
+          <div class="step-title">Pump Brakes & Test</div>
+          <div class="step-desc">Pump the pedal until firm before driving.</div>
+        </div>
+      </a>
+    </div>
+  </main>
+
+  <script>
+    function markComplete(element) {
+      element.classList.toggle('completed');
+    }
+  </script>
+
+</body>
+
+</html>
