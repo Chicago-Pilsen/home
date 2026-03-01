@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oil Change Drain Plug Guide — Chevy, Toyota & Honda</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --black: #0a0a0a; --gold: #c8922a; --gold-light: #e8b04a;
+    --steel: #b9c4cf; --white: #f0ede8; --mid: #1a1e22;
+    --card: #141820; --warn: #e67e22; --green: #4caf50;
+    --toyota-red: #eb0a1e; --honda-blue: #005aab;
+
+    /* Higher-contrast text accents (for dark UI) */
+    --chevy-gold-text: #f6c45a;
+    --toyota-red-text: #ff4d5a;
+    --honda-blue-text: #4da3ff;
+  }
+  body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(200,146,42,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(200,146,42,0.03) 1px, transparent 1px);
+    background-size: 40px 40px; pointer-events: none; z-index: 0;
+  }
+  .container { max-width: 1060px; margin: 0 auto; padding: 0 22px 64px; position: relative; z-index: 1; }
+
+  header { padding: 52px 0 32px; border-bottom: 1px solid rgba(200,146,42,0.2); }
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 12px; opacity:0; animation: fadeUp .5s ease forwards .1s; }
+  h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px,7.5vw,84px); line-height:.9; color:var(--white); opacity:0; animation: fadeUp .6s ease forwards .2s; }
+  h1 span { color: var(--gold); display: block; }
+  .subtitle { margin-top:16px; font-size:14px; font-weight:300; color:var(--steel); max-width:660px; line-height:1.6; opacity:0; animation: fadeUp .6s ease forwards .3s; }
+
+  .brand-bar { display:flex; gap:10px; margin-top:28px; opacity:0; animation: fadeUp .5s ease forwards .32s; flex-wrap:wrap; }
+  .brand-btn { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:.06em; padding:10px 26px; border:1px solid rgba(255,255,255,0.16); background:rgba(20,24,32,0.85); color:rgba(240,237,232,0.86); cursor:pointer; transition:transform .2s, box-shadow .2s, background .2s, border-color .2s, color .2s; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .brand-btn:hover { color:var(--white); border-color:rgba(255,255,255,0.3); }
+  .brand-btn.active-chevy { color:var(--chevy-gold-text); border-color:rgba(246,196,90,0.9); background:rgba(200,146,42,0.14); text-shadow:0 0 10px rgba(246,196,90,0.18); }
+  .brand-btn.active-toyota { color:var(--toyota-red-text); border-color:rgba(255,77,90,0.95); background:rgba(235,10,30,0.12); text-shadow:0 0 10px rgba(255,77,90,0.16); }
+  .brand-btn.active-honda { color:var(--honda-blue-text); border-color:rgba(77,163,255,0.95); background:rgba(0,90,171,0.14); text-shadow:0 0 10px rgba(77,163,255,0.14); }
+  .brand-btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.06); box-shadow: 0 10px 30px rgba(0,0,0,0.35); color: rgba(240,237,232,0.95); }
+  .brand-btn:focus-visible { outline: 2px solid rgba(240,237,232,0.45); outline-offset: 3px; }
+
+
+  .search-wrap { margin-top:18px; opacity:0; animation: fadeUp .5s ease forwards .34s; }
+  .search-input { background:var(--card); border:1px solid rgba(200,146,42,0.25); color:var(--white); font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.08em; padding:11px 16px; width:100%; max-width:360px; outline:none; transition:border-color .2s; }
+  .search-input::placeholder { color:var(--steel); }
+  .search-input:focus { border-color:var(--gold); }
+
+  .tabs { display:flex; margin-top:22px; border-bottom:1px solid rgba(200,146,42,0.2); opacity:0; animation: fadeUp .5s ease forwards .36s; overflow-x:auto; scrollbar-width:none; }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab-btn { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--steel); background:none; border:none; border-bottom:2px solid transparent; padding:11px 14px; cursor:pointer; transition:color .2s,border-color .2s; white-space:nowrap; margin-bottom:-1px; }
+  .tab-btn:hover { color:var(--white); }
+  .tab-btn.active { color:var(--gold); border-bottom-color:var(--gold); }
+  .tab-btn.active-t { color:var(--toyota-red); border-bottom-color:var(--toyota-red); }
+  .tab-btn.active-h { color:var(--honda-blue); border-bottom-color:var(--honda-blue); }
+
+  .brand-panel { display:none; }
+  .brand-panel.active { display:block; }
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; }
+
+  .hero-stat { margin:32px 0 24px; display:flex; align-items:center; gap:22px; flex-wrap:wrap; }
+  .stat-box { background:var(--card); border:1px solid var(--gold); padding:18px 30px; text-align:center; position:relative; flex-shrink:0; }
+  .stat-box.toyota-stat { border-color:var(--toyota-red); }
+  .stat-box.honda-stat { border-color:var(--honda-blue); }
+  .stat-box::before { content:''; position:absolute; inset:3px; border:1px solid rgba(200,146,42,0.2); pointer-events:none; }
+  .stat-box.toyota-stat::before { border-color:rgba(235,10,30,0.2); }
+  .stat-box.honda-stat::before { border-color:rgba(0,90,171,0.2); }
+  .stat-number { font-family:'Bebas Neue',sans-serif; font-size:56px; line-height:1; color:var(--gold); }
+  .stat-number.toyota-num { color:var(--toyota-red); }
+  .stat-number.honda-num { color:var(--honda-blue); }
+  .stat-number.mixed { font-size:32px; line-height:1.2; }
+  .stat-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.18em; color:var(--steel); text-transform:uppercase; margin-top:3px; }
+  .stat-desc { flex:1; min-width:200px; }
+  .stat-desc p { font-size:14px; font-weight:300; color:var(--white); line-height:1.7; }
+  .stat-desc strong { color:var(--gold-light); font-weight:500; }
+  .stat-desc strong.t { color:#f55a68; }
+  .stat-desc strong.h { color:#4d9de0; }
+
+  .section-title { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:.05em; color:var(--white); margin:28px 0 14px; display:flex; align-items:center; gap:12px; }
+  .section-title::after { content:''; flex:1; height:1px; background:rgba(200,146,42,0.2); }
+  .section-title.t-line::after { background:rgba(235,10,30,0.2); }
+  .section-title.h-line::after { background:rgba(0,90,171,0.2); }
+
+  .gen-table { width:100%; border-collapse:collapse; margin-bottom:6px; }
+  .gen-table thead tr { background:rgba(200,146,42,0.07); border-bottom:1px solid var(--gold); }
+  .gen-table.t-table thead tr { background:rgba(235,10,30,0.07); border-bottom-color:var(--toyota-red); }
+  .gen-table.h-table thead tr { background:rgba(0,90,171,0.07); border-bottom-color:var(--honda-blue); }
+  .gen-table th { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); padding:10px 13px; text-align:left; }
+  .gen-table.t-table th { color:var(--toyota-red); }
+  .gen-table.h-table th { color:var(--honda-blue); }
+  .gen-table tbody tr { border-bottom:1px solid rgba(255,255,255,0.04); transition:background .2s; }
+  .gen-table tbody tr:hover { background:rgba(200,146,42,0.05); }
+  .gen-table.t-table tbody tr:hover { background:rgba(235,10,30,0.05); }
+  .gen-table.h-table tbody tr:hover { background:rgba(0,90,171,0.05); }
+  .gen-table td { padding:13px 13px; font-size:13px; vertical-align:middle; }
+  .gen-badge { display:inline-block; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.07em; color:var(--steel); background:var(--mid); border:1px solid rgba(255,255,255,0.07); padding:2px 8px; text-transform:uppercase; }
+  .year-range { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--white); letter-spacing:.04em; text-shadow: 0 1px 0 rgba(0,0,0,0.55), 0 0 14px rgba(0,0,0,0.35); }
+  .size-highlight { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--gold); letter-spacing:.04em; }
+  .size-highlight.t { color:var(--toyota-red); }
+  .size-highlight.h { color:var(--honda-blue); }
+  .size-highlight.warn { color:var(--warn); }
+  .size-note { font-size:9px; color:var(--steel); display:block; font-family:'DM Mono',monospace; margin-top:1px; }
+  .engine-tag { font-family:'DM Mono',monospace; font-size:9px; color:var(--steel); display:block; line-height:1.5; }
+  .check { color:var(--green); font-size:13px; }
+
+  .notice { background:rgba(230,126,34,0.08); border-left:3px solid var(--warn); padding:13px 17px; margin-bottom:18px; font-size:12px; color:var(--steel); line-height:1.6; }
+  .notice strong { color:var(--warn); }
+  .disc-notice { background:rgba(138,154,170,0.05); border-left:3px solid rgba(138,154,170,0.3); padding:11px 17px; margin-bottom:16px; font-size:12px; color:var(--steel); line-height:1.5; }
+  .disc-notice strong { color:rgba(240,237,232,0.55); }
+  .toyota-notice { background:rgba(235,10,30,0.06); border-left:3px solid var(--toyota-red); padding:13px 17px; margin-bottom:18px; font-size:12px; color:var(--steel); line-height:1.6; }
+  .toyota-notice strong { color:#f55a68; }
+  .honda-notice { background:rgba(0,90,171,0.07); border-left:3px solid var(--honda-blue); padding:13px 17px; margin-bottom:18px; font-size:12px; color:var(--steel); line-height:1.6; }
+  .honda-notice strong { color:#4d9de0; }
+
+  .filter-note { background:var(--mid); border-left:3px solid var(--gold); padding:16px 20px; margin-top:18px; }
+  .filter-note.t-note { border-left-color:var(--toyota-red); }
+  .filter-note.h-note { border-left-color:var(--honda-blue); }
+  .filter-note h3 { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
+  .filter-note.t-note h3 { color:var(--toyota-red); }
+  .filter-note.h-note h3 { color:var(--honda-blue); }
+  .filter-note ul { list-style:none; display:flex; flex-direction:column; gap:6px; }
+  .filter-note li { font-size:12px; color:var(--steel); padding-left:16px; position:relative; line-height:1.5; }
+  .filter-note li::before { content:'→'; position:absolute; left:0; color:var(--gold); font-size:10px; }
+  .filter-note.t-note li::before { color:var(--toyota-red); }
+  .filter-note.h-note li::before { color:var(--honda-blue); }
+
+  .model-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:10px; margin-top:18px; }
+  .model-card { background:var(--card); border:1px solid rgba(255,255,255,0.06); padding:14px 16px; transition:border-color .2s,transform .15s; }
+  .model-card:hover { transform:translateY(-2px); border-color:rgba(200,146,42,0.3); }
+  .model-card.t-card:hover { border-color:rgba(235,10,30,0.3); }
+  .model-card.h-card:hover { border-color:rgba(0,90,171,0.35); }
+  .model-card.warn-card { border-color:rgba(230,126,34,0.2); }
+  .mc-name { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--white); letter-spacing:.04em; }
+  .mc-years { font-family:'DM Mono',monospace; font-size:9px; color:var(--steel); margin-top:1px; }
+  .mc-size { font-family:'Bebas Neue',sans-serif; font-size:24px; color:var(--gold); margin-top:5px; letter-spacing:.04em; }
+  .mc-size.t { color:var(--toyota-red); }
+  .mc-size.h { color:var(--honda-blue); }
+  .mc-size.warn { color:var(--warn); }
+  .mc-note { font-family:'DM Mono',monospace; font-size:9px; color:var(--steel); margin-top:2px; line-height:1.4; }
+  .search-hidden { display:none !important; }
+
+  .tools-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:18px; }
+  @media(max-width:700px){ .tools-grid{grid-template-columns:1fr 1fr;} }
+  @media(max-width:480px){ .tools-grid{grid-template-columns:1fr;} .hero-stat{flex-direction:column;} .brand-bar{flex-direction:column;} }
+  .tool-card { background:var(--card); border:1px solid rgba(255,255,255,0.06); padding:17px; transition:border-color .2s,transform .2s; }
+  .tool-card:hover { border-color:rgba(200,146,42,0.35); transform:translateY(-2px); }
+  .tool-card .tool-icon { font-size:22px; margin-bottom:8px; display:block; }
+  .tool-card h3 { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--gold); margin-bottom:5px; }
+  .tool-card p { font-size:12px; color:var(--steel); line-height:1.5; }
+
+  /* Brand comparison bar */
+  .brand-compare { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin:32px 0 20px; }
+  @media(max-width:600px){ .brand-compare{grid-template-columns:1fr;} }
+  .compare-card { background:var(--card); border:1px solid rgba(255,255,255,0.07); padding:20px; text-align:center; }
+  .compare-brand { font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px; text-shadow: 0 1px 0 rgba(0,0,0,0.55), 0 0 14px rgba(0,0,0,0.35); }
+  .compare-size { font-family:'Bebas Neue',sans-serif; font-size:44px; line-height:1; }
+  .compare-note { font-family:'DM Mono',monospace; font-size:9px; color:var(--steel); margin-top:6px; line-height:1.4; }
+
+  footer { border-top:1px solid rgba(200,146,42,0.12); padding:22px 0 0; margin-top:40px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+  footer p { font-family:'DM Mono',monospace; font-size:10px; color:rgba(138,154,170,0.3); letter-spacing:.1em; text-transform:uppercase; }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+
+/* === ORGANIZATION + CSS3 ENHANCEMENTS (2026 refresh) === */
+:root{
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 12px 34px rgba(0,0,0,.45);
+  --shadow-soft: 0 10px 22px rgba(0,0,0,.28);
+  --glow-gold: 0 0 0 1px rgba(200,146,42,.25), 0 0 22px rgba(200,146,42,.18);
+  --glow-red: 0 0 0 1px rgba(235,10,30,.22), 0 0 22px rgba(235,10,30,.16);
+  --glow-blue: 0 0 0 1px rgba(0,90,171,.25), 0 0 22px rgba(0,90,171,.16);
+}
+
+/* smoother UX */
+html{ scroll-behavior:smooth; }
+::selection{ background: rgba(200,146,42,.35); color: var(--white); }
+
+/* subtle animated background bloom */
+body::after{
+  content:'';
+  position:fixed; inset:-20%;
+  background:
+    radial-gradient(closest-side at 25% 20%, rgba(200,146,42,.16), transparent 60%),
+    radial-gradient(closest-side at 80% 35%, rgba(0,90,171,.12), transparent 60%),
+    radial-gradient(closest-side at 55% 85%, rgba(235,10,30,.10), transparent 60%);
+  filter: blur(28px);
+  opacity:.55;
+  z-index:0;
+  pointer-events:none;
+  animation: drift 16s ease-in-out infinite alternate;
+}
+@keyframes drift{ from{ transform:translate3d(-1.5%, -1%, 0) scale(1.02);} to{ transform:translate3d(1.5%, 1%, 0) scale(1.06);} }
+
+/* sticky control dock (brand + search + tabs) */
+.control-dock{
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin-top: 18px;
+  padding: 14px 0 12px;
+  background: rgba(10,10,10,.62);
+  backdrop-filter: blur(12px) saturate(1.25);
+  -webkit-backdrop-filter: blur(12px) saturate(1.25);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.control-dock::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(180deg, rgba(200,146,42,.06), transparent 55%);
+  opacity:.8;
+}
+.control-dock .dock-inner{ position:relative; }
+
+/* tighten header spacing a bit on small screens */
+@media(max-width:520px){
+  header{ padding: 42px 0 22px; }
+}
+
+/* elevate key surfaces */
+.brand-btn, .search-input, .tab-btn, .model-card, .tool-card, .compare-card, .stat-box, .filter-note, .notice, .toyota-notice, .honda-notice, .disc-notice{
+  border-radius: var(--radius-sm);
+}
+.model-card, .tool-card, .compare-card, .stat-box, .filter-note, .notice, .toyota-notice, .honda-notice, .disc-notice{
+  box-shadow: var(--shadow-soft);
+}
+
+/* animated “glow underline” for active tab */
+.tab-btn{
+  position:relative;
+}
+.tab-btn.active::after,
+.tab-btn.active-t::after,
+.tab-btn.active-h::after{
+  content:'';
+  position:absolute;
+  left:10px; right:10px; bottom:-2px;
+  height:2px;
+  border-radius:999px;
+  filter: blur(.2px);
+}
+.tab-btn.active::after{ background: var(--gold); box-shadow: var(--glow-gold); }
+.tab-btn.active-t::after{ background: var(--toyota-red); box-shadow: var(--glow-red); }
+.tab-btn.active-h::after{ background: var(--honda-blue); box-shadow: var(--glow-blue); }
+
+/* “premium” buttons */
+.brand-btn { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:.06em; padding:10px 26px; border:1px solid rgba(255,255,255,0.16); background:rgba(20,24,32,0.85); color:rgba(240,237,232,0.86); cursor:pointer; transition:transform .2s, box-shadow .2s, background .2s, border-color .2s, color .2s; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.brand-btn::before{
+  content:'';
+  position:absolute; inset:-60%;
+  background: conic-gradient(from 180deg,
+    rgba(200,146,42,.0), rgba(200,146,42,.32), rgba(235,10,30,.20),
+    rgba(0,90,171,.22), rgba(200,146,42,.0));
+  animation: spin 6.5s linear infinite;
+  opacity:.0;
+}
+.brand-btn::after{
+  content:'';
+  position:absolute; inset:1px;
+  background: linear-gradient(180deg, rgba(20,24,32,.96), rgba(20,24,32,.82));
+  border-radius: 999px;
+}
+.brand-btn > *{ position:relative; z-index:1; }
+.brand-btn:hover::before{ opacity:.9; }
+@keyframes spin{ to{ transform: rotate(360deg);} }
+
+/* search input polish */
+.search-input{
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 10px 20px rgba(0,0,0,.30);
+}
+
+/* cards: 3D tilt-ready + shimmer */
+.tilt{
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.tilt::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius: inherit;
+  background: radial-gradient(800px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255,255,255,.10), transparent 40%);
+  opacity:0;
+  transition: opacity .18s ease;
+  pointer-events:none;
+}
+.tilt:hover::before{ opacity:1; }
+
+.model-card, .tool-card, .compare-card, .stat-box{
+  position:relative;
+  overflow:hidden;
+}
+
+/* subtle “edge” */
+.model-card::after, .tool-card::after, .compare-card::after, .stat-box::after{
+  content:'';
+  position:absolute; inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+  opacity:.9;
+}
+
+/* reveal animation */
+.reveal{
+  opacity:0;
+  transform: translateY(10px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.reveal.in{
+  opacity:1;
+  transform: translateY(0);
+}
+
+/* back-to-top */
+#toTop{
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 50;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(20,24,32,.75);
+  color: var(--white);
+  padding: 10px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease, border-color .2s ease;
+}
+#toTop.show{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+#toTop:hover{ border-color: rgba(200,146,42,.55); }
+
+/* accessibility: reduce motion */
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  body::after, .brand-btn::before{ animation:none !important; }
+  .reveal{ transition:none; opacity:1; transform:none; }
+  .tilt{ transform:none !important; }
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <p class="eyebrow">// Oil Change Reference — Chevrolet, Toyota & Honda</p>
+    <h1>Drain Plug<span>Socket Guide</span></h1>
+    <p class="subtitle">Every model. Every year. 2000–2026. Chevrolet, Toyota, and Honda A–Z drain plug socket sizes — one complete shop reference.</p>
+  </header>
+
+  
+  <div class="control-dock">
+    <div class="dock-inner">
+<!-- BRAND SWITCHER -->
+  <div class="brand-bar">
+    <button class="brand-btn active-chevy" onclick="switchBrand('chevy',this)">⬡ Chevrolet</button>
+    <button class="brand-btn" onclick="switchBrand('toyota',this)">◈ Toyota</button>
+    <button class="brand-btn" onclick="switchBrand('honda',this)">⬟ Honda</button>
+    <button class="brand-btn" onclick="switchBrand('compare',this)">⇌ Compare All</button>
+  </div>
+
+  <div class="search-wrap">
+    <input class="search-input" type="text" id="modelSearch" placeholder="Search any model..." oninput="filterModels(this.value)">
+  </div>
+    </div>
+  </div>
+
+
+  <!-- ████ COMPARE ALL ████ -->
+  <div id="compare" class="brand-panel">
+    <div class="section-title" style="margin-top:28px;">Brand Comparison at a Glance</div>
+    <div class="brand-compare">
+      <div class="compare-card tilt">
+        <div class="compare-brand" style="color:var(--gold);">Chevrolet</div>
+        <div class="compare-size" style="color:var(--gold);">15mm</div>
+        <div class="compare-note">M12x1.75 · 95% of all models<br>Exceptions: Prizm & Metro = 14mm<br>Duramax HD 2001–16 = 15–16mm</div>
+      </div>
+      <div class="compare-card tilt">
+        <div class="compare-brand" style="color:var(--toyota-red);">Toyota</div>
+        <div class="compare-size" style="color:var(--toyota-red);">14mm</div>
+        <div class="compare-note">M12x1.25 · Every model<br>Corolla to Tundra, 2000–2026<br>bZ4X EV = no oil drain plug</div>
+      </div>
+      <div class="compare-card tilt">
+        <div class="compare-brand" style="color:var(--honda-blue);">Honda</div>
+        <div class="compare-size" style="color:var(--honda-blue);">17mm</div>
+        <div class="compare-note">M14x1.5 · Entire lineup<br>Civic, Accord, CR-V, Pilot, Odyssey<br>Consistent 2000–2026</div>
+      </div>
+    </div>
+    <div class="filter-note" style="margin-top:4px;"><h3>// Quick Shop Rule</h3><ul>
+      <li><strong style="color:var(--gold);">Chevy</strong> → grab the <strong style="color:var(--white);">15mm</strong></li>
+      <li><strong style="color:var(--toyota-red);">Toyota</strong> → grab the <strong style="color:var(--white);">14mm</strong></li>
+      <li><strong style="color:var(--honda-blue);">Honda</strong> → grab the <strong style="color:var(--white);">17mm</strong></li>
+      <li>Each brand is fully standardized — learn one socket per brand and you're covered for 2000–2026</li>
+    </ul></div>
+    <div class="section-title" style="margin-top:32px;">Torque Specs by Brand</div>
+    <table class="gen-table"><thead><tr><th>Brand</th><th>Socket</th><th>Thread</th><th>Torque</th><th>Washer</th></tr></thead><tbody>
+      <tr><td><span class="year-range" style="color:var(--gold);">Chevrolet</span></td><td><span class="size-highlight">15mm</span></td><td><span class="engine-tag">M12x1.75</span></td><td><span class="engine-tag">~18 ft-lbs (gas) / ~44 ft-lbs (Duramax 01–16)</span></td><td><span class="gen-badge">Crush Washer</span></td></tr>
+      <tr><td><span class="year-range" style="color:var(--toyota-red);">Toyota</span></td><td><span class="size-highlight t">14mm</span></td><td><span class="engine-tag">M12x1.25</span></td><td><span class="engine-tag">~27–33 ft-lbs (model dependent)</span></td><td><span class="gen-badge">Crush Washer</span></td></tr>
+      <tr><td><span class="year-range" style="color:var(--honda-blue);">Honda</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">M14x1.5</span></td><td><span class="engine-tag">~29 ft-lbs (26–30 range)</span></td><td><span class="gen-badge">Crush Washer</span></td></tr>
+    </tbody></table>
+  </div>
+
+  <!-- ████ CHEVROLET ████ -->
+  <div id="chevy" class="brand-panel active">
+    <div class="tabs" id="chevyTabs">
+      <button class="tab-btn active" onclick="switchTab('chevy','c-all',this)">All Models</button>
+      <button class="tab-btn" onclick="switchTab('chevy','c-s1500',this)">Silverado 1500</button>
+      <button class="tab-btn" onclick="switchTab('chevy','c-hd',this)">HD Trucks</button>
+      <button class="tab-btn" onclick="switchTab('chevy','c-suvs',this)">SUVs</button>
+      <button class="tab-btn" onclick="switchTab('chevy','c-cars',this)">Cars</button>
+      <button class="tab-btn" onclick="switchTab('chevy','c-vans',this)">Vans</button>
+    </div>
+
+    <div id="c-all" class="tab-panel active">
+      <div class="section-title" style="margin-top:28px;">All Chevrolet Models — Quick Reference</div>
+      <div class="model-grid" id="chevyGrid">
+        <div class="model-card tilt" data-model="silverado 1500 pickup truck"><div class="mc-name">Silverado 1500</div><div class="mc-years">2000–2026</div><div class="mc-size">15mm</div><div class="mc-note">All gens · M12x1.75 · Consistent</div></div>
+        <div class="model-card warn-card tilt" data-model="silverado 2500 hd heavy duty"><div class="mc-name">Silverado 2500 HD</div><div class="mc-years">2000–2026</div><div class="mc-size warn">15–16mm ⚠</div><div class="mc-note">Gas=15mm · Duramax 01–16 verify · L5P 17+=15mm</div></div>
+        <div class="model-card warn-card tilt" data-model="silverado 3500 hd heavy duty"><div class="mc-name">Silverado 3500 HD</div><div class="mc-years">2001–2026</div><div class="mc-size warn">15–16mm ⚠</div><div class="mc-note">Same as 2500HD</div></div>
+        <div class="model-card tilt" data-model="silverado 4500 hd medium duty"><div class="mc-name">Silverado 4500 HD</div><div class="mc-years">2019–2026</div><div class="mc-size">15mm</div><div class="mc-note">L5P Duramax / L8T gas</div></div>
+        <div class="model-card tilt" data-model="silverado 5500 hd medium duty"><div class="mc-name">Silverado 5500 HD</div><div class="mc-years">2019–2026</div><div class="mc-size">15mm</div><div class="mc-note">L5P Duramax / L8T gas</div></div>
+        <div class="model-card warn-card tilt" data-model="kodiak c4500 c5500 medium duty"><div class="mc-name">Kodiak C4500/C5500</div><div class="mc-years">2000–2009</div><div class="mc-size warn">15–16mm ⚠</div><div class="mc-note">8.1L gas=15mm · Duramax=verify</div></div>
+        <div class="model-card warn-card tilt" data-model="topkick medium duty truck"><div class="mc-name">TopKick</div><div class="mc-years">2000–2009</div><div class="mc-size warn">15–16mm ⚠</div><div class="mc-note">Same platform as Kodiak</div></div>
+        <div class="model-card tilt" data-model="s10 compact pickup truck"><div class="mc-name">S10 Pickup</div><div class="mc-years">2000–2004</div><div class="mc-size">15mm</div><div class="mc-note">2.2L / 4.3L · Disc. 2004</div></div>
+        <div class="model-card tilt" data-model="tahoe suv full size"><div class="mc-name">Tahoe</div><div class="mc-years">2000–2026</div><div class="mc-size">15mm</div><div class="mc-note">All V8 gas · M12x1.75</div></div>
+        <div class="model-card tilt" data-model="suburban suv full size large"><div class="mc-name">Suburban</div><div class="mc-years">2000–2026</div><div class="mc-size">15mm</div><div class="mc-note">All gas engines · Consistent</div></div>
+        <div class="model-card tilt" data-model="blazer original s10 suv"><div class="mc-name">Blazer (Original)</div><div class="mc-years">2000–2005</div><div class="mc-size">15mm</div><div class="mc-note">S10-based · 4.3L V6</div></div>
+        <div class="model-card tilt" data-model="blazer new suv crossover 2019"><div class="mc-name">Blazer (New)</div><div class="mc-years">2019–2026</div><div class="mc-size">15mm</div><div class="mc-note">2.0T / 2.5L / 3.6L V6</div></div>
+        <div class="model-card tilt" data-model="camaro muscle car sports"><div class="mc-name">Camaro</div><div class="mc-years">2000–02 · 2010–2024</div><div class="mc-size">15mm</div><div class="mc-note">V6/V8/LT1/ZL1</div></div>
+        <div class="model-card tilt" data-model="corvette sports car c5 c6 c7 c8"><div class="mc-name">Corvette</div><div class="mc-years">2000–2026</div><div class="mc-size">15mm</div><div class="mc-note">C5/C6/C7/C8 · All engines</div></div>
+        <div class="model-card tilt" data-model="impala sedan full size"><div class="mc-name">Impala</div><div class="mc-years">2000–2020</div><div class="mc-size">15mm</div><div class="mc-note">V6 3.4–3.8L · Disc. 2020</div></div>
+        <div class="model-card tilt" data-model="malibu sedan midsize"><div class="mc-name">Malibu</div><div class="mc-years">2000–2024</div><div class="mc-size">15mm</div><div class="mc-note">4-cyl/V6 · Disc. 2024</div></div>
+        <div class="model-card tilt" data-model="monte carlo coupe sport"><div class="mc-name">Monte Carlo</div><div class="mc-years">2000–2007</div><div class="mc-size">15mm</div><div class="mc-note">3.4L/3.8L/SS · Disc. 2007</div></div>
+        <div class="model-card tilt" data-model="cavalier compact sedan"><div class="mc-name">Cavalier</div><div class="mc-years">2000–2005</div><div class="mc-size">15mm</div><div class="mc-note">2.2L/2.4L I4 · Disc. 2005</div></div>
+        <div class="model-card tilt" data-model="lumina sedan"><div class="mc-name">Lumina</div><div class="mc-years">2000–2001</div><div class="mc-size">15mm</div><div class="mc-note">3.1L/3.8L V6 · Disc. 2001</div></div>
+        <div class="model-card warn-card tilt" data-model="prizm compact toyota corolla"><div class="mc-name">Prizm</div><div class="mc-years">2000–2002</div><div class="mc-size warn">14mm ⚠</div><div class="mc-note">Toyota Corolla platform · M12x1.25</div></div>
+        <div class="model-card warn-card tilt" data-model="metro small city suzuki"><div class="mc-name">Metro</div><div class="mc-years">2000–2001</div><div class="mc-size warn">14mm ⚠</div><div class="mc-note">Suzuki platform · 1.0L/1.3L</div></div>
+        <div class="model-card tilt" data-model="astro van full size"><div class="mc-name">Astro</div><div class="mc-years">2000–2005</div><div class="mc-size">15mm</div><div class="mc-note">4.3L V6 · RWD van</div></div>
+        <div class="model-card tilt" data-model="venture minivan"><div class="mc-name">Venture</div><div class="mc-years">2000–2005</div><div class="mc-size">15mm</div><div class="mc-note">3.4L V6 · FWD minivan</div></div>
+      </div>
+      <div class="filter-note" style="margin-top:20px;"><h3>// Chevy Bottom Line</h3><ul>
+        <li><strong>95% of all Chevys: 15mm.</strong> One socket for almost everything.</li>
+        <li><strong>14mm exceptions:</strong> Prizm (Toyota platform) and Metro (Suzuki platform).</li>
+        <li><strong>Duramax 2001–2016 HD diesel:</strong> 15–16mm oil drain plug — verify before pulling.</li>
+      </ul></div>
+    </div>
+
+    <div id="c-s1500" class="tab-panel">
+      <div class="hero-stat">
+        <div class="stat-box tilt"><div class="stat-number">15mm</div><div class="stat-label">All Years</div></div>
+        <div class="stat-desc"><p>Consistent <strong>15mm drain plug</strong> across every Silverado 1500, 2000–2026. M12x1.75 throughout.</p></div>
+      </div>
+      <div class="section-title">By Generation</div>
+      <table class="gen-table"><thead><tr><th>Years</th><th>Platform</th><th>Engines</th><th>Plug</th><th>✓</th></tr></thead><tbody>
+        <tr><td><span class="year-range">2000–2006</span></td><td><span class="gen-badge">GMT800</span></td><td><span class="engine-tag">4.3L/4.8L/5.3L/6.0L</span></td><td><span class="size-highlight">15mm</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td><span class="year-range">2007–2009</span></td><td><span class="gen-badge">GMT900</span></td><td><span class="engine-tag">4.3L/4.8L/5.3L/6.0L/6.2L</span></td><td><span class="size-highlight">15mm</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td><span class="year-range">2010–2013</span></td><td><span class="gen-badge">GMT900</span></td><td><span class="engine-tag">4.3L/4.8L/5.3L/6.2L</span></td><td><span class="size-highlight">15mm</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td><span class="year-range">2014–2018</span></td><td><span class="gen-badge">K2XX</span></td><td><span class="engine-tag">4.3L/5.3L/6.2L</span></td><td><span class="size-highlight">15mm</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td><span class="year-range">2019–2021</span></td><td><span class="gen-badge">T1XX</span></td><td><span class="engine-tag">2.7T/4.3L/5.3L/6.2L</span></td><td><span class="size-highlight">15mm</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td><span class="year-range">2022–2026</span></td><td><span class="gen-badge">T1XX Refresh</span></td><td><span class="engine-tag">2.7T/5.3L/6.2L</span></td><td><span class="size-highlight">15mm</span></td><td><span class="check">✓</span></td></tr>
+      </tbody></table>
+      <div class="filter-note"><h3>// Filter & Torque</h3><ul>
+        <li>2000–2013 — Spin-on filter, band wrench</li>
+        <li>2014–2026 — Cartridge housing, <strong>32mm socket</strong></li>
+        <li>Torque: ~<strong>18 ft-lbs</strong> · Capacity: 6 qts (4.3L) / 8 qts (5.3L/6.2L)</li>
+      </ul></div>
+    </div>
+
+    <div id="c-hd" class="tab-panel">
+      <div class="notice"><strong>⚠ Duramax 2001–2016 Oil Drain Plug:</strong> M14x1.5 thread — head size typically 15mm but can be 16mm depending on plug. Have both sockets ready.</div>
+      <div class="section-title">2500HD / 3500HD</div>
+      <table class="gen-table"><thead><tr><th>Years</th><th>Engine</th><th>Plug</th><th>Notes</th></tr></thead><tbody>
+        <tr><td><span class="year-range">2000–2019</span></td><td><span class="engine-tag">6.0L Vortec Gas</span></td><td><span class="size-highlight">15mm</span></td><td><span class="gen-badge">Consistent</span></td></tr>
+        <tr><td><span class="year-range">2001–2016</span></td><td><span class="engine-tag">6.6L Duramax LB7/LLY/LBZ/LMM/LML</span></td><td><span class="size-highlight warn">15–16mm</span><span class="size-note">M14x1.5 — verify</span></td><td><span class="gen-badge">⚠ Verify</span></td></tr>
+        <tr><td><span class="year-range">2017–2026</span></td><td><span class="engine-tag">6.6L Duramax L5P</span></td><td><span class="size-highlight">15mm</span><span class="size-note">M12x1.75</span></td><td><span class="gen-badge">Consistent</span></td></tr>
+        <tr><td><span class="year-range">2020–2026</span></td><td><span class="engine-tag">6.6L Gas V8 L8T</span></td><td><span class="size-highlight">15mm</span></td><td><span class="gen-badge">Consistent</span></td></tr>
+      </tbody></table>
+      <div class="section-title">4500HD / 5500HD / Kodiak / TopKick</div>
+      <table class="gen-table"><thead><tr><th>Model</th><th>Years</th><th>Engine</th><th>Plug</th></tr></thead><tbody>
+        <tr><td><span class="year-range">4500HD</span></td><td><span class="engine-tag">2019–2026</span></td><td><span class="engine-tag">L5P Duramax / L8T Gas</span></td><td><span class="size-highlight">15mm</span></td></tr>
+        <tr><td><span class="year-range">5500HD</span></td><td><span class="engine-tag">2019–2026</span></td><td><span class="engine-tag">L5P Duramax / L8T Gas</span></td><td><span class="size-highlight">15mm</span></td></tr>
+        <tr><td><span class="year-range">Kodiak C4500/C5500</span></td><td><span class="engine-tag">2000–2009</span></td><td><span class="engine-tag">8.1L Gas / 6.6L Duramax</span></td><td><span class="size-highlight warn">15–16mm ⚠</span></td></tr>
+        <tr><td><span class="year-range">TopKick</span></td><td><span class="engine-tag">2000–2009</span></td><td><span class="engine-tag">8.1L Gas / 6.6L Duramax</span></td><td><span class="size-highlight warn">15–16mm ⚠</span></td></tr>
+      </tbody></table>
+      <div class="filter-note"><h3>// HD Torque</h3><ul>
+        <li>Duramax 2001–2016: ~<strong>44 ft-lbs</strong> · Gas/L5P: ~<strong>18 ft-lbs</strong></li>
+        <li>Duramax L5P — Cartridge filter, <strong>32mm socket</strong> · Capacity: <strong>10 qts</strong></li>
+      </ul></div>
+    </div>
+
+    <div id="c-suvs" class="tab-panel">
+      <div class="hero-stat">
+        <div class="stat-box tilt"><div class="stat-number">15mm</div><div class="stat-label">All Chevy SUVs</div></div>
+        <div class="stat-desc"><p>Every Chevrolet SUV — Tahoe, Suburban, both Blazer generations — uses <strong>15mm</strong> throughout 2000–2026.</p></div>
+      </div>
+      <table class="gen-table"><thead><tr><th>Model</th><th>Years</th><th>Engines</th><th>Plug</th><th>✓</th></tr></thead><tbody>
+        <tr><td><span class="year-range">Tahoe</span></td><td><span class="engine-tag">2000–2026</span></td><td><span class="engine-tag">4.8L/5.3L/6.0L/6.2L V8 + 3.0L Diesel (2021+)</span></td><td><span class="size-highlight">15mm</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td><span class="year-range">Suburban</span></td><td><span class="engine-tag">2000–2026</span></td><td><span class="engine-tag">4.8L/5.3L/6.0L/6.2L V8 + 3.0L Diesel (2021+)</span></td><td><span class="size-highlight">15mm</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td><span class="year-range">Blazer (Original)</span></td><td><span class="engine-tag">2000–2005</span></td><td><span class="engine-tag">4.3L V6 — S10 platform</span></td><td><span class="size-highlight">15mm</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td><span class="year-range">Blazer (New)</span></td><td><span class="engine-tag">2019–2026</span></td><td><span class="engine-tag">2.0T/2.5L/3.6L V6</span></td><td><span class="size-highlight">15mm</span></td><td><span class="check">✓</span></td></tr>
+      </tbody></table>
+    </div>
+
+    <div id="c-cars" class="tab-panel">
+      <div class="notice"><strong>⚠ Two 14mm exceptions:</strong> Prizm (Toyota Corolla platform) and Metro (Suzuki platform). Every other Chevy car is 15mm.</div>
+      <table class="gen-table"><thead><tr><th>Model</th><th>Years</th><th>Engines</th><th>Plug</th></tr></thead><tbody>
+        <tr><td><span class="year-range">Camaro</span></td><td><span class="engine-tag">2000–02 · 2010–2024</span></td><td><span class="engine-tag">3.8L/5.7L/3.6L/6.2L LT1/ZL1</span></td><td><span class="size-highlight">15mm</span></td></tr>
+        <tr><td><span class="year-range">Cavalier</span></td><td><span class="engine-tag">2000–2005</span></td><td><span class="engine-tag">2.2L/2.4L I4</span></td><td><span class="size-highlight">15mm</span></td></tr>
+        <tr><td><span class="year-range">Corvette</span></td><td><span class="engine-tag">2000–2026 (C5–C8)</span></td><td><span class="engine-tag">LS1/LS6/LS2/LS3/LS7/LT1/LT2/LT6</span></td><td><span class="size-highlight">15mm</span></td></tr>
+        <tr><td><span class="year-range">Impala</span></td><td><span class="engine-tag">2000–2020</span></td><td><span class="engine-tag">3.4L/3.5L/3.8L/3.9L/5.3L</span></td><td><span class="size-highlight">15mm</span></td></tr>
+        <tr><td><span class="year-range">Lumina</span></td><td><span class="engine-tag">2000–2001</span></td><td><span class="engine-tag">3.1L/3.8L V6</span></td><td><span class="size-highlight">15mm</span></td></tr>
+        <tr><td><span class="year-range">Malibu</span></td><td><span class="engine-tag">2000–2024</span></td><td><span class="engine-tag">2.2L/2.4L/1.5T/2.0T/3.5L/3.6L</span></td><td><span class="size-highlight">15mm</span></td></tr>
+        <tr><td><span class="year-range">Metro</span></td><td><span class="engine-tag">2000–2001</span></td><td><span class="engine-tag">1.0L 3-cyl/1.3L I4 (Suzuki)</span></td><td><span class="size-highlight warn">14mm ⚠</span></td></tr>
+        <tr><td><span class="year-range">Monte Carlo</span></td><td><span class="engine-tag">2000–2007</span></td><td><span class="engine-tag">3.4L/3.8L/5.3L SS</span></td><td><span class="size-highlight">15mm</span></td></tr>
+        <tr><td><span class="year-range">Prizm</span></td><td><span class="engine-tag">2000–2002</span></td><td><span class="engine-tag">1.8L Toyota 1ZZ-FE</span></td><td><span class="size-highlight warn">14mm ⚠</span></td></tr>
+      </tbody></table>
+    </div>
+
+    <div id="c-vans" class="tab-panel">
+      <div class="hero-stat">
+        <div class="stat-box tilt"><div class="stat-number">15mm</div><div class="stat-label">Both Vans</div></div>
+        <div class="stat-desc"><p>Astro and Venture both use <strong>15mm</strong>, M12x1.75. Both discontinued by 2005.</p></div>
+      </div>
+      <table class="gen-table"><thead><tr><th>Model</th><th>Years</th><th>Engine</th><th>Plug</th><th>Torque</th></tr></thead><tbody>
+        <tr><td><span class="year-range">Astro</span></td><td><span class="engine-tag">2000–2005</span></td><td><span class="engine-tag">4.3L V6 · RWD</span></td><td><span class="size-highlight">15mm</span></td><td><span class="engine-tag">~18 ft-lbs</span></td></tr>
+        <tr><td><span class="year-range">Venture</span></td><td><span class="engine-tag">2000–2005</span></td><td><span class="engine-tag">3.4L V6 · FWD</span></td><td><span class="size-highlight">15mm</span></td><td><span class="engine-tag">~18 ft-lbs</span></td></tr>
+      </tbody></table>
+    </div>
+  </div><!-- end chevy -->
+
+  <!-- ████ TOYOTA ████ -->
+  <div id="toyota" class="brand-panel">
+    <div class="tabs" id="toyotaTabs">
+      <button class="tab-btn active-t" onclick="switchTab('toyota','t-all',this,'t')">All Models</button>
+      <button class="tab-btn" onclick="switchTab('toyota','t-trucks',this,'t')">Trucks</button>
+      <button class="tab-btn" onclick="switchTab('toyota','t-suvs',this,'t')">SUVs</button>
+      <button class="tab-btn" onclick="switchTab('toyota','t-cars',this,'t')">Cars</button>
+      <button class="tab-btn" onclick="switchTab('toyota','t-hybrid',this,'t')">Hybrids/EV</button>
+      <button class="tab-btn" onclick="switchTab('toyota','t-vans',this,'t')">Vans</button>
+    </div>
+    <div id="t-all" class="tab-panel active">
+      <div class="hero-stat">
+        <div class="stat-box toyota-stat tilt"><div class="stat-number toyota-num">14mm</div><div class="stat-label">All Toyotas</div></div>
+        <div class="stat-desc"><p>Toyota standardized on <strong class="t">14mm (M12x1.25)</strong> across the entire lineup. Every Toyota with a gas engine from 2000–2026 uses the same socket.</p></div>
+      </div>
+      <div class="section-title t-line">All Toyota Models — A to Z</div>
+      <div class="model-grid" id="toyotaGrid">
+        <div class="model-card t-card tilt" data-model="toyota 4runner suv off road"><div class="mc-name">4Runner</div><div class="mc-years">2000–2026</div><div class="mc-size t">14mm</div><div class="mc-note">M12x1.25 · All gens consistent</div></div>
+        <div class="model-card t-card tilt" data-model="toyota avalon sedan luxury"><div class="mc-name">Avalon</div><div class="mc-years">2000–2022</div><div class="mc-size t">14mm</div><div class="mc-note">V6/Hybrid · Disc. 2022</div></div>
+        <div class="model-card t-card tilt" data-model="toyota camry sedan midsize"><div class="mc-name">Camry</div><div class="mc-years">2000–2026</div><div class="mc-size t">14mm</div><div class="mc-note">M12x1.25 · 4-cyl/V6/Hybrid</div></div>
+        <div class="model-card t-card tilt" data-model="toyota celica sports coupe"><div class="mc-name">Celica</div><div class="mc-years">2000–2005</div><div class="mc-size t">14mm</div><div class="mc-note">1.8L 1ZZ/2ZZ · Disc. 2005</div></div>
+        <div class="model-card t-card tilt" data-model="toyota chr c-hr crossover subcompact"><div class="mc-name">C-HR</div><div class="mc-years">2018–2022</div><div class="mc-size t">14mm</div><div class="mc-note">2.0L/Hybrid · US disc. 2022</div></div>
+        <div class="model-card t-card tilt" data-model="toyota corolla sedan compact"><div class="mc-name">Corolla</div><div class="mc-years">2000–2026</div><div class="mc-size t">14mm</div><div class="mc-note">M12x1.25 · All gens · OEM confirmed</div></div>
+        <div class="model-card t-card tilt" data-model="toyota corolla cross suv compact"><div class="mc-name">Corolla Cross</div><div class="mc-years">2022–2026</div><div class="mc-size t">14mm</div><div class="mc-note">2.0L/Hybrid AWD</div></div>
+        <div class="model-card t-card tilt" data-model="toyota crown sedan crossover"><div class="mc-name">Crown</div><div class="mc-years">2023–2026</div><div class="mc-size t">14mm</div><div class="mc-note">2.5L Hybrid / 2.4T Hybrid Max</div></div>
+        <div class="model-card t-card tilt" data-model="toyota echo subcompact small"><div class="mc-name">Echo</div><div class="mc-years">2000–2005</div><div class="mc-size t">14mm</div><div class="mc-note">1.5L 1NZ-FE · Disc. 2005</div></div>
+        <div class="model-card t-card tilt" data-model="toyota fj cruiser suv off road"><div class="mc-name">FJ Cruiser</div><div class="mc-years">2006–2014</div><div class="mc-size t">14mm</div><div class="mc-note">4.0L 1GR-FE V6 · Disc. 2014</div></div>
+        <div class="model-card t-card tilt" data-model="toyota gr corolla sports car"><div class="mc-name">GR Corolla</div><div class="mc-years">2023–2026</div><div class="mc-size t">14mm</div><div class="mc-note">1.6L Turbo 3-cyl G16E-GTS</div></div>
+        <div class="model-card t-card tilt" data-model="toyota gr86 86 sports car"><div class="mc-name">GR86 / 86</div><div class="mc-years">2013–2026</div><div class="mc-size t">14mm</div><div class="mc-note">2.0L FA20 / 2.4L FA24</div></div>
+        <div class="model-card t-card tilt" data-model="toyota gr supra sports car"><div class="mc-name">GR Supra</div><div class="mc-years">2020–2026</div><div class="mc-size t">14mm</div><div class="mc-note">2.0T / 3.0T BMW B58</div></div>
+        <div class="model-card t-card tilt" data-model="toyota highlander suv midsize"><div class="mc-name">Highlander</div><div class="mc-years">2001–2026</div><div class="mc-size t">14mm</div><div class="mc-note">V6/Hybrid · M12x1.25</div></div>
+        <div class="model-card t-card tilt" data-model="toyota land cruiser suv luxury off road"><div class="mc-name">Land Cruiser</div><div class="mc-years">2000–2021 · 2024+</div><div class="mc-size t">14mm</div><div class="mc-note">4.7L/5.7L/3.3T V6 TT</div></div>
+        <div class="model-card t-card tilt" data-model="toyota matrix hatchback wagon"><div class="mc-name">Matrix</div><div class="mc-years">2003–2013</div><div class="mc-size t">14mm</div><div class="mc-note">1.8L 1ZZ/2ZZ · Disc. 2013</div></div>
+        <div class="model-card t-card tilt" data-model="toyota mr2 sports car spyder roadster"><div class="mc-name">MR2 Spyder</div><div class="mc-years">2000–2005</div><div class="mc-size t">14mm</div><div class="mc-note">1.8L 1ZZ-FE · Mid-engine</div></div>
+        <div class="model-card t-card tilt" data-model="toyota prius hybrid sedan"><div class="mc-name">Prius</div><div class="mc-years">2001–2026</div><div class="mc-size t">14mm</div><div class="mc-note">1.5L/1.8L/2.0L Hybrid</div></div>
+        <div class="model-card t-card tilt" data-model="toyota prius prime plugin hybrid"><div class="mc-name">Prius Prime</div><div class="mc-years">2017–2026</div><div class="mc-size t">14mm</div><div class="mc-note">1.8L/2.0L PHEV</div></div>
+        <div class="model-card t-card tilt" data-model="toyota rav4 suv crossover compact"><div class="mc-name">RAV4</div><div class="mc-years">2000–2026</div><div class="mc-size t">14mm</div><div class="mc-note">M12x1.25 · All gens · OEM confirmed</div></div>
+        <div class="model-card t-card tilt" data-model="toyota rav4 prime plugin hybrid suv"><div class="mc-name">RAV4 Prime</div><div class="mc-years">2021–2026</div><div class="mc-size t">14mm</div><div class="mc-note">2.5L PHEV</div></div>
+        <div class="model-card t-card tilt" data-model="toyota sequoia suv full size large"><div class="mc-name">Sequoia</div><div class="mc-years">2001–2026</div><div class="mc-size t">14mm</div><div class="mc-note">4.7L/5.7L/3.5L TT Hybrid</div></div>
+        <div class="model-card t-card tilt" data-model="toyota sienna minivan van"><div class="mc-name">Sienna</div><div class="mc-years">2000–2026</div><div class="mc-size t">14mm</div><div class="mc-note">3.0L/3.3L/3.5L V6 / 2.5L Hybrid</div></div>
+        <div class="model-card t-card tilt" data-model="toyota solara camry solara coupe"><div class="mc-name">Solara</div><div class="mc-years">2000–2008</div><div class="mc-size t">14mm</div><div class="mc-note">2.4L/3.3L · Disc. 2008</div></div>
+        <div class="model-card t-card tilt" data-model="toyota tacoma pickup truck midsize"><div class="mc-name">Tacoma</div><div class="mc-years">2000–2026</div><div class="mc-size t">14mm</div><div class="mc-note">M12x1.25 · All gens · OEM confirmed</div></div>
+        <div class="model-card t-card tilt" data-model="toyota tundra pickup truck full size"><div class="mc-name">Tundra</div><div class="mc-years">2000–2026</div><div class="mc-size t">14mm</div><div class="mc-note">M12x1.25 · All gens · OEM confirmed</div></div>
+        <div class="model-card t-card tilt" data-model="toyota venza crossover suv hybrid"><div class="mc-name">Venza</div><div class="mc-years">2009–2015 · 2021–2026</div><div class="mc-size t">14mm</div><div class="mc-note">2.7L/3.5L / 2021+ Hybrid only</div></div>
+        <div class="model-card t-card tilt" data-model="toyota yaris small subcompact hatchback"><div class="mc-name">Yaris</div><div class="mc-years">2006–2020</div><div class="mc-size t">14mm</div><div class="mc-note">1.5L 1NZ-FE · US disc. 2020</div></div>
+        <div class="model-card t-card tilt" data-model="toyota bz4x electric ev suv battery"><div class="mc-name">bZ4X (Full EV)</div><div class="mc-years">2023–2026</div><div class="mc-size warn">N/A</div><div class="mc-note">Battery electric — no oil drain plug</div></div>
+      </div>
+      <div class="filter-note t-note" style="margin-top:20px;"><h3>// Toyota Bottom Line</h3><ul>
+        <li><strong>14mm covers every Toyota with a gas engine, 2000–2026.</strong> M12x1.25 thread.</li>
+        <li>Always replace the crush washer — Toyota uses aluminum/copper crush washers.</li>
+        <li>Torque: ~<strong>27–33 ft-lbs</strong> depending on model. Check FSM for exact spec.</li>
+      </ul></div>
+    </div>
+    <div id="t-trucks" class="tab-panel">
+      <div class="hero-stat"><div class="stat-box toyota-stat tilt"><div class="stat-number toyota-num">14mm</div><div class="stat-label">All Trucks</div></div><div class="stat-desc"><p>Tacoma and Tundra — every generation, every engine — use <strong class="t">14mm (M12x1.25)</strong>.</p></div></div>
+      <div class="section-title t-line">Tacoma</div>
+      <table class="gen-table t-table"><thead><tr><th>Years</th><th>Gen</th><th>Engines</th><th>Plug</th></tr></thead><tbody>
+        <tr><td><span class="year-range">2000–2004</span></td><td><span class="gen-badge">1st Gen</span></td><td><span class="engine-tag">2.4L/2.7L I4 · 3.4L V6</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">2005–2015</span></td><td><span class="gen-badge">2nd Gen</span></td><td><span class="engine-tag">2.7L I4 · 4.0L V6 1GR-FE</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">2016–2023</span></td><td><span class="gen-badge">3rd Gen</span></td><td><span class="engine-tag">2.7L I4 · 3.5L V6 2GR-FKS</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">2024–2026</span></td><td><span class="gen-badge">4th Gen</span></td><td><span class="engine-tag">2.4L Turbo / 2.4T Hybrid</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+      </tbody></table>
+      <div class="section-title t-line">Tundra</div>
+      <table class="gen-table t-table"><thead><tr><th>Years</th><th>Gen</th><th>Engines</th><th>Plug</th></tr></thead><tbody>
+        <tr><td><span class="year-range">2000–2006</span></td><td><span class="gen-badge">1st Gen</span></td><td><span class="engine-tag">3.4L V6 · 4.7L V8 2UZ-FE</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">2007–2021</span></td><td><span class="gen-badge">2nd Gen</span></td><td><span class="engine-tag">4.6L / 5.7L V8 · M12x1.25 confirmed</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">2022–2026</span></td><td><span class="gen-badge">3rd Gen</span></td><td><span class="engine-tag">3.5L Twin-Turbo V6 / iForce Max Hybrid</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+      </tbody></table>
+      <div class="filter-note t-note"><h3>// Torque & Capacity</h3><ul>
+        <li>Tacoma 4.0L: ~<strong>5.5 qts</strong> · Tundra 5.7L: ~<strong>7.9 qts</strong> · Tundra 3.5TT: ~<strong>7.6 qts</strong></li>
+        <li>Torque: ~<strong>27–33 ft-lbs</strong> · Always use new crush washer</li>
+      </ul></div>
+    </div>
+    <div id="t-suvs" class="tab-panel">
+      <div class="hero-stat"><div class="stat-box toyota-stat tilt"><div class="stat-number toyota-num">14mm</div><div class="stat-label">All SUVs</div></div><div class="stat-desc"><p>4Runner to Sequoia, C-HR to Land Cruiser — all <strong class="t">14mm (M12x1.25)</strong> across every generation.</p></div></div>
+      <table class="gen-table t-table"><thead><tr><th>Model</th><th>Years</th><th>Engines</th><th>Plug</th></tr></thead><tbody>
+        <tr><td><span class="year-range">4Runner</span></td><td><span class="engine-tag">2000–2026</span></td><td><span class="engine-tag">3.4L/4.0L/4.7L/2.4T TRD Pro</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">C-HR</span></td><td><span class="engine-tag">2018–2022</span></td><td><span class="engine-tag">2.0L/Hybrid</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Corolla Cross</span></td><td><span class="engine-tag">2022–2026</span></td><td><span class="engine-tag">2.0L/Hybrid AWD</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">FJ Cruiser</span></td><td><span class="engine-tag">2006–2014</span></td><td><span class="engine-tag">4.0L V6 1GR-FE</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Highlander</span></td><td><span class="engine-tag">2001–2026</span></td><td><span class="engine-tag">2.4L/3.0L/3.5L V6/Hybrid</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Land Cruiser</span></td><td><span class="engine-tag">2000–2021 · 2024+</span></td><td><span class="engine-tag">4.7L/5.7L/3.3T V6 TT</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">RAV4 / RAV4 Prime</span></td><td><span class="engine-tag">2000–2026</span></td><td><span class="engine-tag">2.0L/2.5L/Hybrid/PHEV</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Sequoia</span></td><td><span class="engine-tag">2001–2026</span></td><td><span class="engine-tag">4.7L/5.7L/3.5L TT Hybrid</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Venza</span></td><td><span class="engine-tag">2009–2015 · 2021–2026</span></td><td><span class="engine-tag">2.7L/3.5L · 2021+ Hybrid only</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">bZ4X</span></td><td><span class="engine-tag">2023–2026</span></td><td><span class="engine-tag">Full Electric — no ICE</span></td><td><span class="size-highlight warn">N/A</span></td></tr>
+      </tbody></table>
+    </div>
+    <div id="t-cars" class="tab-panel">
+      <div class="hero-stat"><div class="stat-box toyota-stat tilt"><div class="stat-number toyota-num">14mm</div><div class="stat-label">All Cars</div></div><div class="stat-desc"><p>Camry, Corolla, Celica, GR86, Supra — every Toyota car uses <strong class="t">14mm (M12x1.25)</strong>.</p></div></div>
+      <table class="gen-table t-table"><thead><tr><th>Model</th><th>Years</th><th>Engines</th><th>Plug</th></tr></thead><tbody>
+        <tr><td><span class="year-range">Avalon</span></td><td><span class="engine-tag">2000–2022</span></td><td><span class="engine-tag">3.0L/3.5L V6 · Hybrid</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Camry</span></td><td><span class="engine-tag">2000–2026</span></td><td><span class="engine-tag">2.4L/2.5L I4 · 3.0L/3.5L V6 · Hybrid</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Celica</span></td><td><span class="engine-tag">2000–2005</span></td><td><span class="engine-tag">1.8L 1ZZ/2ZZ-GE</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Corolla</span></td><td><span class="engine-tag">2000–2026</span></td><td><span class="engine-tag">1.8L/2.0L/Hybrid</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Crown</span></td><td><span class="engine-tag">2023–2026</span></td><td><span class="engine-tag">2.5L Hybrid / 2.4T Hybrid Max</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Echo</span></td><td><span class="engine-tag">2000–2005</span></td><td><span class="engine-tag">1.5L 1NZ-FE</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">GR Corolla</span></td><td><span class="engine-tag">2023–2026</span></td><td><span class="engine-tag">1.6L Turbo 3-cyl</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">GR86 / 86</span></td><td><span class="engine-tag">2013–2026</span></td><td><span class="engine-tag">2.0L FA20 / 2.4L FA24</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">GR Supra</span></td><td><span class="engine-tag">2020–2026</span></td><td><span class="engine-tag">2.0T / 3.0T BMW B58</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Matrix</span></td><td><span class="engine-tag">2003–2013</span></td><td><span class="engine-tag">1.8L 1ZZ/2ZZ-GE</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">MR2 Spyder</span></td><td><span class="engine-tag">2000–2005</span></td><td><span class="engine-tag">1.8L 1ZZ-FE</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Solara</span></td><td><span class="engine-tag">2000–2008</span></td><td><span class="engine-tag">2.4L/3.3L</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Yaris</span></td><td><span class="engine-tag">2006–2020</span></td><td><span class="engine-tag">1.5L 1NZ-FE</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+      </tbody></table>
+    </div>
+    <div id="t-hybrid" class="tab-panel">
+      <div class="toyota-notice"><strong>ℹ Hybrid note:</strong> All Toyota hybrids still have a gas engine requiring oil changes. All use <strong>14mm</strong>. Full EVs (bZ4X) have no engine oil.</div>
+      <table class="gen-table t-table"><thead><tr><th>Model</th><th>Years</th><th>System</th><th>Plug</th></tr></thead><tbody>
+        <tr><td><span class="year-range">Camry Hybrid</span></td><td><span class="engine-tag">2007–2026</span></td><td><span class="engine-tag">2.5L TNGA + MG</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Corolla Hybrid</span></td><td><span class="engine-tag">2020–2026</span></td><td><span class="engine-tag">1.8L/2.0L + MG</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Highlander Hybrid</span></td><td><span class="engine-tag">2006–2026</span></td><td><span class="engine-tag">3.3L/3.5L V6 + MG</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Prius / Prime</span></td><td><span class="engine-tag">2001–2026</span></td><td><span class="engine-tag">1.5L/1.8L/2.0L + MG</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">RAV4 Hybrid / Prime</span></td><td><span class="engine-tag">2016–2026</span></td><td><span class="engine-tag">2.5L TNGA + eAxle</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Sequoia Hybrid</span></td><td><span class="engine-tag">2022–2026</span></td><td><span class="engine-tag">3.5L TT + iForce Max</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Sienna Hybrid</span></td><td><span class="engine-tag">2021–2026</span></td><td><span class="engine-tag">2.5L TNGA (standard 2021+)</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Tundra iForce Max</span></td><td><span class="engine-tag">2022–2026</span></td><td><span class="engine-tag">3.5L TT + MG</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">Venza (2021+)</span></td><td><span class="engine-tag">2021–2026</span></td><td><span class="engine-tag">2.5L Hybrid only</span></td><td><span class="size-highlight t">14mm</span></td></tr>
+        <tr><td><span class="year-range">bZ4X (Full EV)</span></td><td><span class="engine-tag">2023–2026</span></td><td><span class="engine-tag">Electric — no ICE</span></td><td><span class="size-highlight warn">N/A</span></td></tr>
+      </tbody></table>
+    </div>
+    <div id="t-vans" class="tab-panel">
+      <div class="hero-stat"><div class="stat-box toyota-stat tilt"><div class="stat-number toyota-num">14mm</div><div class="stat-label">Sienna</div></div><div class="stat-desc"><p>Sienna uses <strong class="t">14mm (M12x1.25)</strong> throughout 2000–2026. Note: 2021+ Sienna is hybrid-only — still requires oil changes.</p></div></div>
+      <table class="gen-table t-table"><thead><tr><th>Model</th><th>Years</th><th>Engine</th><th>Plug</th><th>Torque</th></tr></thead><tbody>
+        <tr><td><span class="year-range">Sienna</span></td><td><span class="engine-tag">2000–2026</span></td><td><span class="engine-tag">3.0L/3.3L/3.5L V6 · 2.5L Hybrid (2021+)</span></td><td><span class="size-highlight t">14mm</span></td><td><span class="engine-tag">~33 ft-lbs</span></td></tr>
+      </tbody></table>
+    </div>
+  </div><!-- end toyota -->
+
+  <!-- ████ HONDA ████ -->
+  <div id="honda" class="brand-panel">
+    <div class="tabs" id="hondaTabs">
+      <button class="tab-btn active-h" onclick="switchTab('honda','h-all',this,'h')">All Models</button>
+      <button class="tab-btn" onclick="switchTab('honda','h-trucks',this,'h')">Trucks & SUVs</button>
+      <button class="tab-btn" onclick="switchTab('honda','h-cars',this,'h')">Cars</button>
+      <button class="tab-btn" onclick="switchTab('honda','h-vans',this,'h')">Vans</button>
+      <button class="tab-btn" onclick="switchTab('honda','h-hybrid',this,'h')">Hybrids/EV</button>
+    </div>
+
+    <div id="h-all" class="tab-panel active">
+      <div class="hero-stat">
+        <div class="stat-box honda-stat tilt"><div class="stat-number honda-num">17mm</div><div class="stat-label">All Hondas</div></div>
+        <div class="stat-desc"><p>Honda standardized on <strong class="h">17mm (M14x1.5)</strong> across the entire lineup. Civic, Accord, CR-V, Pilot, Odyssey, Ridgeline — every Honda with a gas engine from 2000–2026 uses the same socket.</p></div>
+      </div>
+      <div class="section-title h-line">All Honda Models — A to Z</div>
+      <div class="model-grid" id="hondaGrid">
+        <!-- A -->
+        <div class="model-card h-card tilt" data-model="honda accord sedan midsize"><div class="mc-name">Accord</div><div class="mc-years">2000–2026</div><div class="mc-size h">17mm</div><div class="mc-note">M14x1.5 · 4-cyl/V6/Hybrid · All gens</div></div>
+        <div class="model-card h-card tilt" data-model="honda accord crosstour crossover wagon"><div class="mc-name">Accord Crosstour</div><div class="mc-years">2010–2011</div><div class="mc-size h">17mm</div><div class="mc-note">3.5L V6</div></div>
+        <!-- C -->
+        <div class="model-card h-card tilt" data-model="honda civic sedan compact hatchback"><div class="mc-name">Civic</div><div class="mc-years">2000–2026</div><div class="mc-size h">17mm</div><div class="mc-note">M14x1.5 · All gens · 1.5T/2.0L/Si/Type R</div></div>
+        <div class="model-card h-card tilt" data-model="honda clarity hybrid ev fuel cell"><div class="mc-name">Clarity</div><div class="mc-years">2018–2021</div><div class="mc-size h">17mm</div><div class="mc-note">1.5L Hybrid / PHEV · Gas engine present</div></div>
+        <div class="model-card h-card tilt" data-model="honda cr-v suv crossover compact"><div class="mc-name">CR-V</div><div class="mc-years">2000–2026</div><div class="mc-size h">17mm</div><div class="mc-note">M14x1.5 · 2.0L/2.4L/1.5T/Hybrid · All gens</div></div>
+        <div class="model-card h-card tilt" data-model="honda cr-z sports hybrid coupe"><div class="mc-name">CR-Z</div><div class="mc-years">2011–2016</div><div class="mc-size h">17mm</div><div class="mc-note">1.5L Hybrid · Disc. 2016</div></div>
+        <div class="model-card h-card tilt" data-model="honda crosstour crossover suv"><div class="mc-name">Crosstour</div><div class="mc-years">2012–2015</div><div class="mc-size h">17mm</div><div class="mc-note">2.4L/3.5L · Disc. 2015</div></div>
+        <!-- E -->
+        <div class="model-card h-card tilt" data-model="honda element suv boxy"><div class="mc-name">Element</div><div class="mc-years">2003–2011</div><div class="mc-size h">17mm</div><div class="mc-note">2.4L I4 · Disc. 2011</div></div>
+        <!-- F -->
+        <div class="model-card h-card tilt" data-model="honda fit jazz subcompact small"><div class="mc-name">Fit / Jazz</div><div class="mc-years">2007–2020</div><div class="mc-size h">17mm</div><div class="mc-note">1.5L i-VTEC · Disc. US 2020</div></div>
+        <!-- H -->
+        <div class="model-card h-card tilt" data-model="honda hr-v suv compact crossover"><div class="mc-name">HR-V</div><div class="mc-years">2016–2026</div><div class="mc-size h">17mm</div><div class="mc-note">1.8L / 2.0L · M14x1.5 OEM confirmed</div></div>
+        <!-- I -->
+        <div class="model-card h-card tilt" data-model="honda insight hybrid sedan compact"><div class="mc-name">Insight</div><div class="mc-years">2000–2022</div><div class="mc-size h">17mm</div><div class="mc-note">1.0L/1.3L/1.5L Hybrid · All gens</div></div>
+        <!-- N -->
+        <div class="model-card h-card tilt" data-model="honda nsx acura nsx sports car supercar"><div class="mc-name">NSX (2nd Gen)</div><div class="mc-years">2017–2022</div><div class="mc-size h">17mm</div><div class="mc-note">3.5L V6 Twin-Turbo Hybrid · Disc. 2022</div></div>
+        <!-- O -->
+        <div class="model-card h-card tilt" data-model="honda odyssey minivan van"><div class="mc-name">Odyssey</div><div class="mc-years">2000–2026</div><div class="mc-size h">17mm</div><div class="mc-note">M14x1.5 · 3.5L V6 · All gens consistent</div></div>
+        <!-- P -->
+        <div class="model-card h-card tilt" data-model="honda passport suv midsize"><div class="mc-name">Passport</div><div class="mc-years">2000–2002 · 2019–2026</div><div class="mc-size h">17mm</div><div class="mc-note">3.2L V6 / 3.5L V6 · OEM M14x1.5</div></div>
+        <div class="model-card h-card tilt" data-model="honda pilot suv full size large"><div class="mc-name">Pilot</div><div class="mc-years">2003–2026</div><div class="mc-size h">17mm</div><div class="mc-note">M14x1.5 · 3.5L V6 / Hybrid · All gens</div></div>
+        <div class="model-card h-card tilt" data-model="honda prelude coupe sport"><div class="mc-name">Prelude</div><div class="mc-years">2000–2001</div><div class="mc-size h">17mm</div><div class="mc-note">2.2L H22A4 · Disc. 2001</div></div>
+        <div class="model-card h-card tilt" data-model="honda prologue electric ev suv"><div class="mc-name">Prologue (EV)</div><div class="mc-years">2024–2026</div><div class="mc-size warn">N/A</div><div class="mc-note">Full BEV on GM Ultium platform — no oil drain plug</div></div>
+        <!-- R -->
+        <div class="model-card h-card tilt" data-model="honda ridgeline pickup truck"><div class="mc-name">Ridgeline</div><div class="mc-years">2006–2014 · 2017–2026</div><div class="mc-size h">17mm</div><div class="mc-note">M14x1.5 · 3.5L V6 · OEM confirmed</div></div>
+        <!-- S -->
+        <div class="model-card h-card tilt" data-model="honda s2000 sports car roadster convertible"><div class="mc-name">S2000</div><div class="mc-years">2000–2009</div><div class="mc-size h">17mm</div><div class="mc-note">2.0L F20C / F22C1 · M14x1.5 OEM confirmed</div></div>
+        <!-- Z -->
+        <div class="model-card h-card tilt" data-model="honda zr-v suv compact crossover"><div class="mc-name">ZR-V / HR-V (2023+)</div><div class="mc-years">2023–2026</div><div class="mc-size h">17mm</div><div class="mc-note">2.0L Hybrid · US market</div></div>
+      </div>
+      <div class="filter-note h-note" style="margin-top:20px;"><h3>// Honda Bottom Line</h3><ul>
+        <li><strong>17mm covers every Honda with a gas engine, 2000–2026.</strong> M14x1.5 thread throughout.</li>
+        <li>Always replace the crush washer (aluminum) — Honda part # 94109-14000 (14mm washer for M14 plug).</li>
+        <li>Drain plug torque: ~<strong>29 ft-lbs</strong> (range: 26–33 ft-lbs by model — check owner's manual).</li>
+        <li><strong>Prologue (2024+)</strong> is a full EV on GM Ultium platform — no oil drain plug.</li>
+      </ul></div>
+    </div>
+
+    <div id="h-trucks" class="tab-panel">
+      <div class="hero-stat">
+        <div class="stat-box honda-stat tilt"><div class="stat-number honda-num">17mm</div><div class="stat-label">All Trucks & SUVs</div></div>
+        <div class="stat-desc"><p>Ridgeline, Pilot, Passport, CR-V, HR-V, Element — every Honda truck and SUV uses <strong class="h">17mm (M14x1.5)</strong>.</p></div>
+      </div>
+      <div class="section-title h-line">Trucks</div>
+      <table class="gen-table h-table"><thead><tr><th>Model</th><th>Years</th><th>Engine</th><th>Plug</th><th>Cap.</th></tr></thead><tbody>
+        <tr><td><span class="year-range">Ridgeline 1G</span></td><td><span class="engine-tag">2006–2014</span></td><td><span class="engine-tag">3.5L V6 J35A9</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">4.5 qts</span></td></tr>
+        <tr><td><span class="year-range">Ridgeline 2G</span></td><td><span class="engine-tag">2017–2026</span></td><td><span class="engine-tag">3.5L V6 J35YA</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">4.5 qts</span></td></tr>
+      </tbody></table>
+      <div class="section-title h-line">SUVs</div>
+      <table class="gen-table h-table"><thead><tr><th>Model</th><th>Years</th><th>Engine</th><th>Plug</th><th>Cap.</th></tr></thead><tbody>
+        <tr><td><span class="year-range">CR-V</span></td><td><span class="engine-tag">2000–2026</span></td><td><span class="engine-tag">2.0L/2.4L/1.5T/Hybrid</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">3.9–4.4 qts</span></td></tr>
+        <tr><td><span class="year-range">Element</span></td><td><span class="engine-tag">2003–2011</span></td><td><span class="engine-tag">2.4L K24A4 I4</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">4.4 qts</span></td></tr>
+        <tr><td><span class="year-range">HR-V</span></td><td><span class="engine-tag">2016–2026</span></td><td><span class="engine-tag">1.8L/2.0L I4</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">3.9 qts</span></td></tr>
+        <tr><td><span class="year-range">Passport</span></td><td><span class="engine-tag">2000–02 · 2019–2026</span></td><td><span class="engine-tag">3.2L/3.5L V6</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">4.5 qts</span></td></tr>
+        <tr><td><span class="year-range">Pilot</span></td><td><span class="engine-tag">2003–2026</span></td><td><span class="engine-tag">3.5L V6 / Hybrid (2025+)</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">4.5 qts</span></td></tr>
+        <tr><td><span class="year-range">Prologue (EV)</span></td><td><span class="engine-tag">2024–2026</span></td><td><span class="engine-tag">Full BEV — GM Ultium</span></td><td><span class="size-highlight warn">N/A</span></td><td><span class="engine-tag">—</span></td></tr>
+      </tbody></table>
+      <div class="filter-note h-note"><h3>// SUV Torque</h3><ul>
+        <li>All SUV drain plugs: ~<strong>29 ft-lbs</strong> · Replace crush washer every change</li>
+        <li>CR-V 1.5T (2017+) — cartridge oil filter, cap wrench needed</li>
+      </ul></div>
+    </div>
+
+    <div id="h-cars" class="tab-panel">
+      <div class="hero-stat">
+        <div class="stat-box honda-stat tilt"><div class="stat-number honda-num">17mm</div><div class="stat-label">All Cars</div></div>
+        <div class="stat-desc"><p>Civic, Accord, S2000, Prelude, Fit, Insight — every Honda car uses <strong class="h">17mm (M14x1.5)</strong>. Confirmed OEM across all generations.</p></div>
+      </div>
+      <table class="gen-table h-table"><thead><tr><th>Model</th><th>Years</th><th>Engines</th><th>Plug</th><th>Cap.</th></tr></thead><tbody>
+        <tr><td><span class="year-range">Accord</span></td><td><span class="engine-tag">2000–2026</span></td><td><span class="engine-tag">2.0L/2.3L/2.4L/3.0L/3.5L/1.5T/2.0T/Hybrid</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">4.4–5.7 qts</span></td></tr>
+        <tr><td><span class="year-range">Accord Crosstour</span></td><td><span class="engine-tag">2010–2011</span></td><td><span class="engine-tag">3.5L V6</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">4.5 qts</span></td></tr>
+        <tr><td><span class="year-range">Civic</span></td><td><span class="engine-tag">2000–2026</span></td><td><span class="engine-tag">1.3L/1.5L/1.6L/1.7L/1.8L/2.0L/1.5T/Si/Type R</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">3.4–4.4 qts</span></td></tr>
+        <tr><td><span class="year-range">Crosstour</span></td><td><span class="engine-tag">2012–2015</span></td><td><span class="engine-tag">2.4L/3.5L</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">4.4 qts</span></td></tr>
+        <tr><td><span class="year-range">CR-Z</span></td><td><span class="engine-tag">2011–2016</span></td><td><span class="engine-tag">1.5L Hybrid</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">3.4 qts</span></td></tr>
+        <tr><td><span class="year-range">Fit / Jazz</span></td><td><span class="engine-tag">2007–2020</span></td><td><span class="engine-tag">1.5L i-VTEC GD/GE</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">3.4 qts</span></td></tr>
+        <tr><td><span class="year-range">NSX (2nd Gen)</span></td><td><span class="engine-tag">2017–2022</span></td><td><span class="engine-tag">3.5L V6 TT Hybrid</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">5.7 qts</span></td></tr>
+        <tr><td><span class="year-range">Prelude</span></td><td><span class="engine-tag">2000–2001</span></td><td><span class="engine-tag">2.2L H22A4 VTEC</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">4.5 qts</span></td></tr>
+        <tr><td><span class="year-range">S2000</span></td><td><span class="engine-tag">2000–2009</span></td><td><span class="engine-tag">2.0L F20C / 2.2L F22C1 VTEC</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">5.1 qts</span></td></tr>
+      </tbody></table>
+    </div>
+
+    <div id="h-vans" class="tab-panel">
+      <div class="hero-stat">
+        <div class="stat-box honda-stat tilt"><div class="stat-number honda-num">17mm</div><div class="stat-label">Odyssey</div></div>
+        <div class="stat-desc"><p>The Odyssey uses <strong class="h">17mm (M14x1.5)</strong> throughout 2000–2026. All generations, one socket.</p></div>
+      </div>
+      <table class="gen-table h-table"><thead><tr><th>Years</th><th>Gen</th><th>Engine</th><th>Plug</th><th>Cap.</th></tr></thead><tbody>
+        <tr><td><span class="year-range">2000–2001</span></td><td><span class="gen-badge">3rd Gen</span></td><td><span class="engine-tag">3.5L V6 J35A1</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">4.5 qts</span></td></tr>
+        <tr><td><span class="year-range">2002–2004</span></td><td><span class="gen-badge">3rd Gen</span></td><td><span class="engine-tag">3.5L V6 J35A4</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">4.5 qts</span></td></tr>
+        <tr><td><span class="year-range">2005–2010</span></td><td><span class="gen-badge">4th Gen</span></td><td><span class="engine-tag">3.5L V6 J35A6</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">4.5 qts</span></td></tr>
+        <tr><td><span class="year-range">2011–2017</span></td><td><span class="gen-badge">5th Gen</span></td><td><span class="engine-tag">3.5L V6 J35Y2</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">4.5 qts</span></td></tr>
+        <tr><td><span class="year-range">2018–2026</span></td><td><span class="gen-badge">6th Gen</span></td><td><span class="engine-tag">3.5L V6 J35Y6 (Sport Hybrid 2023+)</span></td><td><span class="size-highlight h">17mm</span></td><td><span class="engine-tag">4.5 qts</span></td></tr>
+      </tbody></table>
+      <div class="filter-note h-note"><h3>// Odyssey Notes</h3><ul>
+        <li>Spin-on oil filter on all Odyssey generations</li>
+        <li>Drain plug torque: ~<strong>29 ft-lbs</strong></li>
+        <li>Always replace crush washer (Honda part # 94109-14000)</li>
+      </ul></div>
+    </div>
+
+    <div id="h-hybrid" class="tab-panel">
+      <div class="honda-notice"><strong>ℹ Honda Hybrid note:</strong> All Honda hybrid and PHEV models still have a gas engine requiring oil changes. All use <strong>17mm (M14x1.5)</strong>. The Prologue is a full BEV — no oil.</div>
+      <table class="gen-table h-table"><thead><tr><th>Model</th><th>Years</th><th>System</th><th>Plug</th></tr></thead><tbody>
+        <tr><td><span class="year-range">Accord Hybrid</span></td><td><span class="engine-tag">2005 · 2014–2015 · 2018–2026</span></td><td><span class="engine-tag">2.0L Atkinson + e-Motor</span></td><td><span class="size-highlight h">17mm</span></td></tr>
+        <tr><td><span class="year-range">Civic Hybrid</span></td><td><span class="engine-tag">2003–2015 · 2024–2026</span></td><td><span class="engine-tag">1.3L/1.5L IMA/e:HEV</span></td><td><span class="size-highlight h">17mm</span></td></tr>
+        <tr><td><span class="year-range">Clarity Hybrid/PHEV</span></td><td><span class="engine-tag">2018–2021</span></td><td><span class="engine-tag">1.5L Atkinson + e-Motor</span></td><td><span class="size-highlight h">17mm</span></td></tr>
+        <tr><td><span class="year-range">CR-V Hybrid</span></td><td><span class="engine-tag">2020–2026</span></td><td><span class="engine-tag">2.0L Atkinson + e-Motor</span></td><td><span class="size-highlight h">17mm</span></td></tr>
+        <tr><td><span class="year-range">CR-Z</span></td><td><span class="engine-tag">2011–2016</span></td><td><span class="engine-tag">1.5L IMA</span></td><td><span class="size-highlight h">17mm</span></td></tr>
+        <tr><td><span class="year-range">Insight (2G/3G)</span></td><td><span class="engine-tag">2010–2014 · 2019–2022</span></td><td><span class="engine-tag">1.3L/1.5L IMA/e:HEV</span></td><td><span class="size-highlight h">17mm</span></td></tr>
+        <tr><td><span class="year-range">NSX (2nd Gen)</span></td><td><span class="engine-tag">2017–2022</span></td><td><span class="engine-tag">3.5L V6 TT + e-Motors</span></td><td><span class="size-highlight h">17mm</span></td></tr>
+        <tr><td><span class="year-range">Odyssey Hybrid (2023+)</span></td><td><span class="engine-tag">2023–2026</span></td><td><span class="engine-tag">3.5L V6 Sport Hybrid</span></td><td><span class="size-highlight h">17mm</span></td></tr>
+        <tr><td><span class="year-range">Pilot Hybrid (2025+)</span></td><td><span class="engine-tag">2025–2026</span></td><td><span class="engine-tag">3.5L V6 Hybrid</span></td><td><span class="size-highlight h">17mm</span></td></tr>
+        <tr><td><span class="year-range">Prologue (Full EV)</span></td><td><span class="engine-tag">2024–2026</span></td><td><span class="engine-tag">GM Ultium BEV — no ICE</span></td><td><span class="size-highlight warn">N/A</span></td></tr>
+      </tbody></table>
+    </div>
+  </div><!-- end honda -->
+
+  <!-- MASTER TOOLS -->
+  <div class="section-title" style="margin-top:44px;">Shop Tool Summary — All Three Brands</div>
+  <div class="tools-grid">
+    <div class="tool-card tilt"><span class="tool-icon">🔧</span><h3 style="color:var(--gold);">Chevy — 15mm</h3><p>Covers 95%+ of all Chevrolets. Keep <strong style="color:var(--white);">14mm</strong> for Prizm/Metro and <strong style="color:var(--white);">16mm</strong> backup for 2001–16 Duramax HD oil drain plug.</p></div>
+    <div class="tool-card tilt"><span class="tool-icon">🔴</span><h3 style="color:var(--toyota-red);">Toyota — 14mm</h3><p>Covers every Toyota with a gas engine, 2000–2026. M12x1.25. Always replace crush washer. Torque ~<strong style="color:var(--white);">27–33 ft-lbs</strong>.</p></div>
+    <div class="tool-card tilt"><span class="tool-icon">🔵</span><h3 style="color:var(--honda-blue);">Honda — 17mm</h3><p>Covers every Honda with a gas engine, 2000–2026. M14x1.5. Always replace crush washer. Torque ~<strong style="color:var(--white);">29 ft-lbs</strong>.</p></div>
+    <div class="tool-card tilt"><span class="tool-icon">⚙️</span><h3>Filter Wrench</h3><p>Band wrench for spin-on. <strong style="color:var(--white);">32mm</strong> for Chevy cartridge (2014+ 1500, L5P). Cap wrench for Toyota/Honda cartridge-style filters on newer models.</p></div>
+    <div class="tool-card tilt"><span class="tool-icon">📐</span><h3>Torque Wrench</h3><p>Chevy gas: ~<strong style="color:var(--white);">18 ft-lbs</strong> · Duramax 01–16: ~<strong style="color:var(--white);">44 ft-lbs</strong> · Toyota: ~<strong style="color:var(--white);">27–33 ft-lbs</strong> · Honda: ~<strong style="color:var(--white);">29 ft-lbs</strong></p></div>
+    <div class="tool-card tilt"><span class="tool-icon">🪣</span><h3>Drain Pan</h3><p><strong style="color:var(--white);">4–5 qt</strong> for small cars. <strong style="color:var(--white);">8 qt</strong> for most trucks/SUVs. <strong style="color:var(--white);">12 qt</strong> for Duramax HD (10 qt capacity).</p></div>
+  </div>
+
+  <footer>
+    <p>// Chevrolet · Toyota · Honda — Drain Plug Reference</p>
+    <p>2000 — 2026</p>
+  </footer>
+</div>
+
+<script>
+  let activeBrand = 'chevy';
+
+  function switchBrand(brand, btn) {
+    activeBrand = brand;
+    document.querySelectorAll('.brand-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(brand).classList.add('active');
+    document.querySelectorAll('.brand-btn').forEach(b => b.classList.remove('active-chevy','active-toyota','active-honda'));
+    const cls = brand==='chevy'?'active-chevy':brand==='toyota'?'active-toyota':brand==='honda'?'active-honda':'';
+    if(cls) btn.classList.add(cls);
+    document.getElementById('modelSearch').value = '';
+    filterModels('');
+  }
+
+  function switchTab(brand, id, btn, type) {
+    const panel = document.getElementById(brand);
+    panel.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    panel.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active','active-t','active-h'));
+    document.getElementById(id).classList.add('active');
+    const cls = type==='t'?'active-t':type==='h'?'active-h':'active';
+    btn.classList.add(cls);
+    document.getElementById('modelSearch').value = '';
+    filterModels('');
+  }
+
+  function filterModels(query) {
+    const q = query.toLowerCase().trim();
+    if (q) {
+      const brand = activeBrand === 'compare' ? 'chevy' : activeBrand;
+      if (brand !== 'compare') {
+        const prefix = brand==='chevy'?'c':brand==='toyota'?'t':'h';
+        const allId = prefix + '-all';
+        const allPanel = document.getElementById(allId);
+        if (allPanel) {
+          document.getElementById(brand).querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+          document.getElementById(brand).querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active','active-t','active-h'));
+          allPanel.classList.add('active');
+          const tabsEl = document.getElementById(brand+'Tabs');
+          if(tabsEl) {
+            const firstBtn = tabsEl.querySelector('.tab-btn');
+            const cls = brand==='toyota'?'active-t':brand==='honda'?'active-h':'active';
+            if(firstBtn) firstBtn.classList.add(cls);
+          }
+        }
+      }
+    }
+    ['chevyGrid','toyotaGrid','hondaGrid'].forEach(gid => {
+      const grid = document.getElementById(gid);
+      if (!grid) return;
+      grid.querySelectorAll('.model-card').forEach(card => {
+        const text = (card.getAttribute('data-model')||'') + ' ' + card.innerText.toLowerCase();
+        card.classList.toggle('search-hidden', !!q && !text.includes(q));
+      });
+    });
+  }
+
+  // === UI polish: reveal-on-scroll + tilt + back-to-top ===
+  const toTopBtn = document.getElementById('toTop');
+
+  function onScroll() {
+    const show = window.scrollY > 600;
+    if (toTopBtn) toTopBtn.classList.toggle('show', show);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  if (toTopBtn) {
+    toTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
+
+  // Reveal elements as they enter viewport
+  const revealEls = Array.from(document.querySelectorAll('.section-title, .hero-stat, .model-card, .tool-card, .compare-card, table, .filter-note, .notice, .toyota-notice, .honda-notice, .disc-notice'));
+  revealEls.forEach(el => el.classList.add('reveal'));
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '80px 0px', threshold: 0.05 });
+
+    revealEls.forEach(el => io.observe(el));
+  } else {
+    // Fallback: no observer
+    revealEls.forEach(el => el.classList.add('in'));
+  }
+
+  // Simple 3D tilt (pointer position -> CSS vars)
+  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function attachTilt(el) {
+    if (!el || prefersReduced) return;
+
+    const max = 8; // degrees
+    const set = (x, y, rect) => {
+      const px = (x - rect.left) / rect.width;
+      const py = (y - rect.top) / rect.height;
+      const rx = (py - 0.5) * -max;
+      const ry = (px - 0.5) * max;
+
+      el.style.setProperty('--mx', (px * 100).toFixed(2) + '%');
+      el.style.setProperty('--my', (py * 100).toFixed(2) + '%');
+      el.style.transform = `perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(-2px)`;
+    };
+
+    const reset = () => {
+      el.style.transform = '';
+      el.style.removeProperty('--mx');
+      el.style.removeProperty('--my');
+    };
+
+    el.addEventListener('pointermove', (ev) => {
+      const rect = el.getBoundingClientRect();
+      set(ev.clientX, ev.clientY, rect);
+    });
+
+    el.addEventListener('pointerleave', reset);
+    el.addEventListener('pointerdown', reset);
+  }
+
+  document.querySelectorAll('.tilt').forEach(attachTilt);
+
+</script>
+
+  <button id="toTop" aria-label="Back to top" title="Back to top">↑</button>
+
+</body>
+</html>
